@@ -1,0 +1,6 @@
+export enum WebsocketMessageType {
+  NULL = "",
+  INIT = "init",
+  SEND_MESSAGE = "sendMessage",
+  INCOMING_MESSAGE = "incomingMessage",
+}

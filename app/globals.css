@@ -25,3 +25,21 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Global scrollbar styling */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-500 rounded-lg;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-700;
+}
+
+/* If using tailwind-scrollbar plugin (optional) */
+html {
+  @apply scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-700;
+}
