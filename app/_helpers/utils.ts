@@ -36,7 +36,6 @@ export function formatEpoch(epoch: number): string {
   return yyyyMMddHHmm;
 }
 
-
 export function groupMessages(
   messages: WebsocketChatMessage[]
 ): WebsocketChatMessage[][] {
@@ -53,12 +52,10 @@ export function groupMessages(
     if (
       currentGroup &&
       currentGroup[0].userId === msg.userId &&
-      msg.epoch - currentGroup[currentGroup.length - 1].epoch <= TEN_MINUTES
+      msg.epoch - currentGroup[0].epoch <= TEN_MINUTES
     ) {
-      // Add to current group
       currentGroup.push(msg);
     } else {
-      // Start new group
       currentGroup = [{ ...msg }];
       groups.push(currentGroup);
     }
