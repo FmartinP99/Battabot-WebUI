@@ -56,7 +56,7 @@ export const incomingMessageMockData: WebsocketChatMessage[] = Array.from(
   return {
     channelId: "802245735994884154",
     messageId: "1439176029838114848",
-    userId: "215108241481269248",
+    userId: "802239701738192977",
     text: "test" + i,
     epoch: 1763196703 + i * 300,
   } as WebsocketChatMessage;
