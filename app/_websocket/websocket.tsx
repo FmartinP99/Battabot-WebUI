@@ -59,7 +59,6 @@ function WebSocketProvider({
   }
 
   const createWebSocket = () => {
-    // Prevent creating multiple sockets
     if (websocket && websocket.readyState === WebSocket.OPEN) return;
 
     const newSocket = new WebSocket("ws://localhost:8001/ws");
@@ -146,7 +145,6 @@ function WebSocketProvider({
 
   useEffect(() => {
     createWebSocket();
-    // Cleanup when component unmounts
     return () => {
       websocket?.close();
     };

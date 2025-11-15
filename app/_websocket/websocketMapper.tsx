@@ -60,4 +60,3 @@ export const incomingMessageMockData: WebsocketChatMessage[] = Array.from(
   } as WebsocketChatMessage;
 });
 
-// teszt vége
