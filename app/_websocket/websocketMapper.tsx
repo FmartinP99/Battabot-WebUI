@@ -47,8 +47,6 @@ export function loadIncomingMessageToObject(
   return parsed;
 }
 
-// teszt  762674310187843607
-
 export const incomingMessageMockData: WebsocketChatMessage[] = Array.from(
   { length: 30 },
   (_, i) => i + 1
