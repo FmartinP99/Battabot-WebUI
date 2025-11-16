@@ -4,6 +4,7 @@ import MembersList from "./MembersList";
 import ChatWindow from "./ChatWindow";
 import ChatInput from "./ChatInput";
 import { useActiveServerData } from "../_hooks/useActiveServerData";
+import Spinner from "./Spinner";
 
 export default function Server() {
   const {
@@ -16,7 +17,13 @@ export default function Server() {
     selectedServerId,
   } = useActiveServerData();
 
-  if (!selectedServer) return <div>No server</div>;
+  if (!selectedServer)
+    return (
+      <div className="relative grid items-center justify-center self-center w-[100vw]  ">
+        <Spinner />
+        <p className="text-xl text-primary-200">Loading servers...</p>
+      </div>
+    );
 
   return (
     <div className="w-[calc(100%-70px)] ml-3 mr-3 flex h-full min-w-0 overflow-hidden ">

@@ -9,7 +9,7 @@ import {
 
 export interface WebSocketMessage {
   type: WebsocketMessageType;
-  message: {};
+  message: Record<string, unknown>;
 }
 
 export interface WebsocketProviderValue {
