@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { WebsocketInitServerReduced } from "../_websocket/interfaces/websocket_init.interface";
+import { WebsocketInitServerReduced } from "../_websocket/interfaces/websocket_init.types";
 import defaultBg from "@/app/_files/profpic.png";
 import { useWebSocket } from "../_websocket/websocket";
 

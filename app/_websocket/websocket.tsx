@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import {
   WebSocketMessage,
   WebsocketProviderValue,
-} from "./interfaces/websocket.interface";
+} from "./interfaces/websocket.types";
 import { WebsocketMessageType } from "./enums/websocket_message_type.enum";
 import {
   WebsocketChatMessage,
@@ -14,7 +14,7 @@ import {
   WebsocketInitResponse,
   WebsocketInitServer,
   WebsocketInitServerReduced,
-} from "./interfaces/websocket_init.interface";
+} from "./interfaces/websocket_init.types";
 import {
   incomingMessageMockData,
   loadIncomingMessageToObject,

@@ -1,7 +1,7 @@
 export interface WebsocketInitChannels {
   channelId: string;
   name: string;
-  type: string;
+  type: string; // majd megnézni milyen typeok lehetnek
 }
 
 export interface WebsocketInitMembers {
@@ -16,7 +16,7 @@ export interface WebsocketInitServer {
   guildId: string;
   guildName: string;
   iconUrl?: string;
-  channels?: WebsocketInitChannels[];
+  channels: WebsocketInitChannels[];
   members: WebsocketInitMembers[];
 }
 

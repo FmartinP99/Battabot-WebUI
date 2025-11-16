@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WebsocketInitChannels } from "../_websocket/interfaces/websocket_init.interface";
+import { WebsocketInitChannels } from "../_websocket/interfaces/websocket_init.types";
 
 export default function ChannelsList({
   channels,

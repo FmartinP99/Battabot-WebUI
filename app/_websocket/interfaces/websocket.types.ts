@@ -5,7 +5,7 @@ import {
   WebsocketInitChannels,
   WebsocketInitMembers,
   WebsocketInitServerReduced,
-} from "./websocket_init.interface";
+} from "./websocket_init.types";
 
 export interface WebSocketMessage {
   type: WebsocketMessageType;

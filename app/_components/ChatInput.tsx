@@ -1,5 +1,8 @@
+"use client";
+
+import { useMessageSender } from "../_hooks/useMessageSender";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
-import { WebSocketMessage } from "../_websocket/interfaces/websocket.interface";
+import { WebSocketMessage } from "../_websocket/interfaces/websocket.types";
 import { useWebSocket } from "../_websocket/websocket";
 import Button from "./Button";
 
@@ -12,26 +15,7 @@ export default function ChatInput({
     return null;
   }
 
-  const { sendMessage, selectedServerId } = useWebSocket();
-
-  function handleSendMessage(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-
-    const payload = {
-      type: WebsocketMessageType.SEND_MESSAGE,
-      message: {
-        serverId: selectedServerId,
-        channelId: activeChannelId,
-        text: formData.get("message"),
-      },
-    } as WebSocketMessage;
-
-    const response = sendMessage(payload);
-
-    e.currentTarget.reset();
-  }
+  const { handleSendMessage } = useMessageSender(activeChannelId);
 
   return (
     <form onSubmit={handleSendMessage} className="flex gap-3">

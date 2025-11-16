@@ -1,45 +1,22 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useWebSocket } from "../_websocket/websocket";
 import ChannelsList from "./ChannelsList";
 import MembersList from "./MembersList";
-import { WebsocketInitChannels } from "../_websocket/interfaces/websocket_init.interface";
 import ChatWindow from "./ChatWindow";
 import ChatInput from "./ChatInput";
+import { useActiveServerData } from "../_hooks/useActiveServerData";
 
 export default function Server() {
-  const { servers, selectedServerId, members, channels, messages } =
-    useWebSocket();
-  const [activeChannelId, setActiveChannelId] = useState("0");
+  const {
+    selectedServer,
+    selectedMembers,
+    selectedChannels,
+    activeChannelId,
+    handleSetActiveChannel,
+    messages,
+    selectedServerId,
+  } = useActiveServerData();
 
-  const handleSetActiveChannel = (channel: WebsocketInitChannels): void => {
-    if (channel.channelId === activeChannelId) {
-      return;
-    }
-    setActiveChannelId(channel.channelId);
-  };
-
-  const selectedServer = servers.find(
-    (server) => server.guildId === selectedServerId
-  );
-
-  const selectedMembers = members.get(selectedServer?.guildId ?? "0") ?? [];
-  const selectedChannels =
-    channels
-      .get(selectedServer?.guildId ?? "0")
-      ?.filter((channel) => channel.type === "text") ?? [];
-
-  useEffect(() => {
-    if (selectedChannels.length > 0 && activeChannelId === "0") {
-      setActiveChannelId(selectedChannels[0].channelId);
-    }
-  }, [selectedChannels, activeChannelId]);
-
-  useEffect(() => {
-    if (selectedServerId && selectedChannels.length > 0) {
-      setActiveChannelId(selectedChannels[0].channelId);
-    }
-  }, [selectedServerId]);
+  if (!selectedServer) return <div>No server</div>;
 
   return (
     <div className="w-[calc(100%-70px)] ml-3 mr-3 flex h-full min-w-0 overflow-hidden ">

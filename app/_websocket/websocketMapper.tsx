@@ -1,27 +1,31 @@
 import {
   WebsocketChatMessage,
   WebsocketIncomingMessageResponse,
+  WebsocketInitChannels,
+  WebsocketInitMembers,
   WebsocketInitResponse,
-} from "./interfaces/websocket_init.interface";
+  WebsocketInitServer,
+} from "./interfaces/websocket_init.types";
 
+// to-do: parse guar, but im not sure what
 export function loadInitResponseToObject(message: any): WebsocketInitResponse {
   const rawData = JSON.parse(message);
 
   const parsed: WebsocketInitResponse = {
-    servers: rawData.message.map((guild: any) => ({
-      guildId: guild.guild_id,
-      guildName: guild.guild_name,
-      iconUrl: guild.icon_url,
-      channels: guild.channels?.map((ch: any) => ({
-        channelId: ch.channel_id,
+    servers: rawData?.message?.map((guild: WebsocketInitServer) => ({
+      guildId: guild.guildId,
+      guildName: guild.guildName,
+      iconUrl: guild.iconUrl,
+      channels: guild.channels?.map((ch: WebsocketInitChannels) => ({
+        channelId: ch.channelId,
         name: ch.name,
         type: ch.type,
       })),
-      members: guild.members.map((m: any) => ({
-        memberId: m.member_id,
+      members: guild.members?.map((m: WebsocketInitMembers) => ({
+        memberId: m.memberId,
         name: m.name,
-        displayName: m.display_name,
-        avatarUrl: m.avatar_url,
+        displayName: m.displayName,
+        avatarUrl: m.avatarUrl,
         bot: m.bot,
       })),
     })),
@@ -36,12 +40,12 @@ export function loadIncomingMessageToObject(
   const data = JSON.parse(message);
 
   const parsed: WebsocketIncomingMessageResponse = {
-    channelId: data.message.channelId,
-    serverId: data.message.serverId,
-    messageId: data.message.messageId,
-    userId: data.message.userId,
-    text: data.message.text,
-    epoch: data.message.epoch,
+    channelId: data?.message?.channelId,
+    serverId: data?.message?.serverId,
+    messageId: data?.message?.messageId,
+    userId: data?.message?.userId,
+    text: data?.message?.text,
+    epoch: data?.message?.epoch,
   };
 
   return parsed;
@@ -59,4 +63,3 @@ export const incomingMessageMockData: WebsocketChatMessage[] = Array.from(
     epoch: 1763196703 + i * 300,
   } as WebsocketChatMessage;
 });
-
