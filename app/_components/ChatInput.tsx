@@ -2,7 +2,7 @@
 
 import { useMessageSender } from "../_hooks/useMessageSender";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
-import { WebSocketMessage } from "../_websocket/interfaces/websocket.types";
+import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { useWebSocket } from "../_websocket/websocket";
 import Button from "./Button";
 

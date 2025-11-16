@@ -1,4 +1,4 @@
-import { WebsocketInitMembers } from "../_websocket/interfaces/websocket_init.types";
+import { WebsocketInitMembers } from "../_websocket/types/websocket_init.types";
 import Member from "./Member";
 
 export default function MembersList({

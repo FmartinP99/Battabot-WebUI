@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useWebSocket } from "../_websocket/websocket";
-import { WebSocketMessage } from "../_websocket/interfaces/websocket.types";
+import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
 
 export function useMessageSender(activeChannelId: string) {

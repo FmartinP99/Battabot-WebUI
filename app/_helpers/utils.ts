@@ -1,4 +1,4 @@
-import { WebsocketChatMessage } from "../_websocket/interfaces/websocket_init.types";
+import { WebsocketChatMessage } from "../_websocket/types/websocket_init.types";
 
 export function formatEpoch(epoch: number): string {
   if (epoch < 1e12) epoch *= 1000;

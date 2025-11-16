@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { WebsocketInitChannels } from "../_websocket/interfaces/websocket_init.types";
+import { WebsocketInitChannels } from "../_websocket/types/websocket_init.types";
 import { useWebSocket } from "../_websocket/websocket";
 
 export function useActiveServerData() {
@@ -32,14 +32,10 @@ export function useActiveServerData() {
   );
 
   useEffect(() => {
-    if (selectedChannels.length > 0 && activeChannelId === "0") {
-      setActiveChannelId(selectedChannels[0].channelId);
-    }
-  }, [selectedChannels, activeChannelId]);
-
-  useEffect(() => {
-    if (selectedServerId && selectedChannels.length > 0) {
-      setActiveChannelId(selectedChannels[0].channelId);
+    if (selectedChannels.length === 0) return;
+    const firstChannelId = selectedChannels[0].channelId;
+    if (selectedServerId || activeChannelId === "0") {
+      setActiveChannelId(firstChannelId);
     }
   }, [selectedServerId, selectedChannels]);
 

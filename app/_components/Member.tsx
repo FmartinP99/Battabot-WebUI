@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { WebsocketInitMembers } from "../_websocket/interfaces/websocket_init.types";
+import { WebsocketInitMembers } from "../_websocket/types/websocket_init.types";
 import defaultBg from "@/app/_files/profpic.png";
 
 export default function Member({ member }: { member: WebsocketInitMembers }) {

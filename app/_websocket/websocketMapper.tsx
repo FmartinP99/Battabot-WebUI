@@ -5,7 +5,7 @@ import {
   WebsocketInitMembers,
   WebsocketInitResponse,
   WebsocketInitServer,
-} from "./interfaces/websocket_init.types";
+} from "./types/websocket_init.types";
 
 // to-do: parse guar, but im not sure what
 export function loadInitResponseToObject(message: any): WebsocketInitResponse {

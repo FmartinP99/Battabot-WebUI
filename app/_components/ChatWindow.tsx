@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { WebsocketChatMessage } from "../_websocket/interfaces/websocket_init.types";
+import { WebsocketChatMessage } from "../_websocket/types/websocket_init.types";
 import ChatMessage from "./ChatMessage";
 import { groupMessages } from "../_helpers/utils";
 import { useMessageContainer } from "../_hooks/useMessageContainer";
@@ -26,8 +26,8 @@ export default function ChatWindow({
       {groups?.map((messages, index) => (
         <>
           <ChatMessage
-            key={messages[0].messageId}
-            messages={messages}
+            key={messages[0]?.messageId}
+            messages={messages ?? []}
           ></ChatMessage>
           {index < groups.length - 1 ? (
             <div className="bg-slate-500 h-[1px] w-full "></div>
