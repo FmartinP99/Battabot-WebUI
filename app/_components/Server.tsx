@@ -34,12 +34,12 @@ export default function Server() {
       />
 
       <div
-        className="flex-1 flex gap-1 flex-col h-full min-w-0 bg-slate-800 pb-2 pl-2"
+        className="flex-1 flex gap-1 min-h-0 flex-col h-full min-w-0 bg-slate-800 pb-2 pl-2"
         style={{ scrollbarGutter: "stable" }}
       >
         <ChatWindow
           activeChannelId={activeChannelId}
-          messages={(messages.get(selectedServerId ?? "0") ?? []).filter(
+          messages={(messages[selectedServerId ?? "0"] ?? []).filter(
             (msg) => msg.channelId === activeChannelId
           )}
         />

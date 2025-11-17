@@ -1,14 +1,15 @@
-import Header from "./_components/Header";
-import MainView from "./_components/MainView";
+"use client";
 
-export const metadata = {
-  title: "Battabot Web UI",
-};
+import { Provider } from "react-redux";
+import MainView from "./_components/MainView";
+import { store } from "./_store/store";
 
 export default function Page() {
   return (
-    <div className="relative z-10 text-center">
-      <MainView />
+    <div className="relative z-10 text-center ">
+      <Provider store={store}>
+        <MainView />
+      </Provider>
     </div>
   );
 }

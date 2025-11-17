@@ -18,13 +18,14 @@ export default function ChatWindow({
     messages
   );
 
-  const hidden = useAutoHideScrollbar(containerRef, 500);
+  let hidden = useAutoHideScrollbar(containerRef, 500);
+  hidden = false;
 
   if (isChannelInactive) return null;
 
   return (
     <div
-      className={`flex-1 max-h-full max-w-full  overflow-x-hidden min-w-0 pl-2 pr-2  ${
+      className={`flex-1 max-h-full max-w-full overflow-x-hidden min-w-0 pl-2 pr-2  ${
         hidden ? "scrollbar-hide" : "overflow-y-auto"
       } scrollbar-transition`}
       ref={containerRef}

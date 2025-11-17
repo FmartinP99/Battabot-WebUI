@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { WebSocketProvider } from "./_websocket/websocket";
 import { Josefin_Sans } from "next/font/google";
 
 const josefin = Josefin_Sans({
@@ -33,9 +32,7 @@ export default function RootLayout({
          `}
       >
         <div className="flex-1 px-8 py-12 grid">
-          <main className="max-w-[98vw] mx-auto w-full ">
-            <WebSocketProvider>{children}</WebSocketProvider>
-          </main>
+          <main className="max-w-[98vw] mx-auto w-full ">{children}</main>
         </div>
       </body>
     </html>

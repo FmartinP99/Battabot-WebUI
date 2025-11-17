@@ -1,21 +1,21 @@
 import Image from "next/image";
-import {
-  WebsocketChatMessage,
-  WebsocketInitMembers,
-} from "../_websocket/types/websocket_init.types";
-import { useWebSocket } from "../_websocket/websocket";
+import { WebsocketChatMessage } from "../_websocket/types/websocket_init.types";
 import defaultBg from "@/app/_files/profpic.png";
 import { formatEpoch } from "../_helpers/utils";
+import { useSelector } from "react-redux";
+import { selectMembers, selectSelectedServerId } from "../_store/selectors";
 
 export default function ChatMessage({
   messages,
 }: {
   messages: WebsocketChatMessage[];
 }) {
-  const { members, selectedServerId } = useWebSocket();
-  const sender = members
-    .get(selectedServerId ?? "0")
-    ?.find((x) => x.memberId === messages?.[0]?.userId);
+  const members = useSelector(selectMembers);
+  const selectedServerId = useSelector(selectSelectedServerId);
+
+  const sender = members[selectedServerId ?? "0"]?.find(
+    (x) => x.memberId === messages?.[0]?.userId
+  );
 
   return (
     <div className="flex gap-2 min-w-0 text-left mt-2 mb-2">

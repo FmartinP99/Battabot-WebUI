@@ -1,10 +1,20 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { WebsocketInitChannels } from "../_websocket/types/websocket_init.types";
-import { useWebSocket } from "../_websocket/websocket";
+import { useSelector } from "react-redux";
+import {
+  selectChannels,
+  selectMembers,
+  selectMessages,
+  selectSelectedServerId,
+  selectServers,
+} from "../_store/selectors";
 
 export function useActiveServerData() {
-  const { servers, selectedServerId, members, channels, messages } =
-    useWebSocket();
+  const servers = useSelector(selectServers);
+  const selectedServerId = useSelector(selectSelectedServerId);
+  const members = useSelector(selectMembers);
+  const channels = useSelector(selectChannels);
+  const messages = useSelector(selectMessages);
 
   const [activeChannelId, setActiveChannelId] = useState("0");
 
@@ -14,12 +24,12 @@ export function useActiveServerData() {
 
   const selectedMembers = useMemo(() => {
     const guildId = selectedServer?.guildId ?? "0";
-    return members.get(guildId) ?? [];
+    return members[guildId] ?? [];
   }, [members, selectedServer]);
 
   const selectedChannels = useMemo(() => {
     const guildId = selectedServer?.guildId ?? "0";
-    return channels.get(guildId)?.filter((ch) => ch.type === "text") ?? [];
+    return channels[guildId]?.filter((ch) => ch.type === "text") ?? [];
   }, [channels, selectedServer]);
 
   const handleSetActiveChannel = useCallback(

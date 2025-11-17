@@ -1,14 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useWebSocket } from "../_websocket/websocket";
 import ReconnectButton from "./ReconnectButton";
 import defaultBg from "@/app/_files/profpic.png";
+import { useSelector } from "react-redux";
+import {
+  selectSelectedServerId,
+  selectServers,
+  selectSocketReady,
+} from "../_store/selectors";
 
 export default function Header() {
-  const { socketReady } = useWebSocket();
-
-  const { servers, selectedServerId } = useWebSocket();
+  const socketReady = useSelector(selectSocketReady);
+  const servers = useSelector(selectServers);
+  const selectedServerId = useSelector(selectSelectedServerId);
 
   const selectedServer = servers.find(
     (server) => server.guildId === selectedServerId
