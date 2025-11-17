@@ -57,7 +57,7 @@ export const incomingMessageMockData: WebsocketChatMessage[] = Array.from(
 ).map((v, i) => {
   return {
     channelId: "802245735994884154",
-    messageId: "1439176029838114848",
+    messageId: "1439176029838114848" + i,
     userId: "802239701738192977",
     text: "test" + i,
     epoch: 1763196703 + i * 300,

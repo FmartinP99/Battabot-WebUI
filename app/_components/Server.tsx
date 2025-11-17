@@ -34,7 +34,7 @@ export default function Server() {
       />
 
       <div
-        className="flex-1 flex gap-1 flex-col h-full min-w-0 bg-slate-800"
+        className="flex-1 flex gap-1 flex-col h-full min-w-0 bg-slate-800 pb-2 pl-2"
         style={{ scrollbarGutter: "stable" }}
       >
         <ChatWindow

@@ -30,7 +30,7 @@ export default function Header() {
         <span>{selectedServer.guildName}</span>
       </div>
 
-      {socketReady ? null : <ReconnectButton className="" />}
+      {socketReady ? null : <ReconnectButton />}
     </div>
   );
 }
