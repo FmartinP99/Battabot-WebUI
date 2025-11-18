@@ -43,8 +43,6 @@ const PopoverContent = React.forwardRef<
       />
     );
 
-    console.log(disablePortal);
-
     if (disablePortal) {
       return content;
     }
