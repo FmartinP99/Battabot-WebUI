@@ -29,13 +29,13 @@ export const websocketMiddleware: Middleware =
       const socket = new WebSocket("ws://localhost:8001/ws");
 
       socket.onopen = () => {
-        console.log("✅ Connected to backend! 22");
+        console.log("✅ Connected to backend!");
         store.dispatch(setSocketReady(true));
         store.dispatch(setWebSocket(socket));
 
         const payload: WebSocketMessage = {
           type: WebsocketMessageType.INIT,
-          message: { text: "Hello from the frontend! 22" },
+          message: { text: "Hello from the frontend!" },
         };
         socket.send(JSON.stringify(payload));
       };
