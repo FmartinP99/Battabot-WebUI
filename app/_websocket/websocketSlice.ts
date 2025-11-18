@@ -14,6 +14,7 @@ interface WebSocketState {
   members: Record<string, WebsocketInitMembers[]>;
   messages: Record<string, WebsocketChatMessage[]>;
   selectedServerId?: string;
+  selectedChannelId?: string;
 }
 
 const initialState: WebSocketState = {
@@ -74,6 +75,13 @@ const websocketSlice = createSlice({
         state.selectedServerId = action.payload;
       }
     },
+    setSelectedChannelId(state, action: PayloadAction<string>) {
+      const channel = state.channels[state.selectedServerId ?? ""]?.find(
+        (ch) => ch.channelId === action.payload
+      );
+      if (!channel) return;
+      state.selectedChannelId = action.payload;
+    },
   },
 });
 
@@ -86,6 +94,7 @@ export const {
   setMessages,
   addMessage,
   setSelectedServerId,
+  setSelectedChannelId,
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

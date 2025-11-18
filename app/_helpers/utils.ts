@@ -63,3 +63,19 @@ export function groupMessages(
 
   return groups;
 }
+
+export function getTimeString(time: Date): string {
+  return (
+    time.getHours().toString().padStart(2, "0") +
+    ":" +
+    time.getMinutes().toString().padStart(2, "0") +
+    ":" +
+    time.getSeconds().toString().padStart(2, "0")
+  );
+}
+
+function addMinutes(date: Date, minutesToAdd: number) {
+  const currentMinutes = date.getMinutes();
+  date.setMinutes(currentMinutes + minutesToAdd);
+  return date;
+}

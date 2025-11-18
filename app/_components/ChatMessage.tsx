@@ -13,7 +13,7 @@ export default function ChatMessage({
   const members = useSelector(selectMembers);
   const selectedServerId = useSelector(selectSelectedServerId);
 
-  const sender = members[selectedServerId ?? "0"]?.find(
+  const sender = members[selectedServerId ?? ""]?.find(
     (x) => x.memberId === messages?.[0]?.userId
   );
 

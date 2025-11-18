@@ -29,3 +29,6 @@ export const selectMessages = (state: RootState) => state.websocket.messages;
 
 export const selectMessagesByServerId = (state: RootState, serverId: string) =>
   state.websocket.messages[serverId] ?? [];
+
+export const selectSelectedChannelId = (state: RootState) =>
+  state.websocket.selectedChannelId;

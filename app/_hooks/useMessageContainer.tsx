@@ -11,7 +11,7 @@ export function useMessageContainer(activeChannelId: string, messages: any[]) {
     }
   }, [activeChannelId, messages]);
 
-  const isChannelInactive = activeChannelId === "0";
+  const isChannelInactive = activeChannelId === "";
 
   const groups = useMemo(() => {
     if (isChannelInactive) return [];

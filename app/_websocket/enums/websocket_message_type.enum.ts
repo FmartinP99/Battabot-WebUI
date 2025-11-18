@@ -3,4 +3,5 @@ export enum WebsocketMessageType {
   INIT = "init",
   SEND_MESSAGE = "sendMessage",
   INCOMING_MESSAGE = "incomingMessage",
+  SET_REMINDER = "setReminder"
 }
