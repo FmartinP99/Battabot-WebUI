@@ -31,18 +31,12 @@ export default function MembersList({
 }: {
   members: WebsocketInitMembers[];
 }) {
-  //to-do: it does not work with react-window
-  const containerRef = useRef<HTMLDivElement>(null);
-  const hidden = useAutoHideScrollbar(containerRef, 500);
-
   return (
     <div
-      ref={containerRef}
-      className={`flex flex-col gap-2 overflow-ellipsis pl-3 pr-3 border-l-2 border-gray-500 pt-2 pb-2 ml-2 overflow-y-auto w-[210px]  ${
-        hidden ? "scrollbar-hide" : ""
-      } scrollbar-transition`}
+      className={`flex flex-col gap-2 overflow-ellipsis pl-3 pr-3 border-l-2 border-gray-500 pt-2 pb-2 ml-2 w-[210px] `}
     >
       <List
+        className="scrollbar-hide "
         rowComponent={MemberRow}
         rowCount={members.length}
         rowHeight={56}
