@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { WebsocketInitChannels } from "../_websocket/types/websocket_init.types";
 
 export default function ChannelsList({
@@ -10,7 +9,7 @@ export default function ChannelsList({
   setActiveChannel: (channel: WebsocketInitChannels) => void;
   activeChannelId: string;
 }) {
-  if (activeChannelId === "") {
+  if (!activeChannelId) {
     return null;
   }
 

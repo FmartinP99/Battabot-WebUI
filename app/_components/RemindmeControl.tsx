@@ -1,11 +1,5 @@
 import { addMinutes } from "date-fns";
 import { Button } from "./ui/button";
-import {
-  HiOutlineChevronDoubleLeft,
-  HiOutlineChevronLeft,
-  HiOutlineChevronRight,
-  HiOutlineChevronDoubleRight,
-} from "react-icons/hi";
 
 export default function RemindmeControl({
   date,

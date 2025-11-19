@@ -9,7 +9,7 @@ import { selectSelectedChannelId } from "../_store/selectors";
 export default function ChatInput() {
   const { handleSendMessage } = useMessageSenderFromForm();
   const selectedChannelId = useSelector(selectSelectedChannelId);
-  if (selectedChannelId === "") {
+  if (!selectedChannelId) {
     return null;
   }
 
