@@ -7,7 +7,7 @@ import {
   WebsocketInitServer,
 } from "./types/websocket_init.types";
 
-// to-do: parse guar, but im not sure what
+// to-do: parse guard, but im not sure what
 export function loadInitResponseToObject(message: any): WebsocketInitResponse {
   const rawData = JSON.parse(message);
 

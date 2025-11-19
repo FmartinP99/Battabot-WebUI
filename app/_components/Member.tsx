@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { WebsocketInitMembers } from "../_websocket/types/websocket_init.types";
 import defaultBg from "@/app/_files/profpic.png";
+import React from "react";
 
-export default function Member({
+function Member({
   member,
   noMaxWidth,
   isLarge,
@@ -36,3 +37,5 @@ export default function Member({
     </div>
   );
 }
+
+export default React.memo(Member);

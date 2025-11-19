@@ -26,7 +26,7 @@ export default function Server() {
     );
 
   return (
-    <div className="w-[calc(100%-70px)] ml-3 mr-3 flex h-full min-w-0 overflow-hidden ">
+    <div className="w-[calc(100%-70px)] ml-3 mr-3 flex h-full min-w-0 overflow-hidden">
       <ChannelsList
         channels={selectedChannels}
         setActiveChannel={handleSetActiveChannel}

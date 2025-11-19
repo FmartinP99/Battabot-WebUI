@@ -1,13 +1,10 @@
+import React from "react";
 import { WebsocketInitMembers } from "../_websocket/types/websocket_init.types";
 import Member from "./Member";
 import MemberPopup from "./MemberPopup";
 import Modal from "./Modal";
 
-export default function MemberModalItem({
-  member,
-}: {
-  member: WebsocketInitMembers;
-}) {
+function MemberModalItem({ member }: { member: WebsocketInitMembers }) {
   if (!member) {
     return null;
   }
@@ -15,7 +12,7 @@ export default function MemberModalItem({
   return (
     <Modal>
       <Modal.Open opens={member.memberId?.toString()}>
-        <div className="cursor-pointer hover:bg-accent-500 p-2 rounded">
+        <div className="cursor-pointer hover:bg-accent-500 p-2 rounded ">
           <Member member={member} />
         </div>
       </Modal.Open>
@@ -26,3 +23,5 @@ export default function MemberModalItem({
     </Modal>
   );
 }
+
+export default React.memo(MemberModalItem);
