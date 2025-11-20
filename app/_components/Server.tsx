@@ -30,7 +30,7 @@ export default function Server() {
       <ChannelsList
         channels={selectedChannels}
         setActiveChannel={handleSetActiveChannel}
-        activeChannelId={selectedChannelId ?? ""}
+        activeChannelId={selectedChannelId ?? null}
       />
 
       <div
@@ -38,10 +38,11 @@ export default function Server() {
         style={{ scrollbarGutter: "stable" }}
       >
         <ChatWindow
-          activeChannelId={selectedChannelId ?? ""}
-          messages={(messages[selectedServerId ?? ""] ?? []).filter(
-            (msg) => msg.channelId === selectedChannelId
-          )}
+          activeChannelId={selectedChannelId ?? null}
+          messages={(messages && selectedServerId
+            ? messages[selectedServerId] ?? []
+            : []
+          ).filter((msg) => msg.channelId === selectedChannelId)}
         />
         <ChatInput />
       </div>

@@ -76,7 +76,8 @@ const websocketSlice = createSlice({
       }
     },
     setSelectedChannelId(state, action: PayloadAction<string>) {
-      const channel = state.channels[state.selectedServerId ?? ""]?.find(
+      if (!state.selectedServerId) return;
+      const channel = state.channels?.[state.selectedServerId]?.find(
         (ch) => ch.channelId === action.payload
       );
       if (!channel) return;

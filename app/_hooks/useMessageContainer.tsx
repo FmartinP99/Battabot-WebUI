@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useRef } from "react";
 import { groupMessages } from "../_helpers/utils";
 
-export function useMessageContainer(activeChannelId: string, messages: any[]) {
+export function useMessageContainer(
+  activeChannelId: string | null,
+  messages?: any[]
+) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -11,11 +14,11 @@ export function useMessageContainer(activeChannelId: string, messages: any[]) {
     }
   }, [activeChannelId, messages]);
 
-  const isChannelInactive = activeChannelId === "";
+  const isChannelInactive = !activeChannelId;
 
   const groups = useMemo(() => {
     if (isChannelInactive) return [];
-    return groupMessages(messages);
+    return groupMessages(messages ?? []);
   }, [messages, isChannelInactive]);
 
   return {

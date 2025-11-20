@@ -4,15 +4,17 @@ import { useState } from "react";
 import Remindme from "./Remindme";
 import MemberPopupItemSelect from "./MemberPopupSelectItem";
 
-export type MembersPopupType = "remindme" | "teszt" 
+export type MembersPopupType = "remindme" | "teszt";
+
+interface MemberPopupParams {
+  member: WebsocketInitMembers;
+  onCloseModal?: VoidFunction;
+}
 
 export default function MemberPopup({
   member,
   onCloseModal,
-}: {
-  member: WebsocketInitMembers;
-  onCloseModal?: () => void;
-}) {
+}: MemberPopupParams) {
   const [action, setAction] = useState<MembersPopupType>("remindme");
 
   let renderedComponent: JSX.Element | null = null;
@@ -21,11 +23,6 @@ export default function MemberPopup({
     if (actionName === action) return;
     setAction(actionName);
   };
-
-  switch (action) {
-    case "remindme":
-      renderedComponent = <Remindme memberId={member.memberId ?? ""} />;
-  }
 
   return (
     <div className="flex flex-col w-[30vw]">
@@ -48,7 +45,11 @@ export default function MemberPopup({
           />
         </div>
 
-        <div>{renderedComponent}</div>
+        <div>
+          {action === "remindme" && (
+            <Remindme memberId={member.memberId ?? null} />
+          )}
+        </div>
       </div>
     </div>
   );

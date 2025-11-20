@@ -10,7 +10,7 @@ export default function ChatWindow({
   activeChannelId,
   messages,
 }: {
-  activeChannelId: string;
+  activeChannelId: string | null;
   messages: WebsocketChatMessage[];
 }) {
   const { containerRef, isChannelInactive, groups } = useMessageContainer(
@@ -20,7 +20,7 @@ export default function ChatWindow({
 
   const hidden = useAutoHideScrollbar(containerRef, 500);
 
-  if (isChannelInactive) return null;
+  if (!activeChannelId || isChannelInactive) return null;
 
   return (
     <div

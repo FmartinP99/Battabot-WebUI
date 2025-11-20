@@ -74,8 +74,14 @@ export function getTimeString(time: Date): string {
   );
 }
 
-function addMinutes(date: Date, minutesToAdd: number) {
+export function addMinutes(date: Date, minutesToAdd: number) {
   const currentMinutes = date.getMinutes();
   date.setMinutes(currentMinutes + minutesToAdd);
   return date;
 }
+
+export const isPast = (date: Date): boolean => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };

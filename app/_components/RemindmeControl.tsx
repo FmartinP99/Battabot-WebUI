@@ -1,13 +1,15 @@
 import { addMinutes } from "date-fns";
 import { Button } from "./ui/button";
 
+interface RemindmeControlParams {
+  date: Date;
+  handleSetDate: (date: Date | undefined) => void;
+}
+
 export default function RemindmeControl({
   date,
   handleSetDate,
-}: {
-  date: Date;
-  handleSetDate: (date: Date | undefined) => void;
-}) {
+}: RemindmeControlParams) {
   return (
     <div className="flex gap-1 w-full flex-1">
       <Button

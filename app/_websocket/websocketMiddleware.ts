@@ -67,10 +67,10 @@ export const websocketMiddleware: Middleware =
             store.dispatch(setChannels(_channels));
             store.dispatch(setMembers(_members));
             store.dispatch(setMessages(_messages));
-            store.dispatch(setSelectedServerId(_servers[0]?.guildId ?? ""));
+            store.dispatch(setSelectedServerId(_servers[0]?.guildId ?? null));
             store.dispatch(
               setSelectedChannelId(
-                _channels[_servers[0].guildId ?? ""]?.[0].channelId ?? ""
+                _channels[_servers[0].guildId ?? null]?.[0].channelId ?? null
               )
             );
             break;

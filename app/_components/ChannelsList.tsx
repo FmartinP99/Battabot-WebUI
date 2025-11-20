@@ -7,7 +7,7 @@ export default function ChannelsList({
 }: {
   channels: WebsocketInitChannels[];
   setActiveChannel: (channel: WebsocketInitChannels) => void;
-  activeChannelId: string;
+  activeChannelId: string | null;
 }) {
   if (!activeChannelId) {
     return null;

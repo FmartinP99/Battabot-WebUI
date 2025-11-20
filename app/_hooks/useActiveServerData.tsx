@@ -26,20 +26,19 @@ export function useActiveServerData() {
   }, [servers, selectedServerId]);
 
   const selectedMembers = useMemo(() => {
-    const guildId = selectedServer?.guildId ?? "";
-    return members[guildId] ?? [];
+    const guildId = selectedServer?.guildId ?? null;
+    return guildId ? members[guildId] : [];
   }, [members, selectedServer]);
 
   const selectedChannels = useMemo(() => {
-    const guildId = selectedServer?.guildId ?? "";
-    return channels[guildId]?.filter((ch) => ch.type === "text") ?? [];
+    const guildId = selectedServer?.guildId ?? null;
+    return guildId ? channels[guildId]?.filter((ch) => ch.type === "text") : [];
   }, [channels, selectedServer]);
 
   const handleSetActiveChannel = useCallback(
     (channel: WebsocketInitChannels) => {
-      if (channel.channelId !== selectedChannelId) {
-        dispatch(setSelectedChannelId(channel.channelId));
-      }
+      if (channel.channelId === selectedChannelId) return;
+      dispatch(setSelectedChannelId(channel.channelId));
     },
     [selectedChannelId]
   );
@@ -47,9 +46,8 @@ export function useActiveServerData() {
   useEffect(() => {
     if (selectedChannels.length === 0) return;
     const firstChannelId = selectedChannels[0].channelId;
-    if (selectedServerId || selectedChannelId === "") {
-      dispatch(setSelectedChannelId(firstChannelId));
-    }
+    if (!selectedServerId && selectedChannelId) return;
+    dispatch(setSelectedChannelId(firstChannelId));
   }, [selectedServerId, selectedChannels]);
 
   return {

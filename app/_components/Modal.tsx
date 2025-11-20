@@ -12,14 +12,14 @@ import { useOutsideClick } from "../_hooks/useOutsideClick";
 
 interface ModalContextProps {
   name: string;
-  close: () => void;
-  open: (name: any) => void;
+  close?: VoidFunction;
+  open?: (name: string) => void;
 }
 
 const initialState: ModalContextProps = {
   name: "",
-  close: () => {},
-  open: () => {},
+  close: undefined,
+  open: undefined,
 };
 
 interface OpenProps {
@@ -63,7 +63,7 @@ function Modal({ children }: ModalProps) {
 function Open({ children, opens: opensWindowName }: OpenProps) {
   const { open } = useContext(ModalContext);
 
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
+  return cloneElement(children, { onClick: () => open?.(opensWindowName) });
 }
 
 export function Window({ children, name, position = "center" }: WindowProps) {
