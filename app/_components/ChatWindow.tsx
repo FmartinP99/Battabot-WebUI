@@ -24,7 +24,7 @@ export default function ChatWindow({
 
   return (
     <div
-      className={`flex-1 max-h-full max-w-full  overflow-x-hidden min-w-0 pl-2 pr-2  ${
+      className={`flex-1 max-h-full max-w-full overflow-x-hidden min-w-0 px-4 ${
         hidden ? "scrollbar-hide" : "overflow-y-auto"
       } scrollbar-transition`}
       ref={containerRef}
@@ -33,7 +33,7 @@ export default function ChatWindow({
         <Fragment key={(msgs[0]?.messageId ?? index) + "__msggroup"}>
           <ChatMessage messages={msgs ?? []}></ChatMessage>
           {index < groups.length - 1 ? (
-            <div className="bg-slate-500 h-[1px] w-full "></div>
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-1"></div>
           ) : null}
         </Fragment>
       ))}

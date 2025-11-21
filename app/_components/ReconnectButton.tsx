@@ -7,7 +7,7 @@ export default function ReconnectButton({ className }: { className?: string }) {
 
   return (
     <Button
-      variant="outline"
+      variant="chatMessageSend"
       className={className ? className : ""}
       onClick={() => dispatch(connectWebSocket())}
     >

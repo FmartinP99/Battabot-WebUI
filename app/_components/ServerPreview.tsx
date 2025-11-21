@@ -20,7 +20,8 @@ export function ServerPreview({
   return (
     <div
       onClick={() => dispatch(setSelectedServerId(server.guildId))}
-      className="flex gap-1 w-[70px] h-[45px] overflow-hidden cursor-pointer "
+      className="flex gap-1 w-[70px] h-[45px] mb-3
+      overflow-hidden cursor-pointer "
     >
       <div
         className={`${
