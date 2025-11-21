@@ -14,22 +14,22 @@ export function useMessageSenderFromForm() {
   const dispatch = useDispatch();
   const [text, setText] = useState("");
 
-  const handleSendMessage = useCallback(
-    (e: { preventDefault: () => void; }) => {
-      e.preventDefault();
-      const payload: WebSocketMessage = {
-        type: WebsocketMessageType.SEND_MESSAGE,
-        message: {
-          serverId: selectedServerId,
-          channelId: selectedChannelId,
-          text: text,
-        },
-      };
-      dispatch(sendMessageThroughWebsocket(payload));
-      setText("");
-    },
-    [selectedServerId, selectedChannelId]
-  );
+  const handleSendMessage = useCallback(() => {
+    if (!text.trim()) return;
+
+    const payload: WebSocketMessage = {
+      type: WebsocketMessageType.SEND_MESSAGE,
+      message: {
+        serverId: selectedServerId,
+        channelId: selectedChannelId,
+        text,
+      },
+    };
+
+    dispatch(sendMessageThroughWebsocket(payload));
+
+    setText("");
+  }, [selectedServerId, selectedChannelId]);
 
   return { handleSendMessage, text, setText };
 }

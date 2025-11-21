@@ -5,7 +5,6 @@ import { useMessageSenderFromForm } from "../_hooks/useMessageSender";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { selectSelectedChannelId } from "../_store/selectors";
-import { useState } from "react";
 
 export default function ChatInput() {
   const { handleSendMessage, text, setText } = useMessageSenderFromForm();
@@ -32,7 +31,6 @@ export default function ChatInput() {
             </div>
             <Button
               variant="chatMessageSend"
-              type="submit"
               className="h-[40px] w-[100px]"
               onClick={handleSendMessage}
             >
