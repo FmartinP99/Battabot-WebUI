@@ -11,38 +11,43 @@ export default function RemindmeControl({
   handleSetDate,
 }: RemindmeControlParams) {
   return (
-    <div className="flex gap-1 w-full flex-1">
+    <div className="flex gap-2 w-full">
       <Button
         variant="outline"
-        className="flex-1"
+        size="sm"
+        className="flex-1 bg-primary-x2 border-primary-x3  hover:border-accent-x1 text-accent-x2 transition-all duration-200 hover:shadow-md hover:shadow-accent-x1/20"
         onClick={() => handleSetDate(addMinutes(date, -5))}
       >
         -5 min
       </Button>
       <Button
         variant="outline"
-        className="flex-1"
+        size="sm"
+        className="flex-1 bg-primary-x2 border-primary-x3  hover:border-accent-x1 text-accent-x2 transition-all duration-200 hover:shadow-md hover:shadow-accent-x1/20"
         onClick={() => handleSetDate(addMinutes(date, -1))}
       >
         -1 min
       </Button>
       <Button
         variant="outline"
-        className="flex-1"
+        size="sm"
+        className="flex-1 bg-primary-x2 border-primary-x3  hover:border-accent-x1 text-accent-x2 transition-all duration-200 hover:shadow-md hover:shadow-accent-x1/20"
         onClick={() => handleSetDate(new Date())}
       >
-        <span>Reset</span>
+        Reset
       </Button>
       <Button
         variant="outline"
-        className="flex-1"
+        size="sm"
+        className="flex-1 bg-primary-x2 border-primary-x3  hover:border-accent-x1 text-accent-x2 transition-all duration-200 hover:shadow-md hover:shadow-accent-x1/20"
         onClick={() => handleSetDate(addMinutes(date, 1))}
       >
         +1 min
       </Button>
       <Button
         variant="outline"
-        className="flex-1"
+        size="sm"
+        className="flex-1 bg-primary-x2 border-primary-x3  hover:border-accent-x1 text-accent-x2 transition-all duration-200 hover:shadow-md hover:shadow-accent-x1/20"
         onClick={() => handleSetDate(addMinutes(date, 5))}
       >
         +5 min

@@ -8,7 +8,9 @@ export default function useAutoHideScrollbar(
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!ref || !el) return;
+
+    console.log("dadwawdasdawawd");
 
     let timer: ReturnType<typeof setTimeout>;
 

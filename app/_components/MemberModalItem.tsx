@@ -12,7 +12,7 @@ function MemberModalItem({ member }: { member: WebsocketInitMembers }) {
   return (
     <Modal>
       <Modal.Open opens={member.memberId?.toString()}>
-        <div className="cursor-pointer hover:bg-accent-500 p-2 rounded ">
+        <div className="cursor-pointer hover:bg-primary-x4 active:bg-primary-x5 p-2.5 rounded-md transition-all duration-200 group">
           <Member member={member} />
         </div>
       </Modal.Open>

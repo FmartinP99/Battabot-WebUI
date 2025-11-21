@@ -94,12 +94,12 @@ export function Window({ children, name, position = "center" }: WindowProps) {
       >
         <button
           onClick={close}
-          className=" absolute top-5 right-7
+          className=" absolute top-3 right-5
     bg-transparent border-none p-1
     rounded-md
     translate-x-3
     transition-all duration-200
-    hover:bg-slate-300"
+    hover:bg-red-500"
         >
           <HiXMark className="w-6 h-6 text-gray-200" />
         </button>

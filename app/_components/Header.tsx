@@ -18,24 +18,41 @@ export default function Header() {
   const selectedServer = servers.find(
     (server) => server.guildId === selectedServerId
   );
+
   if (!selectedServer) {
-    return <div>Battabot Web UI!</div>;
+    return (
+      <div className="flex items-center justify-center h-14 px-4 border-b border-primary-x3 bg-primary-x1">
+        <span className="text-lg font-semibold bg-gradient-to-r from-primary-action-focus to-accent-x5 bg-clip-text text-transparent">
+          Battabot Web UI!
+        </span>
+      </div>
+    );
   }
 
   return (
-    <div className=" flex flex-row gap-4 items-center  p-2  border-b  border-gray-600 rounded-sm text-accent-500">
-      <div className="w-full h-full  flex items-center gap-2 justify-center text-xl">
-        <Image
-          className="rounded-full object-cover max-h-[25px]"
-          src={selectedServer.iconUrl || defaultBg}
-          alt="Not available"
-          width="25"
-          height="25"
-        />
-        <span>{selectedServer.guildName}</span>
+    <div className="flex flex-row gap-4 items-center h-14 px-4 border-b border-primary-x3 bg-primary-x1 shadow-sm">
+      <div className="flex items-center gap-3 flex-1 justify-center">
+        <div className="relative group">
+          <div className="absolute inset-0 bg-primary-action-focus rounded-full opacity-0 group-hover:opacity-20 blur-sm transition-opacity duration-300" />
+          <Image
+            className="relative rounded-full object-cover w-8 h-8 ring-2 ring-primary-x3 group-hover:ring-primary-action-focus transition-all duration-300"
+            src={selectedServer.iconUrl || defaultBg}
+            alt="Server icon"
+            width="32"
+            height="32"
+          />
+        </div>
+
+        <span className="text-base font-semibold text-accent-x2 truncate">
+          {selectedServer.guildName}
+        </span>
       </div>
 
-      {socketReady ? null : <ReconnectButton />}
+      {socketReady ? null : (
+        <div className="flex items-center">
+          <ReconnectButton />
+        </div>
+      )}
     </div>
   );
 }

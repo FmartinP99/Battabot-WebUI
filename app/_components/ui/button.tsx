@@ -14,13 +14,13 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
-          "border border-input shadow-sm hover:bg-accent hover:text-accent-foreground  transition-colors duration-500",
+          "border border-input  shadow-sm transition-colors duration-500",
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         chatMessageSend:
-          "flex items-center justify-center gap-6 text-lg  px-1 py-1 font-medium  w-full border rounded-sm bg-inherit p-3 min-h-2 hover:bg-accent hover:text-accent-foreground transition-colors duration-500",
+          "rounded-md bg-primary-action-default  hover:bg-primary-action-hover text-white font-medium text-sm transition-colors duration-200 focus:ring-2 focus:ring-bg-primary-action-focus focus:ring-offset-2 focus:ring-offset-primary-x2",
       },
       size: {
         default: "h-9 px-4 py-2",
