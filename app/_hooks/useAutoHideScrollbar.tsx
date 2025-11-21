@@ -10,8 +10,6 @@ export default function useAutoHideScrollbar(
     const el = ref.current;
     if (!ref || !el) return;
 
-    console.log("dadwawdasdawawd");
-
     let timer: ReturnType<typeof setTimeout>;
 
     const handleScroll = () => {

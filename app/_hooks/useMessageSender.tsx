@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,26 +12,24 @@ export function useMessageSenderFromForm() {
   const selectedServerId = useSelector(selectSelectedServerId);
   const selectedChannelId = useSelector(selectSelectedChannelId);
   const dispatch = useDispatch();
+  const [text, setText] = useState("");
 
   const handleSendMessage = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    (e: { preventDefault: () => void; }) => {
       e.preventDefault();
-
-      const formData = new FormData(e.currentTarget);
-
       const payload: WebSocketMessage = {
         type: WebsocketMessageType.SEND_MESSAGE,
         message: {
           serverId: selectedServerId,
           channelId: selectedChannelId,
-          text: formData.get("message"),
+          text: text,
         },
       };
       dispatch(sendMessageThroughWebsocket(payload));
-      e.currentTarget.reset();
+      setText("");
     },
     [selectedServerId, selectedChannelId]
   );
 
-  return { handleSendMessage };
+  return { handleSendMessage, text, setText };
 }

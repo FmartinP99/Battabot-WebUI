@@ -5,9 +5,10 @@ import { useMessageSenderFromForm } from "../_hooks/useMessageSender";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { selectSelectedChannelId } from "../_store/selectors";
+import { useState } from "react";
 
 export default function ChatInput() {
-  const { handleSendMessage } = useMessageSenderFromForm();
+  const { handleSendMessage, text, setText } = useMessageSenderFromForm();
   const selectedChannelId = useSelector(selectSelectedChannelId);
 
   if (!selectedChannelId) {
@@ -16,30 +17,30 @@ export default function ChatInput() {
 
   return (
     <div className="w-full bg-primary-x2 border-t border-primary-x1">
-      <form onSubmit={handleSendMessage} className="max-w-full px-4 py-3">
-        <div className="relative">
-          <div className="relative bg-primary-x1 rounded-lg overflow-hidden transition-all duration-200 hover:bg-primary-x4 ">
-            <div className="flex items-end gap-2 p-3">
-              <div className="flex-1 relative">
-                <Textarea
-                  name="message"
-                  placeholder="Type your message..."
-                  className="w-full resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-accent-x2 placeholder:text-accent-x4 min-h-[40px] max-h-[200px] py-1 px-2 text-sm"
-                  rows={1}
-                />
-              </div>
-
-              <Button
-                variant="chatMessageSend"
-                type="submit"
-                className="h-[40px] w-[100px]"
-              >
-                Send
-              </Button>
+      <div className="relative">
+        <div className="relative bg-primary-x1 rounded-lg overflow-hidden transition-all duration-200 hover:bg-primary-x4 ">
+          <div className="flex items-end gap-2 p-3">
+            <div className="flex-1 relative">
+              <Textarea
+                name="message"
+                placeholder="Type your message..."
+                className="w-full resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-accent-x2 placeholder:text-accent-x4 min-h-[40px] max-h-[200px] py-1 px-2 text-sm"
+                rows={1}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
             </div>
+            <Button
+              variant="chatMessageSend"
+              type="submit"
+              className="h-[40px] w-[100px]"
+              onClick={handleSendMessage}
+            >
+              Send
+            </Button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
