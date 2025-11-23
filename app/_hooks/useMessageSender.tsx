@@ -14,22 +14,25 @@ export function useMessageSenderFromForm() {
   const dispatch = useDispatch();
   const [text, setText] = useState("");
 
-  const handleSendMessage = useCallback(() => {
-    if (!text.trim()) return;
+  const handleSendMessage = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-    const payload: WebSocketMessage = {
-      type: WebsocketMessageType.SEND_MESSAGE,
-      message: {
-        serverId: selectedServerId,
-        channelId: selectedChannelId,
-        text,
-      },
-    };
+      const formData = new FormData(e.currentTarget);
 
-    dispatch(sendMessageThroughWebsocket(payload));
-
-    setText("");
-  }, [selectedServerId, selectedChannelId]);
+      const payload: WebSocketMessage = {
+        type: WebsocketMessageType.SEND_MESSAGE,
+        message: {
+          serverId: selectedServerId,
+          channelId: selectedChannelId,
+          text: formData.get("message"),
+        },
+      };
+      dispatch(sendMessageThroughWebsocket(payload));
+      setText("");
+    },
+    [selectedServerId, selectedChannelId]
+  );
 
   return { handleSendMessage, text, setText };
 }

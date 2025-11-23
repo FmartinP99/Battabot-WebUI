@@ -45,6 +45,7 @@ export function useReminder(memberId: string) {
     };
 
     dispatch(sendMessageThroughWebsocket(payload));
+    setText("");
   }, [selectedServerId, selectedChannelId, memberId, date, dispatch]);
 
   return {
