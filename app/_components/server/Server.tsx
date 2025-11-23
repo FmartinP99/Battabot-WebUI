@@ -1,10 +1,10 @@
 "use client";
 import ChannelsList from "./ChannelsList";
-import MembersList from "./MembersList";
-import ChatWindow from "./ChatWindow";
-import ChatInput from "./ChatInput";
-import { useActiveServerData } from "../_hooks/useActiveServerData";
-import Spinner from "./Spinner";
+import MembersList from "./member/MembersList";
+import ChatInput from "./chat/ChatInput";
+import { useActiveServerData } from "../../hooks/useActiveServerData";
+import Spinner from "../shared/Spinner";
+import ChatWindow from "./chat/ChatWindow";
 
 export default function Server() {
   const {

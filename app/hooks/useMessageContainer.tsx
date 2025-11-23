@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { groupMessages } from "../_helpers/utils";
+import { groupMessages } from "../helpers/utils";
 
 export function useMessageContainer(
   activeChannelId: string | null,

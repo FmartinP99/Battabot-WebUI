@@ -1,8 +1,8 @@
 import React from "react";
-import { WebsocketInitMembers } from "../_websocket/types/websocket_init.types";
+import { WebsocketInitMembers } from "../../../_websocket/types/websocket_init.types";
 import Member from "./Member";
 import MemberPopup from "./MemberPopup";
-import Modal from "./Modal";
+import Modal from "../../shared/Modal";
 
 function MemberModalItem({ member }: { member: WebsocketInitMembers }) {
   if (!member) {

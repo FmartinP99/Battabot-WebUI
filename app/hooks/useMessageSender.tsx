@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectSelectedChannelId,
   selectSelectedServerId,
-} from "../_store/selectors";
-import { sendMessageThroughWebsocket } from "../_store/actions";
+} from "../store/selectors";
+import { sendMessageThroughWebsocket } from "../store/actions";
 
 export function useMessageSenderFromForm() {
   const selectedServerId = useSelector(selectSelectedServerId);

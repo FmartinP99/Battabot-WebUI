@@ -1,9 +1,9 @@
-import { DateTimePicker } from "./DateTimePicker";
+import { DateTimePicker } from "../shared/DateTimePicker";
+import { Button } from "../ui/button";
+import { isPast } from "../../helpers/utils";
+import { useReminder } from "../../hooks/useReminder";
+import { Textarea } from "../ui/textarea";
 import RemindmeControl from "./RemindmeControl";
-import { Button } from "./ui/button";
-import { isPast } from "../_helpers/utils";
-import { useReminder } from "../_hooks/useReminder";
-import { Textarea } from "./ui/textarea";
 
 export default function Remindme({ memberId }: { memberId: string }) {
   const { date, setValidDate, sendReminder, text, handleSetText } =

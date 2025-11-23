@@ -2,7 +2,7 @@
 
 import { Provider } from "react-redux";
 import MainView from "./_components/MainView";
-import { store } from "./_store/store";
+import { store } from "./store/store";
 
 export default function Page() {
   return (

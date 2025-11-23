@@ -1,10 +1,10 @@
 "use client";
 
 import { Fragment } from "react";
-import { WebsocketChatMessage } from "../_websocket/types/websocket_init.types";
 import ChatMessage from "./ChatMessage";
-import { useMessageContainer } from "../_hooks/useMessageContainer";
-import useAutoHideScrollbar from "../_hooks/useAutoHideScrollbar";
+import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
+import { useMessageContainer } from "@/app/hooks/useMessageContainer";
+import useAutoHideScrollbar from "@/app/hooks/useAutoHideScrollbar";
 
 export default function ChatWindow({
   activeChannelId,

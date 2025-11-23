@@ -1,7 +1,7 @@
-import { WebsocketInitMembers } from "../_websocket/types/websocket_init.types";
+import { WebsocketInitMembers } from "../../../_websocket/types/websocket_init.types";
 import Member from "./Member";
 import { useState } from "react";
-import Remindme from "./Remindme";
+import Remindme from "../../remindme/Remindme";
 import MemberPopupItemSelect from "./MemberPopupSelectItem";
 
 export type MembersPopupType = "remindme" | "teszt";

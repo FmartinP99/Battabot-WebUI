@@ -1,4 +1,4 @@
-import { WebsocketInitMembers } from "../_websocket/types/websocket_init.types";
+import { WebsocketInitMembers } from "../../../_websocket/types/websocket_init.types";
 import MemberModalItem from "./MemberModalItem";
 import { List } from "react-window";
 import { type RowComponentProps } from "react-window";

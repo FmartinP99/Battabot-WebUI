@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { WebsocketChatMessage } from "../_websocket/types/websocket_init.types";
-import defaultBg from "@/app/_files/profpic.png";
-import { formatEpoch } from "../_helpers/utils";
+import defaultBg from "@/app/files/profpic.png";
 import { useSelector } from "react-redux";
-import { selectMembers, selectSelectedServerId } from "../_store/selectors";
+import { formatEpoch } from "@/app/helpers/utils";
+import { selectSelectedServerId, selectMembers } from "@/app/store/selectors";
+import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
 
 export default function ChatMessage({
   messages,

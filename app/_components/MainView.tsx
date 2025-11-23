@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useAppDispatch } from "../_hooks/storeHooks";
-import { connectWebSocket } from "../_store/actions";
-import Header from "./Header";
-import Server from "./Server";
-import ServersList from "./ServersList";
+import { useAppDispatch } from "../hooks/storeHooks";
+import { connectWebSocket } from "../store/actions";
+import Header from "./shared/Header";
+import Server from "./server/Server";
+import ServersList from "./server/ServersList";
 
 export default function MainView() {
   const dispatch = useAppDispatch();

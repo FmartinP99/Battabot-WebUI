@@ -1,5 +1,5 @@
 import { addMinutes } from "date-fns";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 interface RemindmeControlParams {
   date: Date;

@@ -1,10 +1,10 @@
 "use client";
 
 import { useSelector } from "react-redux";
-import { useMessageSenderFromForm } from "../_hooks/useMessageSender";
-import { Button } from "./ui/button";
-import { Textarea } from "./ui/textarea";
-import { selectSelectedChannelId } from "../_store/selectors";
+import { useMessageSenderFromForm } from "../../../hooks/useMessageSender";
+import { Button } from "../../ui/button";
+import { Textarea } from "../../ui/textarea";
+import { selectSelectedChannelId } from "../../../store/selectors";
 
 export default function ChatInput() {
   const { handleSendMessage, text, setText } = useMessageSenderFromForm();

@@ -4,10 +4,10 @@ import { useAppDispatch } from "./storeHooks";
 import {
   selectSelectedChannelId,
   selectSelectedServerId,
-} from "../_store/selectors";
+} from "../store/selectors";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
-import { sendMessageThroughWebsocket } from "../_store/actions";
+import { sendMessageThroughWebsocket } from "../store/actions";
 
 export function useReminder(memberId: string) {
   const dispatch = useAppDispatch();
@@ -46,7 +46,7 @@ export function useReminder(memberId: string) {
 
     dispatch(sendMessageThroughWebsocket(payload));
     setText("");
-  }, [selectedServerId, selectedChannelId, memberId, date, dispatch]);
+  }, [selectedServerId, selectedChannelId, memberId, date, dispatch, text]);
 
   return {
     date,

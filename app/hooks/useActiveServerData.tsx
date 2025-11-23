@@ -8,7 +8,7 @@ import {
   selectSelectedChannelId,
   selectSelectedServerId,
   selectServers,
-} from "../_store/selectors";
+} from "../store/selectors";
 import { setSelectedChannelId } from "../_websocket/websocketSlice";
 import { useAppDispatch } from "./storeHooks";
 

@@ -1,4 +1,4 @@
-import { RootState } from "../_store/store";
+import { RootState } from "../store/store";
 
 export const selectWebSocketState = (state: RootState) => state.websocket;
 

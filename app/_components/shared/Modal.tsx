@@ -8,7 +8,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { useOutsideClick } from "../_hooks/useOutsideClick";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
 
 interface ModalContextProps {
   name: string;

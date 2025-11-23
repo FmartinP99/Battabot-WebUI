@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { WebsocketInitServerReduced } from "../_websocket/types/websocket_init.types";
-import defaultBg from "@/app/_files/profpic.png";
-import { selectSelectedServerId } from "../_store/selectors";
+import { WebsocketInitServerReduced } from "../../_websocket/types/websocket_init.types";
+import defaultBg from "@/app/files/profpic.png";
+import { selectSelectedServerId } from "../../store/selectors";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../_hooks/storeHooks";
-import { setSelectedServerId } from "../_websocket/websocketSlice";
+import { useAppDispatch } from "../../hooks/storeHooks";
+import { setSelectedServerId } from "../../_websocket/websocketSlice";
 
 export function ServerPreview({
   server,

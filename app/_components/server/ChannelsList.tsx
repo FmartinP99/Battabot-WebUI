@@ -1,4 +1,4 @@
-import { WebsocketInitChannels } from "../_websocket/types/websocket_init.types";
+import { WebsocketInitChannels } from "../../_websocket/types/websocket_init.types";
 
 export default function ChannelsList({
   channels,

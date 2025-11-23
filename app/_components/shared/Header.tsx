@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import ReconnectButton from "./ReconnectButton";
-import defaultBg from "@/app/_files/profpic.png";
+import defaultBg from "@/app/files/profpic.png";
 import { useSelector } from "react-redux";
 import {
   selectSelectedServerId,
   selectServers,
   selectSocketReady,
-} from "../_store/selectors";
+} from "../../store/selectors";
 
 export default function Header() {
   const socketReady = useSelector(selectSocketReady);

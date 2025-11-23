@@ -2,7 +2,7 @@
 
 import { useSelector } from "react-redux";
 import { ServerPreview } from "./ServerPreview";
-import { selectServers } from "../_store/selectors";
+import { selectServers } from "../../store/selectors";
 
 export default function ServersList() {
   const servers = useSelector(selectServers);
