@@ -2,17 +2,30 @@ import Image from "next/image";
 import { WebsocketInitMembers } from "../../../_websocket/types/websocket_init.types";
 import defaultBg from "@/app/files/profpic.png";
 import React from "react";
+import { MemberSize } from "./enums/memberSize.enum";
+
+const pxHeightMap: Record<MemberSize, number> = {
+  [MemberSize.SMALL]: 20,
+  [MemberSize.MEDIUM]: 30,
+  [MemberSize.LARGE]: 45,
+};
+
+const textStyleMap: Record<MemberSize, string> = {
+  [MemberSize.SMALL]: "text-sm",
+  [MemberSize.MEDIUM]: "text-sm",
+  [MemberSize.LARGE]: "text-2xl font-bold",
+};
 
 function Member({
   member,
   noMaxWidth,
-  isLarge,
+  memberSize = MemberSize.MEDIUM,
 }: {
   member: WebsocketInitMembers;
   noMaxWidth?: boolean;
-  isLarge?: boolean;
+  memberSize?: MemberSize;
 }) {
-  const pxHeight = isLarge ? "45" : "30";
+  const pxHeight = pxHeightMap[memberSize];
 
   return (
     <div
@@ -35,9 +48,7 @@ function Member({
       </div>
 
       <span
-        className={`truncate self-center text-left text-[#e4e4e7] font-medium transition-colors duration-200 hover:text-white ${
-          isLarge ? "text-2xl font-bold" : "text-sm"
-        }`}
+        className={`truncate self-center text-left text-[#e4e4e7] font-medium transition-colors duration-200 hover:text-white ${textStyleMap[memberSize]}`}
       >
         {member.displayName}
       </span>

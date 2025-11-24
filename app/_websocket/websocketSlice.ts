@@ -4,6 +4,7 @@ import {
   WebsocketInitChannels,
   WebsocketInitMembers,
   WebsocketChatMessage,
+  WebsocketVoiceUpdateResponse,
 } from "./types/websocket_init.types";
 
 interface WebSocketState {
@@ -83,6 +84,40 @@ const websocketSlice = createSlice({
       if (!channel) return;
       state.selectedChannelId = action.payload;
     },
+    setVoiceEvent(state, action: PayloadAction<WebsocketVoiceUpdateResponse>) {
+      const serverId = action.payload.serverId;
+      const memberId = action.payload.memberId;
+      if (!serverId || !memberId) return;
+
+      const channels = state.channels[action.payload.serverId];
+      if (!channels) return;
+
+      // if there is no before channel its a new connect, if theres no after channel its a disconnect - by discordpy
+      const afterChannel = action.payload.afterChannel;
+      const beforeChannel = action.payload.beforeChannel;
+
+      // does nothing
+      if (!afterChannel && !beforeChannel) return;
+
+      // if there is a join
+      if (afterChannel) {
+        const ch = channels.find((c) => c.channelId === afterChannel);
+        if (ch) {
+          if (!ch.connectedMemberIds.includes(memberId)) {
+            ch.connectedMemberIds.push(memberId);
+          }
+        }
+      }
+
+      if (beforeChannel) {
+        const ch = channels.find((c) => c.channelId === beforeChannel);
+        if (ch) {
+          ch.connectedMemberIds = ch.connectedMemberIds.filter(
+            (id) => id !== memberId
+          );
+        }
+      }
+    },
   },
 });
 
@@ -96,6 +131,7 @@ export const {
   addMessage,
   setSelectedServerId,
   setSelectedChannelId,
+  setVoiceEvent,
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

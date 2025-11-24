@@ -8,6 +8,10 @@
   }
 }
 
+.scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
 ::-webkit-scrollbar {
   @apply w-2 h-2;
 }
@@ -20,12 +24,25 @@
   @apply bg-slate-700;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.scrollbar-default {
+  @apply scrollbar-thin scrollbar-thumb-primary-x1 scrollbar-track-transparent;
 }
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.scrollbar-hide-nonhover::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide-nonhover {
+  @apply scrollbar-hide;
+}
+
+.scrollbar-hide-nonhover:hover {
+  @apply scrollbar-default;
 }
 
 .scrollbar-transition {

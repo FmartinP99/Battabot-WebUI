@@ -11,11 +11,13 @@ import {
   addMessage,
   setSelectedServerId,
   setSelectedChannelId,
+  setVoiceEvent,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
   loadInitResponseToObject,
   incomingMessageMockData,
+  loadIncomingVoiceUpdateToObject,
 } from "./websocketMapper";
 import {
   WebsocketChatMessage,
@@ -42,6 +44,8 @@ export const websocketMiddleware: Middleware =
 
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
+
+        //console.dir(message);
 
         switch (message.msgtype) {
           case "init":
@@ -89,6 +93,10 @@ export const websocketMiddleware: Middleware =
                 },
               })
             );
+            break;
+          case "voiceStateUpdate":
+            const voiceUpdate = loadIncomingVoiceUpdateToObject(event.data);
+            store.dispatch(setVoiceEvent(voiceUpdate));
             break;
         }
       };

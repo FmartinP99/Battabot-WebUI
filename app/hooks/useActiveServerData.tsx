@@ -11,6 +11,11 @@ import {
 } from "../store/selectors";
 import { setSelectedChannelId } from "../_websocket/websocketSlice";
 import { useAppDispatch } from "./storeHooks";
+import { ChannelType } from "../_components/server/channel/enums/channel.enum";
+import {
+  isGuildText,
+  isVoiceLike,
+} from "../_components/server/channel/helpers/channel_helpers";
 
 export function useActiveServerData() {
   const servers = useSelector(selectServers);
@@ -32,13 +37,22 @@ export function useActiveServerData() {
 
   const selectedChannels = useMemo(() => {
     const guildId = selectedServer?.guildId ?? null;
-    return guildId ? channels[guildId]?.filter((ch) => ch.type === "text") : [];
+    return guildId ? channels[guildId] : [];
   }, [channels, selectedServer]);
 
-  const handleSetActiveChannel = useCallback(
+  const handleOnChannelClick = useCallback(
     (channel: WebsocketInitChannels) => {
       if (channel.channelId === selectedChannelId) return;
-      dispatch(setSelectedChannelId(channel.channelId));
+
+      // if guildText then we set the active channel as the channel
+      if (isGuildText(channel.type)) {
+        dispatch(setSelectedChannelId(channel.channelId));
+      }
+
+      // if voiceLike then we connect to that channel
+      else if (isVoiceLike(channel.type)) {
+        // to-do: connection
+      }
     },
     [selectedChannelId]
   );
@@ -62,6 +76,6 @@ export function useActiveServerData() {
     selectedChannels,
 
     selectedChannelId,
-    handleSetActiveChannel,
+    handleOnChannelClick,
   };
 }

@@ -4,7 +4,6 @@ import { Fragment } from "react";
 import ChatMessage from "./ChatMessage";
 import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
 import { useMessageContainer } from "@/app/hooks/useMessageContainer";
-import useAutoHideScrollbar from "@/app/hooks/useAutoHideScrollbar";
 
 export default function ChatWindow({
   activeChannelId,
@@ -18,15 +17,11 @@ export default function ChatWindow({
     messages
   );
 
-  const hidden = useAutoHideScrollbar(containerRef, 500);
-
   if (!activeChannelId || isChannelInactive) return null;
 
   return (
     <div
-      className={`flex-1 max-h-full max-w-full overflow-x-hidden min-w-0 px-4 ${
-        hidden ? "scrollbar-hide" : "overflow-y-auto"
-      } scrollbar-transition`}
+      className={`flex-1 max-h-full max-w-full overflow-x-hidden min-w-0 px-4 scrollbar-hide-nonhover scrollbar-transition`}
       ref={containerRef}
     >
       {groups?.map((msgs, index) => (

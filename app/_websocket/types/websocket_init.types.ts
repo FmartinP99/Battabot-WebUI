@@ -1,7 +1,10 @@
+import { ChannelType } from "@/app/_components/server/channel/enums/channel.enum";
+
 export interface WebsocketInitChannels {
   channelId: string;
   name: string;
-  type: string; // majd megnézni milyen typeok lehetnek
+  type: ChannelType;
+  connectedMemberIds: string[]; //ids only
 }
 
 export interface WebsocketInitMembers {
@@ -35,6 +38,14 @@ export interface WebsocketIncomingMessageResponse {
   userId: string;
   messageId: string;
   text: string;
+  epoch: number;
+}
+
+export interface WebsocketVoiceUpdateResponse {
+  serverId: string;
+  memberId: string;
+  beforeChannel?: string;
+  afterChannel?: string;
   epoch: number;
 }
 

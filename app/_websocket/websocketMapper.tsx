@@ -5,6 +5,7 @@ import {
   WebsocketInitMembers,
   WebsocketInitResponse,
   WebsocketInitServer,
+  WebsocketVoiceUpdateResponse,
 } from "./types/websocket_init.types";
 
 // to-do: parse guard, but im not sure what
@@ -20,6 +21,7 @@ export function loadInitResponseToObject(message: any): WebsocketInitResponse {
         channelId: ch.channelId,
         name: ch.name,
         type: ch.type,
+        connectedMemberIds: ch.connectedMemberIds,
       })),
       members: guild.members?.map((m: WebsocketInitMembers) => ({
         memberId: m.memberId,
@@ -46,6 +48,22 @@ export function loadIncomingMessageToObject(
     userId: data?.message?.userId,
     text: data?.message?.text,
     epoch: data?.message?.epoch,
+  };
+
+  return parsed;
+}
+
+export function loadIncomingVoiceUpdateToObject(
+  message: any
+): WebsocketVoiceUpdateResponse {
+  const data = JSON.parse(message);
+
+  const parsed: WebsocketVoiceUpdateResponse = {
+    serverId: data?.message?.serverId,
+    memberId: data?.message?.memberId,
+    epoch: data?.message?.epoch,
+    beforeChannel: data?.message?.beforeChannel,
+    afterChannel: data?.message?.afterChannel,
   };
 
   return parsed;
