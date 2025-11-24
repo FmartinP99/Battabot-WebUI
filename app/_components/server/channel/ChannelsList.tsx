@@ -8,7 +8,10 @@ export default function ChannelsList({
   activeChannelId,
 }: {
   channels: WebsocketInitChannels[];
-  onChannelClick: (channel: WebsocketInitChannels) => void;
+  onChannelClick: (
+    channel: WebsocketInitChannels,
+    voiceDisconnect?: boolean
+  ) => void;
   activeChannelId: string | null;
 }) {
   if (!activeChannelId) {

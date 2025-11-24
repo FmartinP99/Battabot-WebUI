@@ -26,12 +26,10 @@ export const selectMembersByServerId = (state: RootState, serverId: string) =>
   state.websocket.members[serverId] ?? [];
 
 
-export const selectMemberByActiveServer = (memberId: string) => (state: RootState) => {
+export const selectMembersByActiveServer = (state: RootState) => {
   const selectedServerId = selectSelectedServerId(state);
   if (!selectedServerId) return undefined;
-  return state.websocket.members[selectedServerId]?.find(
-    (member) => member.memberId === memberId
-  );
+  return state.websocket.members[selectedServerId];
 };
 
 

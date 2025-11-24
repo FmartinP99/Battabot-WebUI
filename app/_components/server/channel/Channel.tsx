@@ -1,14 +1,20 @@
 import { WebsocketInitChannels } from "@/app/_websocket/types/websocket_init.types";
 import { getPrefix } from "./helpers/channel_helpers";
-import { selectMemberByActiveServer } from "@/app/store/selectors";
+import { selectMembersByActiveServer } from "@/app/store/selectors";
 import { useAppSelector } from "@/app/hooks/storeHooks";
 import Member from "../member/Member";
 import { MemberSize } from "../member/enums/memberSize.enum";
+import { BotId } from "@/app/consts/botId";
+import { Button } from "../../ui/button";
+import { HiXMark } from "react-icons/hi2";
 
 interface ChannelProps {
   channel: WebsocketInitChannels;
   isActive: boolean;
-  onChannelClick: (channel: WebsocketInitChannels) => void;
+  onChannelClick: (
+    channel: WebsocketInitChannels,
+    voiceDisconnect?: boolean
+  ) => void;
 }
 
 export default function Channel({
@@ -16,6 +22,8 @@ export default function Channel({
   isActive,
   onChannelClick,
 }: ChannelProps) {
+  const members = useAppSelector(selectMembersByActiveServer);
+
   return (
     <>
       <div
@@ -51,14 +59,23 @@ export default function Channel({
       </div>
 
       {channel.connectedMemberIds.map((cmId) => {
-        const member = useAppSelector(selectMemberByActiveServer(cmId));
+        const member = members?.find((mem) => mem.memberId === cmId);
         if (!member) {
           return null;
         }
+        // to-do: restyle this button better in the future
         return (
-          <div className="flex flex-row">
+          <div className="flex flex-row mb-2">
             <span className="ml-10" />
             <Member member={member} memberSize={MemberSize.SMALL} />
+            {cmId === BotId ? (
+              <button
+                className="bg-red-600 bg-opacity-70 hover:bg-opacity-90 rounded flex items-center justify-center p-0.5 mr-2"
+                onClick={() => onChannelClick(channel, true)}
+              >
+                <HiXMark className=" text-white-200" />
+              </button>
+            ) : null}
           </div>
         );
       })}
