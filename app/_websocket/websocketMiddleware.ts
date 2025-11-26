@@ -18,6 +18,7 @@ import {
   loadInitResponseToObject,
   incomingMessageMockData,
   loadIncomingVoiceUpdateToObject,
+  loadIncomingPlaylistToObject,
 } from "./websocketMapper";
 import {
   WebsocketChatMessage,
@@ -98,6 +99,10 @@ export const websocketMiddleware: Middleware =
             const voiceUpdate = loadIncomingVoiceUpdateToObject(event.data);
             store.dispatch(setVoiceEvent(voiceUpdate));
             break;
+
+          case WebsocketMessageType.GET_MUSIC_PLAYLIST:
+            const playlist = loadIncomingPlaylistToObject(event.data);
+            console.log(playlist);
         }
       };
 

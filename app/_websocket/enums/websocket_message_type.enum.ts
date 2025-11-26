@@ -5,4 +5,5 @@ export enum WebsocketMessageType {
   INCOMING_MESSAGE = "incomingMessage",
   SET_REMINDER = "setReminder",
   VOICE_STATE_UPDATE = "voiceStateUpdate",
+  GET_MUSIC_PLAYLIST = "getMusicPlaylist",
 }

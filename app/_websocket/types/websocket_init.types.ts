@@ -1,4 +1,5 @@
 import { ChannelType } from "@/app/_components/server/channel/enums/channel.enum";
+import { Music } from "@/app/_components/server/musicPlayer/music.type";
 
 export interface WebsocketInitChannels {
   channelId: string;
@@ -47,6 +48,10 @@ export interface WebsocketVoiceUpdateResponse {
   beforeChannel?: string;
   afterChannel?: string;
   epoch: number;
+}
+
+export interface WebsocketPlaylist {
+  songs: Record<number, Music>;
 }
 
 export type WebsocketChatMessage = Omit<

@@ -65,7 +65,7 @@ export default function Channel({
         }
         // to-do: restyle this button better in the future
         return (
-          <div className="flex flex-row mb-2">
+          <div className="flex flex-row mb-2" key={member.memberId}>
             <span className="ml-10" />
             <Member member={member} memberSize={MemberSize.SMALL} />
             {cmId === BotId ? (

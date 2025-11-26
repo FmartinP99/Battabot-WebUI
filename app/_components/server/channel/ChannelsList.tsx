@@ -37,6 +37,7 @@ export default function ChannelsList({
               channel={channel}
               isActive={activeChannelId === channel.channelId}
               onChannelClick={onChannelClick}
+              key={channel.channelId + "_t"}
             />
           ))}
       </div>
@@ -55,6 +56,7 @@ export default function ChannelsList({
               channel={channel}
               isActive={activeChannelId === channel.channelId}
               onChannelClick={onChannelClick}
+              key={channel.channelId + "_v"}
             />
           ))}
       </div>

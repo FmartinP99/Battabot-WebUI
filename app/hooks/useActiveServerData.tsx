@@ -11,7 +11,6 @@ import {
 } from "../store/selectors";
 import { setSelectedChannelId } from "../_websocket/websocketSlice";
 import { useAppDispatch } from "./storeHooks";
-import { ChannelType } from "../_components/server/channel/enums/channel.enum";
 import {
   isGuildText,
   isVoiceLike,
@@ -63,6 +62,7 @@ export function useActiveServerData() {
           },
         };
 
+        dispatch(setSelectedChannelId(channel.channelId));
         dispatch(sendMessageThroughWebsocket(payload));
       }
     },
@@ -70,11 +70,26 @@ export function useActiveServerData() {
   );
 
   useEffect(() => {
+    if (!selectedServerId) return;
     if (selectedChannels.length === 0) return;
-    const firstChannelId = selectedChannels[0].channelId;
-    if (!selectedServerId && selectedChannelId) return;
+
+    const firstChannelId = selectedChannels.filter((ch) =>
+      isGuildText(ch.type)
+    )?.[0].channelId;
     dispatch(setSelectedChannelId(firstChannelId));
-  }, [selectedServerId, selectedChannels]);
+  }, [selectedServerId]);
+
+  // teszt to-do: delete
+  useEffect(() => {
+    const payload: WebSocketMessage = {
+      type: WebsocketMessageType.GET_MUSIC_PLAYLIST,
+      message: {
+        serverId: selectedServerId,
+      },
+    };
+
+    dispatch(sendMessageThroughWebsocket(payload));
+  }, []);
 
   return {
     servers,

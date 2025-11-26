@@ -5,6 +5,7 @@ import {
   WebsocketInitMembers,
   WebsocketInitResponse,
   WebsocketInitServer,
+  WebsocketPlaylist,
   WebsocketVoiceUpdateResponse,
 } from "./types/websocket_init.types";
 
@@ -64,6 +65,16 @@ export function loadIncomingVoiceUpdateToObject(
     epoch: data?.message?.epoch,
     beforeChannel: data?.message?.beforeChannel,
     afterChannel: data?.message?.afterChannel,
+  };
+
+  return parsed;
+}
+
+export function loadIncomingPlaylistToObject(message: any): WebsocketPlaylist {
+  const data = JSON.parse(message);
+
+  const parsed: WebsocketPlaylist = {
+    songs: data?.message?.songs,
   };
 
   return parsed;

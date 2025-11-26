@@ -83,6 +83,7 @@ const websocketSlice = createSlice({
       );
       if (!channel) return;
       state.selectedChannelId = action.payload;
+      console.log(state.selectedChannelId);
     },
     setVoiceEvent(state, action: PayloadAction<WebsocketVoiceUpdateResponse>) {
       const serverId = action.payload.serverId;
