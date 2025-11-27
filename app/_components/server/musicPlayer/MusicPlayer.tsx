@@ -1,3 +1,7 @@
+import Playlist from "./Playlist";
+
 export default function MusicPlayer() {
-  return <div>MUSIC PLAYER!</div>;
+  // to-do: progress bar component
+  // to-do: controls component.
+  return <Playlist />;
 }

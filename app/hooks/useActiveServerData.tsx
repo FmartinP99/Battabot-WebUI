@@ -8,6 +8,8 @@ import {
   selectSelectedChannelId,
   selectSelectedServerId,
   selectServers,
+  selectSocketReady,
+  selectSongs,
 } from "../store/selectors";
 import { setSelectedChannelId } from "../_websocket/websocketSlice";
 import { useAppDispatch } from "./storeHooks";
@@ -27,6 +29,8 @@ export function useActiveServerData() {
   const messages = useSelector(selectMessages);
   const selectedChannelId = useSelector(selectSelectedChannelId);
   const dispatch = useAppDispatch();
+  const socketReady = useSelector(selectSocketReady);
+  const songs = useSelector(selectSongs);
 
   const selectedServer = useMemo(() => {
     return servers.find((server) => server.guildId === selectedServerId);
@@ -62,7 +66,11 @@ export function useActiveServerData() {
           },
         };
 
-        dispatch(setSelectedChannelId(channel.channelId));
+        //  if there are no songs, it is pointless to select to that channel.
+        if (songs) {
+          dispatch(setSelectedChannelId(channel.channelId));
+        }
+
         dispatch(sendMessageThroughWebsocket(payload));
       }
     },
@@ -81,6 +89,10 @@ export function useActiveServerData() {
 
   // teszt to-do: delete
   useEffect(() => {
+    if (!socketReady) return;
+    if (!selectedServerId) return;
+    if (songs) return;
+
     const payload: WebSocketMessage = {
       type: WebsocketMessageType.GET_MUSIC_PLAYLIST,
       message: {
@@ -89,7 +101,7 @@ export function useActiveServerData() {
     };
 
     dispatch(sendMessageThroughWebsocket(payload));
-  }, []);
+  }, [socketReady, selectedServerId, songs]);
 
   return {
     servers,

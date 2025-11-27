@@ -81,7 +81,11 @@ export function addMinutes(date: Date, minutesToAdd: number) {
 }
 
 export const isPast = (date: Date): boolean => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
-  };
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date < today;
+};
+
+export function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}

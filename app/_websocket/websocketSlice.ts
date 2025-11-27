@@ -5,7 +5,13 @@ import {
   WebsocketInitMembers,
   WebsocketChatMessage,
   WebsocketVoiceUpdateResponse,
+  WebsocketPlaylist,
 } from "./types/websocket_init.types";
+import {
+  Music,
+  PlaylistState,
+} from "../_components/server/musicPlayer/music.type";
+import { clamp } from "../helpers/utils";
 
 interface WebSocketState {
   socketReady: boolean;
@@ -16,6 +22,8 @@ interface WebSocketState {
   messages: Record<string, WebsocketChatMessage[]>;
   selectedServerId?: string;
   selectedChannelId?: string;
+  songs?: Record<number, Music>;
+  playlistState: Record<string, PlaylistState>;
 }
 
 const initialState: WebSocketState = {
@@ -26,6 +34,7 @@ const initialState: WebSocketState = {
   members: {},
   messages: {},
   selectedServerId: undefined,
+  playlistState: {},
 };
 
 const websocketSlice = createSlice({
@@ -83,7 +92,6 @@ const websocketSlice = createSlice({
       );
       if (!channel) return;
       state.selectedChannelId = action.payload;
-      console.log(state.selectedChannelId);
     },
     setVoiceEvent(state, action: PayloadAction<WebsocketVoiceUpdateResponse>) {
       const serverId = action.payload.serverId;
@@ -119,6 +127,42 @@ const websocketSlice = createSlice({
         }
       }
     },
+
+    setSongs(state, action: PayloadAction<WebsocketPlaylist>) {
+      const songs = action.payload.songs;
+      if (!songs) return;
+      state.songs = songs;
+    },
+
+    updatePlaylistState(state, action: PayloadAction<PlaylistState>) {
+      if (!action.payload.selectedSong) return;
+      const selectedServerId = state.selectedServerId;
+      if (!selectedServerId) return;
+      state.playlistState[selectedServerId] = action.payload;
+    },
+
+    // increments it by a value
+    incrementPlaylistPlayedDuration(state, action: PayloadAction<number>) {
+      const selectedServerId = state.selectedServerId;
+      if (!selectedServerId) return;
+      const playlistState = state.playlistState[selectedServerId];
+      if (!playlistState) return;
+      const playedDuration = playlistState.playedDuration;
+      const maximumDuration = playlistState.selectedSong.length;
+      const next = playedDuration + action.payload;
+      playlistState.playedDuration = clamp(next, 0, maximumDuration);
+    },
+
+    // sets it to an exact value
+    setPlaylistPlayedDuration(state, action: PayloadAction<number>) {
+      const selectedServerId = state.selectedServerId;
+      if (!selectedServerId) return;
+      const playlistState = state.playlistState[selectedServerId];
+      if (!playlistState) return;
+      const maximumDuration = playlistState.selectedSong.length;
+      const next = action.payload;
+      playlistState.playedDuration = clamp(next, 0, maximumDuration);
+    },
   },
 });
 
@@ -133,6 +177,9 @@ export const {
   setSelectedServerId,
   setSelectedChannelId,
   setVoiceEvent,
+  setSongs,
+  updatePlaylistState,
+  incrementPlaylistPlayedDuration
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

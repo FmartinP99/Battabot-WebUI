@@ -12,6 +12,7 @@ import {
   setSelectedServerId,
   setSelectedChannelId,
   setVoiceEvent,
+  setSongs,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
@@ -46,7 +47,7 @@ export const websocketMiddleware: Middleware =
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
 
-        //console.dir(message);
+        console.dir(message);
 
         switch (message.msgtype) {
           case "init":
@@ -102,7 +103,7 @@ export const websocketMiddleware: Middleware =
 
           case WebsocketMessageType.GET_MUSIC_PLAYLIST:
             const playlist = loadIncomingPlaylistToObject(event.data);
-            console.log(playlist);
+            store.dispatch(setSongs(playlist));
         }
       };
 
