@@ -1,10 +1,13 @@
 "use client";
-import ChannelsList from "./ChannelsList";
+import ChannelsList from "./channel/ChannelsList";
 import MembersList from "./member/MembersList";
 import ChatInput from "./chat/ChatInput";
 import { useActiveServerData } from "../../hooks/useActiveServerData";
 import Spinner from "../shared/Spinner";
 import ChatWindow from "./chat/ChatWindow";
+import { isTextLike, isVoiceLike } from "./channel/helpers/channel_helpers";
+import { ReactNode } from "react";
+import MusicPlayer from "./musicPlayer/MusicPlayer";
 
 export default function Server() {
   const {
@@ -12,9 +15,11 @@ export default function Server() {
     selectedMembers,
     selectedChannels,
     selectedChannelId,
-    handleSetActiveChannel,
+    handleOnChannelClick,
     messages,
     selectedServerId,
+    handleOnVoiceDisconnect,
+    activeChannelType,
   } = useActiveServerData();
 
   if (!selectedServer)
@@ -25,18 +30,11 @@ export default function Server() {
       </div>
     );
 
-  return (
-    <div className="w-[calc(100%-70px)] ml-3  flex h-full min-w-0 overflow-hidden">
-      <ChannelsList
-        channels={selectedChannels}
-        setActiveChannel={handleSetActiveChannel}
-        activeChannelId={selectedChannelId ?? null}
-      />
+  let renderedComponent: ReactNode = null;
 
-      <div
-        className="flex-1 flex gap-1 min-h-0 flex-col h-full min-w-0 bg-slate-800 pb-2"
-        style={{ scrollbarGutter: "stable" }}
-      >
+  if (isTextLike(activeChannelType)) {
+    renderedComponent = (
+      <>
         <ChatWindow
           activeChannelId={selectedChannelId ?? null}
           messages={(messages && selectedServerId
@@ -44,7 +42,32 @@ export default function Server() {
             : []
           ).filter((msg) => msg.channelId === selectedChannelId)}
         />
-        <ChatInput />
+        <ChatInput />{" "}
+      </>
+    );
+  } else if (isVoiceLike(activeChannelType)) {
+    // to-do: only render this MusicPlayer if Battabot is is connected to the selected voice channel!!!!!!
+    renderedComponent = (
+      <>
+        <MusicPlayer />
+      </>
+    );
+  }
+
+  return (
+    <div className="w-[calc(100%-70px)] ml-3  flex h-full min-w-0 overflow-hidden">
+      <ChannelsList
+        channels={selectedChannels}
+        onChannelClick={handleOnChannelClick}
+        activeChannelId={selectedChannelId ?? null}
+        onVoiceDisconnect={handleOnVoiceDisconnect}
+      />
+
+      <div
+        className="flex-1 flex gap-1 min-h-0 flex-col h-full min-w-0 bg-slate-800 pb-2 px-2"
+        style={{ scrollbarGutter: "stable" }}
+      >
+        {renderedComponent}
       </div>
       <MembersList members={selectedMembers} />
     </div>

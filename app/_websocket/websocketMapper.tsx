@@ -5,10 +5,15 @@ import {
   WebsocketInitMembers,
   WebsocketInitResponse,
   WebsocketInitServer,
+  WebsocketPlaylist,
+  WebsocketPlaylistStateUpdate,
+  WebsocketVoiceUpdateResponse,
 } from "./types/websocket_init.types";
 
 // to-do: parse guard, but im not sure what
-export function loadInitResponseToObject(message: any): WebsocketInitResponse {
+export function loadInitResponseToObject(
+  message: string
+): WebsocketInitResponse {
   const rawData = JSON.parse(message);
 
   const parsed: WebsocketInitResponse = {
@@ -20,6 +25,7 @@ export function loadInitResponseToObject(message: any): WebsocketInitResponse {
         channelId: ch.channelId,
         name: ch.name,
         type: ch.type,
+        connectedMemberIds: ch.connectedMemberIds,
       })),
       members: guild.members?.map((m: WebsocketInitMembers) => ({
         memberId: m.memberId,
@@ -35,7 +41,7 @@ export function loadInitResponseToObject(message: any): WebsocketInitResponse {
 }
 
 export function loadIncomingMessageToObject(
-  message: any
+  message: string
 ): WebsocketIncomingMessageResponse {
   const data = JSON.parse(message);
 
@@ -46,6 +52,57 @@ export function loadIncomingMessageToObject(
     userId: data?.message?.userId,
     text: data?.message?.text,
     epoch: data?.message?.epoch,
+  };
+
+  return parsed;
+}
+
+export function loadIncomingVoiceUpdateToObject(
+  message: string
+): WebsocketVoiceUpdateResponse {
+  const data = JSON.parse(message);
+
+  const parsed: WebsocketVoiceUpdateResponse = {
+    serverId: data?.message?.serverId,
+    memberId: data?.message?.memberId,
+    epoch: data?.message?.epoch,
+    beforeChannel: data?.message?.beforeChannel,
+    afterChannel: data?.message?.afterChannel,
+  };
+
+  return parsed;
+}
+
+export function loadIncomingPlaylistToObject(
+  message: string
+): WebsocketPlaylist {
+  const data = JSON.parse(message);
+
+  const parsed: WebsocketPlaylist = {
+    serverId: data?.message?.serverId,
+    playlistState: {
+      serverId: data?.message?.serverId,
+      selectedSong: data?.message?.playlistState?.music,
+      selectedModifiedAt: data?.message?.playlistState?.modifiedAt,
+      isPlaying: data?.message?.playlistState?.isPlaying,
+      songs: data?.message?.songs,
+      playedDuration: 0, // default
+    },
+  };
+
+  return parsed;
+}
+
+export function loadIncomingPlaylistStateUpdateToObject(
+  message: string
+): WebsocketPlaylistStateUpdate {
+  const data = JSON.parse(message);
+
+  const parsed: WebsocketPlaylistStateUpdate = {
+    serverId: data?.message?.serverId,
+    selectedSong: data?.message?.playlistState?.music,
+    selectedModifiedAt: data?.message?.playlistState?.modifiedAt,
+    isPlaying: data?.message?.playlistState?.isPlaying,
   };
 
   return parsed;

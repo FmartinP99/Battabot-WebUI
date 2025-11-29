@@ -5,11 +5,11 @@ import { formatEpoch } from "@/app/helpers/utils";
 import { selectSelectedServerId, selectMembers } from "@/app/store/selectors";
 import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
 
-export default function ChatMessage({
-  messages,
-}: {
+interface ChatMessageProps {
   messages: WebsocketChatMessage[];
-}) {
+}
+
+export default function ChatMessage({ messages }: ChatMessageProps) {
   const members = useSelector(selectMembers);
   const selectedServerId = useSelector(selectSelectedServerId);
 

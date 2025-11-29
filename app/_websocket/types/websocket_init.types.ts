@@ -1,7 +1,14 @@
+import { ChannelType } from "@/app/_components/server/channel/enums/channel.enum";
+import {
+  Music,
+  PlaylistState,
+} from "@/app/_components/server/musicPlayer/types/music.type";
+
 export interface WebsocketInitChannels {
   channelId: string;
   name: string;
-  type: string; // majd megnézni milyen typeok lehetnek
+  type: ChannelType;
+  connectedMemberIds: string[]; //ids only
 }
 
 export interface WebsocketInitMembers {
@@ -36,6 +43,26 @@ export interface WebsocketIncomingMessageResponse {
   messageId: string;
   text: string;
   epoch: number;
+}
+
+export interface WebsocketVoiceUpdateResponse {
+  serverId: string;
+  memberId: string;
+  beforeChannel?: string;
+  afterChannel?: string;
+  epoch: number;
+}
+
+export interface WebsocketPlaylist {
+  serverId: string;
+  playlistState: PlaylistState;
+}
+
+export interface WebsocketPlaylistStateUpdate {
+  serverId: string;
+  selectedSong: Music;
+  selectedModifiedAt: number;
+  isPlaying: boolean;
 }
 
 export type WebsocketChatMessage = Omit<

@@ -3,14 +3,15 @@ import Member from "./Member";
 import { useState } from "react";
 import Remindme from "../../remindme/Remindme";
 import MemberPopupItemSelect from "./MemberPopupSelectItem";
+import { MemberSize } from "./enums/memberSize.enum";
 
 export type MembersPopupType = "remindme" | "teszt";
 
-interface MemberPopupParams {
+interface MemberPopupProps {
   member: WebsocketInitMembers;
 }
 
-export default function MemberPopup({ member }: MemberPopupParams) {
+export default function MemberPopup({ member }: MemberPopupProps) {
   const [action, setAction] = useState<MembersPopupType>("remindme");
 
   const handleClick = (actionName: MembersPopupType) => {
@@ -21,7 +22,7 @@ export default function MemberPopup({ member }: MemberPopupParams) {
   return (
     <div className="flex flex-col w-[30vw] bg-primary-x1 rounded-lg shadow-2xl overflow-hidden">
       <div className="flex w-full justify-center border-b border-primary-x3 pb-4 pt-5 px-6 bg-gradient-to-b from-primary-x4 to-primary-x1">
-        <Member member={member} noMaxWidth={true} isLarge={true} />
+        <Member member={member} noMaxWidth={true} memberSize={MemberSize.LARGE} />
       </div>
 
       <div className="mt-4 flex gap-6 p-6">

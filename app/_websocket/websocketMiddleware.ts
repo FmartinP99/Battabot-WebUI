@@ -11,11 +11,17 @@ import {
   addMessage,
   setSelectedServerId,
   setSelectedChannelId,
+  setVoiceEvent,
+  setPlaylistState,
+  updatePlaylistState,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
   loadInitResponseToObject,
   incomingMessageMockData,
+  loadIncomingVoiceUpdateToObject,
+  loadIncomingPlaylistToObject,
+  loadIncomingPlaylistStateUpdateToObject,
 } from "./websocketMapper";
 import {
   WebsocketChatMessage,
@@ -43,6 +49,8 @@ export const websocketMiddleware: Middleware =
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
 
+        console.dir(message);
+
         switch (message.msgtype) {
           case "init":
             const initParsed = loadInitResponseToObject(event.data);
@@ -56,8 +64,10 @@ export const websocketMiddleware: Middleware =
             const _messages: Record<string, WebsocketChatMessage[]> = {};
 
             initParsed.servers.forEach((server) => {
-              _channels[server.guildId] = server.channels ?? [];
-              _members[server.guildId] = server.members ?? [];
+              _channels[server.guildId] =
+                server.channels.filter((chn) => chn.channelId) ?? [];
+              _members[server.guildId] =
+                server.members?.filter((mem) => mem.memberId) ?? [];
               _messages[server.guildId] = [];
             });
 
@@ -89,6 +99,23 @@ export const websocketMiddleware: Middleware =
                 },
               })
             );
+            break;
+          case "voiceStateUpdate":
+            const voiceUpdate = loadIncomingVoiceUpdateToObject(event.data);
+            store.dispatch(setVoiceEvent(voiceUpdate));
+            break;
+
+          case WebsocketMessageType.GET_MUSIC_PLAYLIST:
+            const playlist = loadIncomingPlaylistToObject(event.data);
+            store.dispatch(setPlaylistState(playlist));
+            break;
+
+          case WebsocketMessageType.PLAYLIST_STATE_UPDATE:
+            const playlistStateUpdate = loadIncomingPlaylistStateUpdateToObject(
+              event.data
+            );
+            store.dispatch(updatePlaylistState(playlistStateUpdate));
+
             break;
         }
       };
