@@ -64,8 +64,10 @@ export const websocketMiddleware: Middleware =
             const _messages: Record<string, WebsocketChatMessage[]> = {};
 
             initParsed.servers.forEach((server) => {
-              _channels[server.guildId] = server.channels ?? [];
-              _members[server.guildId] = server.members ?? [];
+              _channels[server.guildId] =
+                server.channels.filter((chn) => chn.channelId) ?? [];
+              _members[server.guildId] =
+                server.members?.filter((mem) => mem.memberId) ?? [];
               _messages[server.guildId] = [];
             });
 
