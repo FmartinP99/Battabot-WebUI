@@ -11,7 +11,9 @@ import {
 } from "./types/websocket_init.types";
 
 // to-do: parse guard, but im not sure what
-export function loadInitResponseToObject(message: any): WebsocketInitResponse {
+export function loadInitResponseToObject(
+  message: string
+): WebsocketInitResponse {
   const rawData = JSON.parse(message);
 
   const parsed: WebsocketInitResponse = {
@@ -39,7 +41,7 @@ export function loadInitResponseToObject(message: any): WebsocketInitResponse {
 }
 
 export function loadIncomingMessageToObject(
-  message: any
+  message: string
 ): WebsocketIncomingMessageResponse {
   const data = JSON.parse(message);
 
@@ -56,7 +58,7 @@ export function loadIncomingMessageToObject(
 }
 
 export function loadIncomingVoiceUpdateToObject(
-  message: any
+  message: string
 ): WebsocketVoiceUpdateResponse {
   const data = JSON.parse(message);
 
@@ -71,7 +73,9 @@ export function loadIncomingVoiceUpdateToObject(
   return parsed;
 }
 
-export function loadIncomingPlaylistToObject(message: any): WebsocketPlaylist {
+export function loadIncomingPlaylistToObject(
+  message: string
+): WebsocketPlaylist {
   const data = JSON.parse(message);
 
   const parsed: WebsocketPlaylist = {
@@ -90,7 +94,7 @@ export function loadIncomingPlaylistToObject(message: any): WebsocketPlaylist {
 }
 
 export function loadIncomingPlaylistStateUpdateToObject(
-  message: any
+  message: string
 ): WebsocketPlaylistStateUpdate {
   const data = JSON.parse(message);
 

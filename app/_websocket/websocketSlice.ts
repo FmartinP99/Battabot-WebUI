@@ -11,7 +11,7 @@ import {
 import {
   Music,
   PlaylistState,
-} from "../_components/server/musicPlayer/music.type";
+} from "../_components/server/musicPlayer/types/music.type";
 import { clamp } from "../helpers/utils";
 
 interface WebSocketState {
@@ -21,20 +21,21 @@ interface WebSocketState {
   channels: Record<string, WebsocketInitChannels[]>;
   members: Record<string, WebsocketInitMembers[]>;
   messages: Record<string, WebsocketChatMessage[]>;
-  selectedServerId?: string;
-  selectedChannelId?: string;
+  selectedServerId: string | null;
+  selectedChannelId: string | null;
   playlistStates: Record<string, PlaylistState>;
 }
 
 const initialState: WebSocketState = {
   socketReady: false,
   websocket: null,
-  servers: [],
-  channels: {},
-  members: {},
-  messages: {},
-  selectedServerId: undefined,
-  playlistStates: {},
+  servers: [] as WebsocketInitServerReduced[],
+  channels: {} as Record<string, WebsocketInitChannels[]>,
+  members: {} as Record<string, WebsocketInitMembers[]>,
+  messages: {} as Record<string, WebsocketChatMessage[]>,
+  selectedServerId: null,
+  selectedChannelId: null,
+  playlistStates: {} as Record<string, PlaylistState>,
 };
 
 const websocketSlice = createSlice({
@@ -110,18 +111,16 @@ const websocketSlice = createSlice({
 
       // if there is a join
       if (afterChannel) {
-        const ch = channels.find((c) => c.channelId === afterChannel);
-        if (ch) {
-          if (!ch.connectedMemberIds.includes(memberId)) {
-            ch.connectedMemberIds.push(memberId);
-          }
+        const channel = channels.find((c) => c.channelId === afterChannel);
+        if (channel && !channel.connectedMemberIds.includes(memberId)) {
+          channel.connectedMemberIds.push(memberId);
         }
       }
 
       if (beforeChannel) {
-        const ch = channels.find((c) => c.channelId === beforeChannel);
-        if (ch) {
-          ch.connectedMemberIds = ch.connectedMemberIds.filter(
+        const channel = channels.find((c) => c.channelId === beforeChannel);
+        if (channel) {
+          channel.connectedMemberIds = channel.connectedMemberIds.filter(
             (id) => id !== memberId
           );
         }
@@ -140,8 +139,9 @@ const websocketSlice = createSlice({
       if (!selectedServerId) return;
       const playlistState = state.playlistStates[selectedServerId];
       if (!playlistState) return;
-      const playedDuration = playlistState.playedDuration;
-      const maximumDuration = playlistState.selectedSong.length;
+
+      const { playedDuration, selectedSong } = playlistState;
+      const maximumDuration = selectedSong.length;
       const next = playedDuration + action.payload;
       playlistState.playedDuration = clamp(next, 0, maximumDuration);
     },
@@ -161,13 +161,16 @@ const websocketSlice = createSlice({
       state,
       action: PayloadAction<WebsocketPlaylistStateUpdate>
     ) {
-      const serverId = action.payload.serverId;
+      const { serverId, selectedModifiedAt, selectedSong, isPlaying } =
+        action.payload;
+
       if (!serverId) return;
       const playlistState = state.playlistStates[serverId];
       if (!playlistState) return;
-      (playlistState.isPlaying = action.payload.isPlaying ?? false),
-        (playlistState.selectedModifiedAt = action.payload.selectedModifiedAt),
-        (playlistState.selectedSong = action.payload.selectedSong);
+
+      playlistState.isPlaying = isPlaying ?? false;
+      playlistState.selectedModifiedAt = selectedModifiedAt;
+      playlistState.selectedSong = selectedSong;
     },
   },
 });

@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Music } from "../_components/server/musicPlayer/music.type";
+import { Music } from "../_components/server/musicPlayer/types/music.type";
 
 export function useMusicPlayerTable() {
   const selectedServerId = useAppSelector(selectSelectedServerId);
@@ -16,9 +16,7 @@ export function useMusicPlayerTable() {
 
   const songsArray = useMemo(() => {
     if (!songs) return [];
-    return Object.entries(songs).map(([key, song]) => ({
-      ...song,
-    }));
+    return songs ? Object.values(songs) : [];
   }, [songs]);
 
   const columns = useMemo(() => {

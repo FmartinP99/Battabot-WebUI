@@ -4,7 +4,11 @@ import Member from "./Member";
 import MemberPopup from "./MemberPopup";
 import Modal from "../../shared/Modal";
 
-function MemberModalItem({ member }: { member: WebsocketInitMembers }) {
+interface MemberModalItemProps {
+  member: WebsocketInitMembers;
+}
+
+function MemberModalItem({ member }: MemberModalItemProps) {
   if (!member) {
     return null;
   }

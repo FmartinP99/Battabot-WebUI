@@ -2,7 +2,7 @@ import { ChannelType } from "@/app/_components/server/channel/enums/channel.enum
 import {
   Music,
   PlaylistState,
-} from "@/app/_components/server/musicPlayer/music.type";
+} from "@/app/_components/server/musicPlayer/types/music.type";
 
 export interface WebsocketInitChannels {
   channelId: string;

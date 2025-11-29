@@ -6,10 +6,8 @@ import { useActiveServerData } from "../../hooks/useActiveServerData";
 import Spinner from "../shared/Spinner";
 import ChatWindow from "./chat/ChatWindow";
 import { isTextLike, isVoiceLike } from "./channel/helpers/channel_helpers";
-import { ChannelType } from "./channel/enums/channel.enum";
 import { ReactNode } from "react";
 import MusicPlayer from "./musicPlayer/MusicPlayer";
-import Member from "./member/Member";
 
 export default function Server() {
   const {
@@ -21,6 +19,7 @@ export default function Server() {
     messages,
     selectedServerId,
     handleOnVoiceDisconnect,
+    activeChannelType,
   } = useActiveServerData();
 
   if (!selectedServer)
@@ -30,10 +29,6 @@ export default function Server() {
         <p className="text-xl text-primary-200">Loading servers...</p>
       </div>
     );
-
-  const activeChannelType =
-    selectedChannels.find((ch) => ch.channelId === selectedChannelId)?.type ??
-    ChannelType.Text;
 
   let renderedComponent: ReactNode = null;
 
@@ -51,7 +46,7 @@ export default function Server() {
       </>
     );
   } else if (isVoiceLike(activeChannelType)) {
-     // to-do: only render this MusicPlayer if Battabot is is connected to the selected voice channel!!!!!!
+    // to-do: only render this MusicPlayer if Battabot is is connected to the selected voice channel!!!!!!
     renderedComponent = (
       <>
         <MusicPlayer />

@@ -7,11 +7,11 @@ import { MemberSize } from "./enums/memberSize.enum";
 
 export type MembersPopupType = "remindme" | "teszt";
 
-interface MemberPopupParams {
+interface MemberPopupProps {
   member: WebsocketInitMembers;
 }
 
-export default function MemberPopup({ member }: MemberPopupParams) {
+export default function MemberPopup({ member }: MemberPopupProps) {
   const [action, setAction] = useState<MembersPopupType>("remindme");
 
   const handleClick = (actionName: MembersPopupType) => {

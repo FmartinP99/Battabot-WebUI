@@ -13,7 +13,7 @@ import {
   selectPlaylistState,
   selectSelectedServerId,
 } from "@/app/store/selectors";
-import { Music, PlaylistState } from "./music.type";
+import { Music, PlaylistState } from "./types/music.type";
 import { WebSocketMessage } from "@/app/_websocket/types/websocket.types";
 import { WebsocketMessageType } from "@/app/_websocket/enums/websocket_message_type.enum";
 import { sendMessageThroughWebsocket } from "@/app/store/actions";
@@ -42,9 +42,9 @@ export default function Playlist() {
   return (
     <Table>
       <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
+        {table.getHeaderGroups()?.map((headerGroup) => (
           <TableRow key={headerGroup.id} className="uppercase">
-            {headerGroup.headers.map((header) => (
+            {headerGroup.headers?.map((header) => (
               <TableHead key={header.id} className="text-white">
                 {header.isPlaceholder
                   ? null
@@ -58,7 +58,7 @@ export default function Playlist() {
         ))}
       </TableHeader>
       <TableBody>
-        {table.getRowModel().rows.map((row) => (
+        {table.getRowModel()?.rows.map((row) => (
           <TableRow
             onClick={() => handleSelectNewSong(row.original)}
             key={row.id}
@@ -70,7 +70,7 @@ export default function Playlist() {
                 }
             `}
           >
-            {row.getVisibleCells().map((cell) => (
+            {row.getVisibleCells()?.map((cell) => (
               <TableCell key={cell.id} className="text-left">
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>

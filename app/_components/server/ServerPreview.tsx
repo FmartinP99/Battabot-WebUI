@@ -8,11 +8,11 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../hooks/storeHooks";
 import { setSelectedServerId } from "../../_websocket/websocketSlice";
 
-export function ServerPreview({
-  server,
-}: {
+interface ServerPreviewProps {
   server: WebsocketInitServerReduced;
-}) {
+}
+
+export function ServerPreview({ server }: ServerPreviewProps) {
   const dispatch = useAppDispatch();
   const selectedServerId = useSelector(selectSelectedServerId);
   const isActive = selectedServerId === server.guildId;

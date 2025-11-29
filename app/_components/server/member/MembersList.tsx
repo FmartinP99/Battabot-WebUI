@@ -24,11 +24,11 @@ export function MemberRow({
   );
 }
 
-export default function MembersList({
-  members,
-}: {
+interface MemberListProps {
   members: WebsocketInitMembers[];
-}) {
+}
+
+export default function MembersList({ members }: MemberListProps) {
   return (
     <div className="flex flex-col gap-1 overflow-hidden pl-3 pr-2 border-l border-primary-x1 pt-3 pb-2 w-[240px] bg-primary-x2">
       <div className="px-2 mb-2">

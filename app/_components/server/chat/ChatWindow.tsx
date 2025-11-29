@@ -5,13 +5,15 @@ import ChatMessage from "./ChatMessage";
 import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
 import { useMessageContainer } from "@/app/hooks/useMessageContainer";
 
+interface ChatWindowProps {
+  activeChannelId: string | null;
+  messages: WebsocketChatMessage[];
+}
+
 export default function ChatWindow({
   activeChannelId,
   messages,
-}: {
-  activeChannelId: string | null;
-  messages: WebsocketChatMessage[];
-}) {
+}: ChatWindowProps) {
   const { containerRef, isChannelInactive, groups } = useMessageContainer(
     activeChannelId,
     messages
@@ -21,7 +23,7 @@ export default function ChatWindow({
 
   return (
     <div
-      className={`flex-1 max-h-full max-w-full overflow-x-hidden min-w-0 px-4 scrollbar-hide-nonhover scrollbar-transition`}
+      className="flex-1 max-h-full max-w-full overflow-x-hidden min-w-0 px-4 scrollbar-hide-nonhover scrollbar-transition"
       ref={containerRef}
     >
       {groups?.map((msgs, index) => (

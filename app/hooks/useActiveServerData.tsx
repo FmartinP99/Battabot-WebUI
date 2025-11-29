@@ -20,6 +20,7 @@ import {
 import { sendMessageThroughWebsocket } from "../store/actions";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
+import { ChannelType } from "../_components/server/channel/enums/channel.enum";
 
 export function useActiveServerData() {
   const servers = useAppSelector(selectServers);
@@ -50,15 +51,26 @@ export function useActiveServerData() {
 
   const handleOnChannelClick = useCallback(
     (channel: WebsocketInitChannels) => {
-      if (channel.channelId === selectedChannelId) return;
+      const { channelId, type } = channel;
+
+      if (channelId === selectedChannelId) return;
+
+      const guildText = isGuildText(type);
+      const voiceText = isVoiceLike(type);
 
       // if guildText then we set the active channel as the channel
-      if (isGuildText(channel.type)) {
+      if (guildText) {
         dispatch(setSelectedChannelId(channel.channelId));
+        return;
       }
 
       // if voiceLike then we connect to that channel
-      else if (isVoiceLike(channel.type)) {
+      else if (voiceText) {
+        //  if there are no songs, it is pointless to select that channel.
+        if (songs) {
+          dispatch(setSelectedChannelId(channel.channelId));
+        }
+
         const payload: WebSocketMessage = {
           type: WebsocketMessageType.VOICE_STATE_UPDATE,
           message: {
@@ -67,11 +79,6 @@ export function useActiveServerData() {
             isDisconnect: false,
           },
         };
-
-        //  if there are no songs, it is pointless to select that channel.
-        if (songs) {
-          dispatch(setSelectedChannelId(channel.channelId));
-        }
 
         dispatch(sendMessageThroughWebsocket(payload));
       }
@@ -102,6 +109,9 @@ export function useActiveServerData() {
     const firstChannelId = selectedChannels.filter((ch) =>
       isGuildText(ch.type)
     )?.[0].channelId;
+
+    if (!firstChannelId) return;
+
     dispatch(setSelectedChannelId(firstChannelId));
   }, [selectedServerId]);
 
@@ -121,6 +131,10 @@ export function useActiveServerData() {
     dispatch(sendMessageThroughWebsocket(payload));
   }, [socketReady, selectedServerId, songs]);
 
+  const activeChannelType =
+    selectedChannels.find((ch) => ch.channelId === selectedChannelId)?.type ??
+    ChannelType.Text;
+
   return {
     servers,
     selectedServerId,
@@ -135,5 +149,6 @@ export function useActiveServerData() {
     selectedChannelId,
     handleOnChannelClick,
     handleOnVoiceDisconnect,
+    activeChannelType,
   };
 }

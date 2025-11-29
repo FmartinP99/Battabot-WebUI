@@ -1,4 +1,4 @@
-interface MemberPopupItemSelectParams {
+interface MemberPopupItemSelectProps {
   text: string;
   isSelected: boolean;
   handleClick: VoidFunction;
@@ -8,7 +8,7 @@ export default function MemberPopupItemSelect({
   text,
   isSelected,
   handleClick,
-}: MemberPopupItemSelectParams) {
+}: MemberPopupItemSelectProps) {
   return (
     <div
       onClick={handleClick}

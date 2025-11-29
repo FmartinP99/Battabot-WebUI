@@ -16,15 +16,17 @@ const textStyleMap: Record<MemberSize, string> = {
   [MemberSize.LARGE]: "text-2xl font-bold",
 };
 
+interface MemberProps {
+  member: WebsocketInitMembers;
+  noMaxWidth?: boolean;
+  memberSize?: MemberSize;
+}
+
 function Member({
   member,
   noMaxWidth,
   memberSize = MemberSize.MEDIUM,
-}: {
-  member: WebsocketInitMembers;
-  noMaxWidth?: boolean;
-  memberSize?: MemberSize;
-}) {
+}: MemberProps) {
   const pxHeight = pxHeightMap[memberSize];
 
   return (
