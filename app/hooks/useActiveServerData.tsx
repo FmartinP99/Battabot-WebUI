@@ -57,7 +57,7 @@ export function useActiveServerData() {
         dispatch(setSelectedChannelId(channel.channelId));
       }
 
-      // if voiceLike then we connect/disconnect to/from that channel
+      // if voiceLike then we connect to that channel
       else if (isVoiceLike(channel.type)) {
         const payload: WebSocketMessage = {
           type: WebsocketMessageType.VOICE_STATE_UPDATE,
@@ -68,7 +68,7 @@ export function useActiveServerData() {
           },
         };
 
-        //  if there are no songs, it is pointless to select to that channel.
+        //  if there are no songs, it is pointless to select that channel.
         if (songs) {
           dispatch(setSelectedChannelId(channel.channelId));
         }
