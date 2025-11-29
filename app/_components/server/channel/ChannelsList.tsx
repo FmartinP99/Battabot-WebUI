@@ -6,13 +6,12 @@ export default function ChannelsList({
   channels,
   onChannelClick,
   activeChannelId,
+  onVoiceDisconnect,
 }: {
   channels: WebsocketInitChannels[];
-  onChannelClick: (
-    channel: WebsocketInitChannels,
-    voiceDisconnect?: boolean
-  ) => void;
+  onChannelClick: (channel: WebsocketInitChannels) => void;
   activeChannelId: string | null;
+  onVoiceDisconnect: (channel: WebsocketInitChannels) => void;
 }) {
   if (!activeChannelId) {
     return null;
@@ -38,6 +37,7 @@ export default function ChannelsList({
               isActive={activeChannelId === channel.channelId}
               onChannelClick={onChannelClick}
               key={channel.channelId + "_t"}
+              onVoiceDisconnect={onVoiceDisconnect}
             />
           ))}
       </div>
@@ -57,6 +57,7 @@ export default function ChannelsList({
               isActive={activeChannelId === channel.channelId}
               onChannelClick={onChannelClick}
               key={channel.channelId + "_v"}
+              onVoiceDisconnect={onVoiceDisconnect}
             />
           ))}
       </div>

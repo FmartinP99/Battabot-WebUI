@@ -12,7 +12,8 @@ import {
   setSelectedServerId,
   setSelectedChannelId,
   setVoiceEvent,
-  setSongs,
+  setPlaylistState,
+  updatePlaylistState,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
@@ -20,6 +21,7 @@ import {
   incomingMessageMockData,
   loadIncomingVoiceUpdateToObject,
   loadIncomingPlaylistToObject,
+  loadIncomingPlaylistStateUpdateToObject,
 } from "./websocketMapper";
 import {
   WebsocketChatMessage,
@@ -103,7 +105,16 @@ export const websocketMiddleware: Middleware =
 
           case WebsocketMessageType.GET_MUSIC_PLAYLIST:
             const playlist = loadIncomingPlaylistToObject(event.data);
-            store.dispatch(setSongs(playlist));
+            store.dispatch(setPlaylistState(playlist));
+            break;
+
+          case WebsocketMessageType.PLAYLIST_STATE_UPDATE:
+            const playlistStateUpdate = loadIncomingPlaylistStateUpdateToObject(
+              event.data
+            );
+            store.dispatch(updatePlaylistState(playlistStateUpdate));
+
+            break;
         }
       };
 

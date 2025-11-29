@@ -14,10 +14,14 @@ import {
   selectSelectedServerId,
 } from "@/app/store/selectors";
 import { Music, PlaylistState } from "./music.type";
-import { updatePlaylistState } from "@/app/_websocket/websocketSlice";
+import { WebSocketMessage } from "@/app/_websocket/types/websocket.types";
+import { WebsocketMessageType } from "@/app/_websocket/enums/websocket_message_type.enum";
+import { sendMessageThroughWebsocket } from "@/app/store/actions";
 
 export default function Playlist() {
   const { table } = useMusicPlayerTable();
+
+  // maybe put these into a custom hook later?
   const selectedServerId = useAppSelector(selectSelectedServerId);
   const playlistState = useAppSelector((state) =>
     selectedServerId ? selectPlaylistState(state, selectedServerId) : undefined
@@ -25,16 +29,14 @@ export default function Playlist() {
   const dispatch = useAppDispatch();
 
   function handleSelectNewSong(music: Music) {
-    const playlistId = playlistState?.selectedSong.index;
-    const musicId = music.index;
-    if (playlistId === musicId) return;
-
-    const newState: PlaylistState = {
-      selectedSong: music,
-      isPlaying: false,
-      playedDuration: 0,
+    const payload: WebSocketMessage = {
+      type: WebsocketMessageType.PLAYLIST_SONG_SKIP,
+      message: {
+        serverId: selectedServerId,
+        songIndex: music.index,
+      },
     };
-    dispatch(updatePlaylistState(newState));
+    dispatch(sendMessageThroughWebsocket(payload));
   }
 
   return (

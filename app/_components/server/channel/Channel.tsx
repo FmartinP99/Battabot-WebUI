@@ -11,16 +11,15 @@ import { HiXMark } from "react-icons/hi2";
 interface ChannelProps {
   channel: WebsocketInitChannels;
   isActive: boolean;
-  onChannelClick: (
-    channel: WebsocketInitChannels,
-    voiceDisconnect?: boolean
-  ) => void;
+  onChannelClick: (channel: WebsocketInitChannels) => void;
+  onVoiceDisconnect?: (channel: WebsocketInitChannels) => void;
 }
 
 export default function Channel({
   channel,
   isActive,
   onChannelClick,
+  onVoiceDisconnect,
 }: ChannelProps) {
   const members = useAppSelector(selectMembersByActiveServer);
 
@@ -71,7 +70,7 @@ export default function Channel({
             {cmId === BotId ? (
               <button
                 className="bg-red-600 bg-opacity-70 hover:bg-opacity-90 rounded flex items-center justify-center p-0.5 mr-2"
-                onClick={() => onChannelClick(channel, true)}
+                onClick={() => onVoiceDisconnect?.(channel)}
               >
                 <HiXMark className=" text-white-200" />
               </button>

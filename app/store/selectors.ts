@@ -39,7 +39,8 @@ export const selectMessagesByServerId = (state: RootState, serverId: string) =>
 export const selectSelectedChannelId = (state: RootState) =>
   state.websocket.selectedChannelId;
 
-export const selectSongs = (state: RootState) => state.websocket.songs;
+export const selectSongs = (state: RootState, serverId: string) =>
+  state.websocket.playlistStates[serverId]?.songs;
 
 export const selectPlaylistState = (state: RootState, serverId: string) =>
-  state.websocket.playlistState[serverId]
+  state.websocket.playlistStates[serverId];

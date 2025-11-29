@@ -6,6 +6,7 @@ import {
   WebsocketInitResponse,
   WebsocketInitServer,
   WebsocketPlaylist,
+  WebsocketPlaylistStateUpdate,
   WebsocketVoiceUpdateResponse,
 } from "./types/websocket_init.types";
 
@@ -74,7 +75,30 @@ export function loadIncomingPlaylistToObject(message: any): WebsocketPlaylist {
   const data = JSON.parse(message);
 
   const parsed: WebsocketPlaylist = {
-    songs: data?.message?.songs,
+    serverId: data?.message?.serverId,
+    playlistState: {
+      serverId: data?.message?.serverId,
+      selectedSong: data?.message?.playlistState?.music,
+      selectedModifiedAt: data?.message?.playlistState?.modifiedAt,
+      isPlaying: data?.message?.playlistState?.isPlaying,
+      songs: data?.message?.songs,
+      playedDuration: 0, // default
+    },
+  };
+
+  return parsed;
+}
+
+export function loadIncomingPlaylistStateUpdateToObject(
+  message: any
+): WebsocketPlaylistStateUpdate {
+  const data = JSON.parse(message);
+
+  const parsed: WebsocketPlaylistStateUpdate = {
+    serverId: data?.message?.serverId,
+    selectedSong: data?.message?.playlistState?.music,
+    selectedModifiedAt: data?.message?.playlistState?.modifiedAt,
+    isPlaying: data?.message?.playlistState?.isPlaying,
   };
 
   return parsed;

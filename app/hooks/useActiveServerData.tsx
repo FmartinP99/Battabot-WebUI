@@ -12,7 +12,7 @@ import {
   selectSongs,
 } from "../store/selectors";
 import { setSelectedChannelId } from "../_websocket/websocketSlice";
-import { useAppDispatch } from "./storeHooks";
+import { useAppDispatch, useAppSelector } from "./storeHooks";
 import {
   isGuildText,
   isVoiceLike,
@@ -22,15 +22,17 @@ import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
 
 export function useActiveServerData() {
-  const servers = useSelector(selectServers);
-  const selectedServerId = useSelector(selectSelectedServerId);
-  const members = useSelector(selectMembers);
-  const channels = useSelector(selectChannels);
-  const messages = useSelector(selectMessages);
-  const selectedChannelId = useSelector(selectSelectedChannelId);
+  const servers = useAppSelector(selectServers);
+  const selectedServerId = useAppSelector(selectSelectedServerId);
+  const members = useAppSelector(selectMembers);
+  const channels = useAppSelector(selectChannels);
+  const messages = useAppSelector(selectMessages);
+  const selectedChannelId = useAppSelector(selectSelectedChannelId);
   const dispatch = useAppDispatch();
   const socketReady = useSelector(selectSocketReady);
-  const songs = useSelector(selectSongs);
+  const songs = useAppSelector((state) =>
+    selectSongs(state, selectedServerId ?? "")
+  );
 
   const selectedServer = useMemo(() => {
     return servers.find((server) => server.guildId === selectedServerId);
@@ -47,7 +49,7 @@ export function useActiveServerData() {
   }, [channels, selectedServer]);
 
   const handleOnChannelClick = useCallback(
-    (channel: WebsocketInitChannels, voiceDisconnect: boolean = false) => {
+    (channel: WebsocketInitChannels) => {
       if (channel.channelId === selectedChannelId) return;
 
       // if guildText then we set the active channel as the channel
@@ -62,7 +64,7 @@ export function useActiveServerData() {
           message: {
             serverId: selectedServerId,
             channelId: channel.channelId,
-            isDisconnect: voiceDisconnect,
+            isDisconnect: false,
           },
         };
 
@@ -76,6 +78,22 @@ export function useActiveServerData() {
     },
     [selectedChannelId]
   );
+
+  function handleOnVoiceDisconnect(channel: WebsocketInitChannels) {
+    if (!isVoiceLike(channel.type)) return;
+    const payload: WebSocketMessage = {
+      type: WebsocketMessageType.VOICE_STATE_UPDATE,
+      message: {
+        serverId: selectedServerId,
+        channelId: channel.channelId,
+        isDisconnect: true,
+      },
+    };
+
+    dispatch(sendMessageThroughWebsocket(payload));
+
+    // to-do: maybe on disconect set a text channel as active channel?
+  }
 
   useEffect(() => {
     if (!selectedServerId) return;
@@ -116,5 +134,6 @@ export function useActiveServerData() {
 
     selectedChannelId,
     handleOnChannelClick,
+    handleOnVoiceDisconnect,
   };
 }

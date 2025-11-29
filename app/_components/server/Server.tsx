@@ -20,6 +20,7 @@ export default function Server() {
     handleOnChannelClick,
     messages,
     selectedServerId,
+    handleOnVoiceDisconnect,
   } = useActiveServerData();
 
   if (!selectedServer)
@@ -64,6 +65,7 @@ export default function Server() {
         channels={selectedChannels}
         onChannelClick={handleOnChannelClick}
         activeChannelId={selectedChannelId ?? null}
+        onVoiceDisconnect={handleOnVoiceDisconnect}
       />
 
       <div
