@@ -22,7 +22,7 @@ export function useProgressBarPercentage() {
   useEffect(() => {
     if (!playlistState?.isPlaying) return;
 
-    const fps = 24; // to-do: react doesnt render fast enough
+    const fps = 24; // to-do: react doesnt render frequently enough
     const intervalMs = 1000 / fps;
     const increment = intervalMs / 1000;
 
