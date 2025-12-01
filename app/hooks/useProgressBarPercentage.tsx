@@ -13,8 +13,6 @@ export function useProgressBarPercentage() {
     selectedServerId ? selectPlaylistState(state, selectedServerId) : undefined
   );
 
-  const dispatch = useAppDispatch();
-
   const [playedDuration, setPlayedDuration] = useState(0);
 
   useEffect(() => {

@@ -11,6 +11,7 @@ export default function MusicPlayerProgressBar() {
           className="bg-accent-x1 h-full ring-1 rounded-lg ring-black transition-all duration-100 ease-out"
           style={{ width: progressBarPercentage * 100 + "%" }}
         />
+
         <div
           className="absolute top-1/2 -translate-y-1/2 bg-accent-x1 rounded-full ring-1 ring-black transition-all duration-100 ease-out"
           style={{
