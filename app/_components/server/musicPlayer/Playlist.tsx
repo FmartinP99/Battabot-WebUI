@@ -17,6 +17,7 @@ import { Music, PlaylistState } from "./types/music.type";
 import { WebSocketMessage } from "@/app/_websocket/types/websocket.types";
 import { WebsocketMessageType } from "@/app/_websocket/enums/websocket_message_type.enum";
 import { sendMessageThroughWebsocket } from "@/app/store/actions";
+import { useEffect } from "react";
 
 export default function Playlist() {
   const { table } = useMusicPlayerTable();
@@ -40,7 +41,7 @@ export default function Playlist() {
   }
 
   return (
-    <Table>
+    <Table className="overflow-y-auto">
       <TableHeader>
         {table.getHeaderGroups()?.map((headerGroup) => (
           <TableRow key={headerGroup.id} className="uppercase">

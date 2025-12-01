@@ -21,6 +21,7 @@ import { sendMessageThroughWebsocket } from "../store/actions";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
 import { ChannelType } from "../_components/server/channel/enums/channel.enum";
+import { BotId } from "../consts/botId";
 
 export function useActiveServerData() {
   const servers = useAppSelector(selectServers);
@@ -71,6 +72,11 @@ export function useActiveServerData() {
           dispatch(setSelectedChannelId(channel.channelId));
         }
 
+        if (!BotId || (BotId && channel.connectedMemberIds.includes(BotId)))
+          return;
+
+        // request that bot wants to join
+
         const payload: WebSocketMessage = {
           type: WebsocketMessageType.VOICE_STATE_UPDATE,
           message: {
@@ -79,7 +85,6 @@ export function useActiveServerData() {
             isDisconnect: false,
           },
         };
-
         dispatch(sendMessageThroughWebsocket(payload));
       }
     },

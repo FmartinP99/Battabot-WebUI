@@ -15,6 +15,8 @@ const buttonVariants = cva(
           "flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md px-4 py-1 cursor-pointer transition-colors duration-200",
         outline:
           "border border-input  shadow-sm transition-colors duration-500",
+        outlineClickable:
+          "border border-input shadow-sm transition-colors duration-500 active:scale-95 active:opacity-80 active:shadow-inner transform",
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",

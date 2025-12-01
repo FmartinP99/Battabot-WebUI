@@ -161,8 +161,13 @@ const websocketSlice = createSlice({
       state,
       action: PayloadAction<WebsocketPlaylistStateUpdate>
     ) {
-      const { serverId, selectedModifiedAt, selectedSong, isPlaying } =
-        action.payload;
+      const {
+        serverId,
+        selectedModifiedAt,
+        selectedSong,
+        isPlaying,
+        playedDuration,
+      } = action.payload;
 
       if (!serverId) return;
       const playlistState = state.playlistStates[serverId];
@@ -171,6 +176,7 @@ const websocketSlice = createSlice({
       playlistState.isPlaying = isPlaying ?? false;
       playlistState.selectedModifiedAt = selectedModifiedAt;
       playlistState.selectedSong = selectedSong;
+      playlistState.playedDuration = playedDuration;
     },
   },
 });
@@ -189,6 +195,7 @@ export const {
   setPlaylistState,
   updatePlaylistState,
   incrementPlaylistPlayedDuration,
+  setPlaylistPlayedDuration
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

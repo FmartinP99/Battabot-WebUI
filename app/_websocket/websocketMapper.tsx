@@ -86,7 +86,7 @@ export function loadIncomingPlaylistToObject(
       selectedModifiedAt: data?.message?.playlistState?.modifiedAt,
       isPlaying: data?.message?.playlistState?.isPlaying,
       songs: data?.message?.songs,
-      playedDuration: 0, // default
+      playedDuration: data?.message?.playlistState?.playedDuration ?? 0, // default
     },
   };
 
@@ -103,6 +103,7 @@ export function loadIncomingPlaylistStateUpdateToObject(
     selectedSong: data?.message?.playlistState?.music,
     selectedModifiedAt: data?.message?.playlistState?.modifiedAt,
     isPlaying: data?.message?.playlistState?.isPlaying,
+    playedDuration: data?.message?.playlistState?.playedDuration ?? 0,
   };
 
   return parsed;

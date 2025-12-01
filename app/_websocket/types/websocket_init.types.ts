@@ -63,6 +63,7 @@ export interface WebsocketPlaylistStateUpdate {
   selectedSong: Music;
   selectedModifiedAt: number;
   isPlaying: boolean;
+  playedDuration: number;
 }
 
 export type WebsocketChatMessage = Omit<

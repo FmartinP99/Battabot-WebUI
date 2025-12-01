@@ -74,6 +74,28 @@ export function getTimeString(time: Date): string {
   );
 }
 
+export function secondsToHHMMSS(
+  totalSeconds: number,
+  skipHoursIfLessThan1: boolean = false
+): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+
+  if (skipHoursIfLessThan1 && hours == 0) {
+    return [
+      minutes.toString().padStart(2, "0"),
+      seconds.toString().padStart(2, "0"),
+    ].join(":");
+  }
+
+  return [
+    hours.toString().padStart(2, "0"),
+    minutes.toString().padStart(2, "0"),
+    seconds.toString().padStart(2, "0"),
+  ].join(":");
+}
+
 export function addMinutes(date: Date, minutesToAdd: number) {
   const currentMinutes = date.getMinutes();
   date.setMinutes(currentMinutes + minutesToAdd);
