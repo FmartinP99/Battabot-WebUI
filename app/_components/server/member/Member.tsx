@@ -3,6 +3,7 @@ import { WebsocketInitMembers } from "../../../_websocket/types/websocket_init.t
 import defaultBg from "@/app/files/profpic.png";
 import React from "react";
 import { MemberSize } from "./enums/memberSize.enum";
+import { MemberStatusColors } from "./consts/memberStatusColors.consts";
 
 const pxHeightMap: Record<MemberSize, number> = {
   [MemberSize.SMALL]: 20,
@@ -28,6 +29,9 @@ function Member({
   memberSize = MemberSize.MEDIUM,
 }: MemberProps) {
   const pxHeight = pxHeightMap[memberSize];
+  const circleColor = MemberStatusColors[member.status];
+
+  console.log(circleColor);
 
   return (
     <div
@@ -46,7 +50,10 @@ function Member({
           height={pxHeight}
         />
 
-        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-accent-x6 rounded-full border-2 border-primary-x2"></div>
+        <div
+          className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-primary-x2"
+          style={{ backgroundColor: circleColor }}
+        ></div>
       </div>
 
       <span

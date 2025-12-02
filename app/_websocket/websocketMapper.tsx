@@ -7,6 +7,7 @@ import {
   WebsocketInitServer,
   WebsocketPlaylist,
   WebsocketPlaylistStateUpdate,
+  WebsocketPresenceUpdate,
   WebsocketVoiceUpdateResponse,
 } from "./types/websocket_init.types";
 
@@ -33,6 +34,7 @@ export function loadInitResponseToObject(
         displayName: m.displayName,
         avatarUrl: m.avatarUrl,
         bot: m.bot,
+        status: m.status,
       })),
     })),
   };
@@ -104,6 +106,21 @@ export function loadIncomingPlaylistStateUpdateToObject(
     selectedModifiedAt: data?.message?.playlistState?.modifiedAt,
     isPlaying: data?.message?.playlistState?.isPlaying,
     playedDuration: data?.message?.playlistState?.playedDuration ?? 0,
+  };
+
+  return parsed;
+}
+
+export function loadIncomingPresenceUpdateToObject(
+  message: string
+): WebsocketPresenceUpdate {
+  const data = JSON.parse(message);
+
+  const parsed: WebsocketPresenceUpdate = {
+    serverId: data?.message?.serverId,
+    memberId: data?.message?.memberId,
+    newStatus: data?.message?.newStatus,
+    newDisplayName: data?.message?.newDisplayName,
   };
 
   return parsed;

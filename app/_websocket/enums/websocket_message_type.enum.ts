@@ -10,4 +10,5 @@ export enum WebsocketMessageType {
   PLAYLIST_SONG_SKIP = "playlistSongSkip",
   PLAYLIST_PAUSE = "playlistPause",
   PLAYLIST_RESUME = "playlistResume",
+  PRESENCE_UPDATE = "presenceUpdate",
 }

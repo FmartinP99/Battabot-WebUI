@@ -7,6 +7,7 @@ import {
   WebsocketVoiceUpdateResponse,
   WebsocketPlaylist,
   WebsocketPlaylistStateUpdate,
+  WebsocketPresenceUpdate,
 } from "./types/websocket_init.types";
 import {
   Music,
@@ -178,6 +179,22 @@ const websocketSlice = createSlice({
       playlistState.selectedSong = selectedSong;
       playlistState.playedDuration = playedDuration;
     },
+
+    updatePresenceStates(
+      state,
+      action: PayloadAction<WebsocketPresenceUpdate>
+    ) {
+      const { serverId, memberId, newDisplayName, newStatus } = action.payload;
+      if (!serverId || !memberId) return;
+
+      const member = state.members[serverId]?.find(
+        (mem) => mem.memberId === memberId
+      );
+      if (!member) return;
+
+      member.status = newStatus;
+      member.displayName = newDisplayName;
+    },
   },
 });
 
@@ -195,7 +212,8 @@ export const {
   setPlaylistState,
   updatePlaylistState,
   incrementPlaylistPlayedDuration,
-  setPlaylistPlayedDuration
+  setPlaylistPlayedDuration,
+  updatePresenceStates,
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

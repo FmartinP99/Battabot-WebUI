@@ -14,6 +14,7 @@ import {
   setVoiceEvent,
   setPlaylistState,
   updatePlaylistState,
+  updatePresenceStates,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
@@ -22,6 +23,7 @@ import {
   loadIncomingVoiceUpdateToObject,
   loadIncomingPlaylistToObject,
   loadIncomingPlaylistStateUpdateToObject,
+  loadIncomingPresenceUpdateToObject,
 } from "./websocketMapper";
 import {
   WebsocketChatMessage,
@@ -100,7 +102,7 @@ export const websocketMiddleware: Middleware =
               })
             );
             break;
-          case "voiceStateUpdate":
+          case WebsocketMessageType.VOICE_STATE_UPDATE:
             const voiceUpdate = loadIncomingVoiceUpdateToObject(event.data);
             store.dispatch(setVoiceEvent(voiceUpdate));
             break;
@@ -117,6 +119,12 @@ export const websocketMiddleware: Middleware =
             store.dispatch(updatePlaylistState(playlistStateUpdate));
 
             break;
+
+          case WebsocketMessageType.PRESENCE_UPDATE:
+            const presenceUpdate = loadIncomingPresenceUpdateToObject(
+              event.data
+            );
+            store.dispatch(updatePresenceStates(presenceUpdate));
         }
       };
 

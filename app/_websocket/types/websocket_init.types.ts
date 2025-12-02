@@ -1,4 +1,5 @@
 import { ChannelType } from "@/app/_components/server/channel/enums/channel.enum";
+import { MemberStatus } from "@/app/_components/server/member/enums/memberStatus.enum";
 import {
   Music,
   PlaylistState,
@@ -17,6 +18,7 @@ export interface WebsocketInitMembers {
   displayName: string;
   memberId: string;
   name: string;
+  status: MemberStatus;
 }
 
 export interface WebsocketInitServer {
@@ -70,3 +72,10 @@ export type WebsocketChatMessage = Omit<
   WebsocketIncomingMessageResponse,
   "serverId"
 >;
+
+export interface WebsocketPresenceUpdate {
+  serverId: string;
+  memberId: string;
+  newStatus: MemberStatus;
+  newDisplayName: string;
+}
