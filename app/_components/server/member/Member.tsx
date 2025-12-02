@@ -31,8 +31,6 @@ function Member({
   const pxHeight = pxHeightMap[memberSize];
   const circleColor = MemberStatusColors[member.status];
 
-  console.log(circleColor);
-
   return (
     <div
       className={`flex gap-3 items-center cursor-pointer transition-all duration-200 ${
