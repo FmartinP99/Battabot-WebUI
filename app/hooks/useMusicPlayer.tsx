@@ -17,7 +17,7 @@ export default function useMusicPlayer() {
   const selectedSongTitle = playlistState?.selectedSong?.title ?? "";
 
   const selectedSongName = selectedSongArtist
-    ? selectedSongArtist + " - " + selectedSongTitle
+    ? `${selectedSongArtist} - ${selectedSongTitle}`
     : selectedSongTitle;
 
   const dispatch = useAppDispatch();

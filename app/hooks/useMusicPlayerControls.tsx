@@ -41,13 +41,10 @@ export default function useMusicPlayerControls() {
     dispatch(sendMessageThroughWebsocket(payload));
   }, [selectedServerId]);
 
-  const togglePlay = useCallback(() => {
-    if (isPaused) {
-      resume();
-    } else {
-      pause();
-    }
-  }, [isPaused, pause, resume]);
+  const togglePlay = useCallback(
+    () => (isPaused ? resume() : pause()),
+    [isPaused, pause, resume]
+  );
 
   const skip = useCallback(
     (direction: 1 | -1) => {
