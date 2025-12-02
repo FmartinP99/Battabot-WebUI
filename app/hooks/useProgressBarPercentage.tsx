@@ -13,7 +13,9 @@ export function useProgressBarPercentage() {
     selectedServerId ? selectPlaylistState(state, selectedServerId) : undefined
   );
 
-  const [playedDuration, setPlayedDuration] = useState(0);
+  const [playedDuration, setPlayedDuration] = useState(
+    playlistState?.playedDuration ?? 0
+  );
 
   useEffect(() => {
     setPlayedDuration(playlistState?.playedDuration ?? 0);
