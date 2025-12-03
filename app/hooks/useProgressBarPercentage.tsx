@@ -3,9 +3,8 @@ import {
   selectPlaylistState,
   selectSelectedServerId,
 } from "../store/selectors";
-import { useAppDispatch, useAppSelector } from "./storeHooks";
+import { useAppSelector } from "./storeHooks";
 import { secondsToHHMMSS } from "../helpers/utils";
-import { setPlaylistPlayedDuration } from "../_websocket/websocketSlice";
 
 export function useProgressBarPercentage() {
   const selectedServerId = useAppSelector(selectSelectedServerId);

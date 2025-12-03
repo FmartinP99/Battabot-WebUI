@@ -22,6 +22,7 @@ import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
 import { ChannelType } from "../_components/server/channel/enums/channel.enum";
 import { BotId } from "../consts/botId";
+import { MemberStatus } from "../_components/server/member/enums/memberStatus.enum";
 
 export function useActiveServerData() {
   const servers = useAppSelector(selectServers);
@@ -42,7 +43,21 @@ export function useActiveServerData() {
 
   const selectedMembers = useMemo(() => {
     const guildId = selectedServer?.guildId ?? null;
-    return guildId ? members[guildId] : [];
+    const unOrderedmembers = guildId ? members[guildId] : [];
+
+    const sortedMembers = [
+      ...unOrderedmembers.filter(
+        (m) =>
+          m.status !== MemberStatus.OFFLINE &&
+          m.status !== MemberStatus.INVISIBLE
+      ),
+      ...unOrderedmembers.filter(
+        (m) =>
+          m.status === MemberStatus.OFFLINE ||
+          m.status === MemberStatus.INVISIBLE
+      ),
+    ];
+    return sortedMembers;
   }, [members, selectedServer]);
 
   const selectedChannels = useMemo(() => {
