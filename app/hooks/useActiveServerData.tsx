@@ -154,6 +154,8 @@ export function useActiveServerData() {
   const activeChannelType =
     selectedChannels.find((ch) => ch.channelId === selectedChannelId)?.type ??
     ChannelType.Text;
+  
+  const isBotConnected: boolean = !!selectedChannels.find((ch) => ch.connectedMemberIds.includes(BotId!))
 
   return {
     servers,
@@ -170,5 +172,6 @@ export function useActiveServerData() {
     handleOnChannelClick,
     handleOnVoiceDisconnect,
     activeChannelType,
+    isBotConnected
   };
 }

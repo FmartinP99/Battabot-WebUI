@@ -20,6 +20,7 @@ export default function Server() {
     selectedServerId,
     handleOnVoiceDisconnect,
     activeChannelType,
+    isBotConnected,
   } = useActiveServerData();
 
   if (!selectedServer)
@@ -45,8 +46,7 @@ export default function Server() {
         <ChatInput />{" "}
       </>
     );
-  } else if (isVoiceLike(activeChannelType)) {
-    // to-do: only render this MusicPlayer if Battabot is is connected to the selected voice channel!!!!!!
+  } else if (isVoiceLike(activeChannelType) && isBotConnected) {
     renderedComponent = (
       <>
         <MusicPlayer />
