@@ -34,7 +34,7 @@ import {
 export const websocketMiddleware: Middleware =
   (store: any) => (next: any) => (action: any) => {
     if (action.type === "websocket/connect") {
-      const socket = new WebSocket("ws://localhost:8001/ws");
+      const socket = new WebSocket("ws://localhost:8000/ws");
 
       socket.onopen = () => {
         console.log("✅ Connected to backend!");
