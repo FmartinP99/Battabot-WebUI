@@ -13,8 +13,8 @@ export default function ChatMessageFormatted({
 
   return (
     <div className="break-all whitespace-pre-wrap max-w-full text-slate-200 leading-relaxed text-left">
-      {renderMessageWithImageNames(message.text)}
-      {getImagesFromMessage(message.text)}
+      <div>{renderMessageWithImageNames(message.text)}</div>
+      <div className="">{getImagesFromMessage(message.text)}</div>
     </div>
   );
 }

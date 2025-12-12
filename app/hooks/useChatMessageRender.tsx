@@ -20,13 +20,9 @@ export default function useChatMessageRender() {
         rel="noopener noreferrer"
         className="inline-block"
       >
-        <Image
-          unoptimized
+        <img
           src={url}
-          alt="Image"
-          width={800}
-          height={600}
-          className="block max-h-[350px] max-w-full rounded-lg object-contain mt-1 self-baseline"
+          className="block max-h-[350px] rounded-lg object-contain mt-1 "
         />
       </a>
     ));
