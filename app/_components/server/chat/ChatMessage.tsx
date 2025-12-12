@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { formatEpoch } from "@/app/helpers/utils";
 import { selectSelectedServerId, selectMembers } from "@/app/store/selectors";
 import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
+import ChatMessageFormatted from "./ChatMessageFormatted";
 
 interface ChatMessageProps {
   messages: WebsocketChatMessage[];
@@ -41,12 +42,7 @@ export default function ChatMessage({ messages }: ChatMessageProps) {
 
         <div className="space-y-1">
           {messages?.map((msg) => (
-            <div
-              className="break-all whitespace-pre-wrap max-w-full text-slate-200 leading-relaxed"
-              key={msg.messageId}
-            >
-              {msg.text}
-            </div>
+            <ChatMessageFormatted message={msg} key={msg.messageId} />
           ))}
         </div>
       </div>
