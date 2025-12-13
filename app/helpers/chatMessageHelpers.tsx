@@ -1,7 +1,4 @@
-"use client";
-
-export default function useChatMessageRender() {
-  const imageUrlRegex =
+const imageUrlRegex =
     /(https?:\/\/(?:cdn\.discordapp\.com|media\.discordapp\.net)\/[^\s]+)|(https?:\/\/[^\s]+?\.(?:png|jpe?g|gif|webp|svg))/gi;
 
   function getImagesFromMessage(text: string) {
@@ -66,5 +63,4 @@ export default function useChatMessageRender() {
     return <>{parts}</>;
   }
 
-  return { getImagesFromMessage, renderMessageWithImageNames };
-}
+export {getImagesFromMessage, renderMessageWithImageNames}
