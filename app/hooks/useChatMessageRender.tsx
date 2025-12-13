@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 export default function useChatMessageRender() {
   const imageUrlRegex =
     /(https?:\/\/(?:cdn\.discordapp\.com|media\.discordapp\.net)\/[^\s]+)|(https?:\/\/[^\s]+?\.(?:png|jpe?g|gif|webp|svg))/gi;
@@ -18,11 +16,11 @@ export default function useChatMessageRender() {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block"
+        className="inline-block relative w-full max-h-[350px] mt-1"
       >
         <img
           src={url}
-          className="block max-h-[350px] rounded-lg object-contain mt-1 "
+          className="block max-h-[350px] max-w-[full] rounded-lg object-contain mt-1 "
         />
       </a>
     ));
