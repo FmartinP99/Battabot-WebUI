@@ -4,6 +4,12 @@ import defaultBg from "@/app/files/profpic.png";
 import React from "react";
 import { MemberSize } from "./enums/memberSize.enum";
 import { MemberStatusColors } from "./consts/memberStatusColors.consts";
+import {
+  selectRolesByServerId,
+  selectSelectedServerId,
+} from "@/app/store/selectors";
+import { useAppSelector } from "@/app/hooks/storeHooks";
+import { useMemberRoleColor } from "@/app/hooks/useMemberRoleColor";
 
 const pxHeightMap: Record<MemberSize, number> = {
   [MemberSize.SMALL]: 20,
@@ -30,6 +36,7 @@ function Member({
 }: MemberProps) {
   const pxHeight = pxHeightMap[memberSize];
   const circleColor = MemberStatusColors[member.status];
+  const { color } = useMemberRoleColor(member.roleIds);
 
   return (
     <div
@@ -55,7 +62,10 @@ function Member({
       </div>
 
       <span
-        className={`truncate self-center text-left text-[#e4e4e7] font-medium transition-colors duration-200 hover:text-white ${textStyleMap[memberSize]}`}
+        style={{ color: color }}
+        className={`truncate self-center text-left text-[#e4e4e7] 
+                    font-medium transition-colors duration-200 hover:text-white 
+                    ${textStyleMap[memberSize]}`}
       >
         {member.displayName}
       </span>

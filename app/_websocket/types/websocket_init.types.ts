@@ -19,6 +19,15 @@ export interface WebsocketInitMembers {
   memberId: string;
   name: string;
   status: MemberStatus;
+  roleIds: string[];
+}
+
+export interface WebsocketInitRoles {
+  id: string;
+  name: string;
+  priority: number;
+  color: string;
+  displaySeparately: boolean;
 }
 
 export interface WebsocketInitServer {
@@ -27,12 +36,14 @@ export interface WebsocketInitServer {
   iconUrl?: string;
   channels: WebsocketInitChannels[];
   members: WebsocketInitMembers[];
+  roles: WebsocketInitRoles[];
 }
 
 export type WebsocketInitServerReduced = Omit<
   WebsocketInitServer,
-  "channels" | "members"
+  "channels" | "members" | "roles"
 >;
+
 
 export interface WebsocketInitResponse {
   servers?: WebsocketInitServer[];

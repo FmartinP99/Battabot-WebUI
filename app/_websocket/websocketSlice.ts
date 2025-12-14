@@ -8,6 +8,7 @@ import {
   WebsocketPlaylist,
   WebsocketPlaylistStateUpdate,
   WebsocketPresenceUpdate,
+  WebsocketInitRoles,
 } from "./types/websocket_init.types";
 import {
   Music,
@@ -21,6 +22,7 @@ interface WebSocketState {
   servers: WebsocketInitServerReduced[];
   channels: Record<string, WebsocketInitChannels[]>;
   members: Record<string, WebsocketInitMembers[]>;
+  roles: Record<string, WebsocketInitRoles[]>;
   messages: Record<string, WebsocketChatMessage[]>;
   selectedServerId: string | null;
   selectedChannelId: string | null;
@@ -33,6 +35,7 @@ const initialState: WebSocketState = {
   servers: [] as WebsocketInitServerReduced[],
   channels: {} as Record<string, WebsocketInitChannels[]>,
   members: {} as Record<string, WebsocketInitMembers[]>,
+  roles: {} as Record<string, WebsocketInitRoles[]>,
   messages: {} as Record<string, WebsocketChatMessage[]>,
   selectedServerId: null,
   selectedChannelId: null,
@@ -65,6 +68,12 @@ const websocketSlice = createSlice({
       action: PayloadAction<Record<string, WebsocketInitMembers[]>>
     ) {
       state.members = action.payload;
+    },
+    setRoles(
+      state,
+      action: PayloadAction<Record<string, WebsocketInitRoles[]>>
+    ) {
+      state.roles = action.payload;
     },
     setMessages(
       state,
@@ -204,6 +213,7 @@ export const {
   setServers,
   setChannels,
   setMembers,
+  setRoles,
   setMessages,
   addMessage,
   setSelectedServerId,

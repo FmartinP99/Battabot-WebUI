@@ -15,6 +15,7 @@ import {
   setPlaylistState,
   updatePlaylistState,
   updatePresenceStates,
+  setRoles,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
@@ -29,6 +30,7 @@ import {
   WebsocketChatMessage,
   WebsocketInitChannels,
   WebsocketInitMembers,
+  WebsocketInitRoles,
 } from "./types/websocket_init.types";
 
 export const websocketMiddleware: Middleware =
@@ -65,11 +67,15 @@ export const websocketMiddleware: Middleware =
 
             const _messages: Record<string, WebsocketChatMessage[]> = {};
 
+            const _roles: Record<string, WebsocketInitRoles[]> = {};
+
             initParsed.servers.forEach((server) => {
               _channels[server.guildId] =
                 server.channels.filter((chn) => chn.channelId) ?? [];
               _members[server.guildId] =
                 server.members?.filter((mem) => mem.memberId) ?? [];
+              _roles[server.guildId] =
+                server.roles?.filter((role) => role.id) ?? [];
               _messages[server.guildId] = [];
             });
 
@@ -78,6 +84,7 @@ export const websocketMiddleware: Middleware =
             store.dispatch(setServers(_servers ?? []));
             store.dispatch(setChannels(_channels));
             store.dispatch(setMembers(_members));
+            store.dispatch(setRoles(_roles));
             store.dispatch(setMessages(_messages));
             store.dispatch(setSelectedServerId(_servers[0]?.guildId ?? null));
             store.dispatch(

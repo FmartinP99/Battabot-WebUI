@@ -44,3 +44,6 @@ export const selectSongs = (state: RootState, serverId: string) =>
 
 export const selectPlaylistState = (state: RootState, serverId: string) =>
   state.websocket.playlistStates[serverId];
+
+export const selectRolesByServerId = (state: RootState, serverId: string) =>
+  state.websocket.roles[serverId];

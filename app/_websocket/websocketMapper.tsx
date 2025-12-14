@@ -4,6 +4,7 @@ import {
   WebsocketInitChannels,
   WebsocketInitMembers,
   WebsocketInitResponse,
+  WebsocketInitRoles,
   WebsocketInitServer,
   WebsocketPlaylist,
   WebsocketPlaylistStateUpdate,
@@ -35,6 +36,14 @@ export function loadInitResponseToObject(
         avatarUrl: m.avatarUrl,
         bot: m.bot,
         status: m.status,
+        roleIds: m.roleIds,
+      })),
+      roles: guild.roles?.map((r: WebsocketInitRoles) => ({
+        id: r.id,
+        name: r.name,
+        priority: r.priority,
+        color: r.color,
+        displaySeparately: r.displaySeparately,
       })),
     })),
   };
