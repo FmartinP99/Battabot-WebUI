@@ -4,11 +4,6 @@ import defaultBg from "@/app/files/profpic.png";
 import React from "react";
 import { MemberSize } from "./enums/memberSize.enum";
 import { MemberStatusColors } from "./consts/memberStatusColors.consts";
-import {
-  selectRolesByServerId,
-  selectSelectedServerId,
-} from "@/app/store/selectors";
-import { useAppSelector } from "@/app/hooks/storeHooks";
 import { useMemberRoleColor } from "@/app/hooks/useMemberRoleColor";
 
 const pxHeightMap: Record<MemberSize, number> = {

@@ -6,6 +6,7 @@ import MemberModalItem from "./MemberModalItem";
 import { List } from "react-window";
 import { type RowComponentProps } from "react-window";
 import { useMemberListRows } from "@/app/hooks/useMemberListRows";
+import { isOfflineLikeStatus } from "./helpers/members_helper";
 
 export type MemberRow =
   | { type: "member"; member: WebsocketInitMembers }
@@ -22,8 +23,12 @@ export function MemberListRow({
 }: RowComponentProps<MemberListRowProps>) {
   const row = rows[index];
   if (row.type === "member") {
+    const isOfflineLike = isOfflineLikeStatus(row.member?.status);
     return (
-      <div style={style}>
+      <div
+        style={style}
+        className={` ${isOfflineLike ? "opacity-30" : ""} hover:opacity-100`}
+      >
         <MemberModalItem
           member={row.member}
           key={(row.member?.memberId ?? "") + "_" + index}
