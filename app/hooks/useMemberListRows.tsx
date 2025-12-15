@@ -14,6 +14,7 @@ import {
   isRoleRow,
 } from "../_components/server/member/helpers/members_helper";
 
+// all the offlineLike members, are at the end of the members list.
 export function useMemberListRows(
   members: WebsocketInitMembers[]
 ): MemberRow[] {
