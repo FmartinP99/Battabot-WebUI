@@ -1,3 +1,7 @@
+import { ChannelType } from "../_components/server/channel/enums/channel.enum";
+import { MemberStatus } from "../_components/server/member/enums/memberStatus.enum";
+import { WebsocketMessageType } from "./enums/websocket_message_type.enum";
+import { WebSocketMessage } from "./types/websocket.types";
 import {
   WebsocketChatMessage,
   WebsocketIncomingMessageResponse,
@@ -13,38 +17,47 @@ import {
   WebsocketVoiceUpdateResponse,
 } from "./types/websocket_init.types";
 
-// to-do: parse guard, but im not sure what
+function tryParseJson(data: string) {
+  let rawData: any;
+  try {
+    rawData = JSON.parse(data);
+  } catch (error) {
+    rawData = null;
+  }
+  return rawData;
+}
+
 export function loadInitResponseToObject(
   message: string
 ): WebsocketInitResponse {
-  const rawData = JSON.parse(message);
+  const data = tryParseJson(message);
 
   const parsed: WebsocketInitResponse = {
-    servers: rawData?.message?.map((guild: WebsocketInitServer) => ({
+    servers: data?.message?.map((guild: WebsocketInitServer) => ({
       guildId: guild.guildId,
-      guildName: guild.guildName,
-      iconUrl: guild.iconUrl,
+      guildName: guild.guildName ?? "Undefined",
+      iconUrl: guild.iconUrl ?? "",
       channels: guild.channels?.map((ch: WebsocketInitChannels) => ({
         channelId: ch.channelId,
-        name: ch.name,
-        type: ch.type,
-        connectedMemberIds: ch.connectedMemberIds,
+        name: ch.name ?? "Undefined",
+        type: ch.type ?? ChannelType.Category,
+        connectedMemberIds: ch.connectedMemberIds ?? [],
       })),
       members: guild.members?.map((m: WebsocketInitMembers) => ({
         memberId: m.memberId,
-        name: m.name,
-        displayName: m.displayName,
-        avatarUrl: m.avatarUrl,
-        bot: m.bot,
-        status: m.status,
-        roleIds: m.roleIds,
+        name: m.name ?? "Undefined",
+        displayName: m.displayName ?? "Undefined",
+        avatarUrl: m.avatarUrl ?? "",
+        bot: m.bot ?? false,
+        status: m.status ?? MemberStatus.OFFLINE,
+        roleIds: m.roleIds ?? [],
       })),
       roles: guild.roles?.map((r: WebsocketInitRoles) => ({
         id: r.id,
-        name: r.name,
-        priority: r.priority,
-        color: r.color,
-        displaySeparately: r.displaySeparately,
+        name: r.name ?? "Undefined",
+        priority: r.priority ?? -1,
+        color: r.color ?? "#000000",
+        displaySeparately: r.displaySeparately ?? false,
       })),
     })),
   };
@@ -55,7 +68,7 @@ export function loadInitResponseToObject(
 export function loadIncomingMessageToObject(
   message: string
 ): WebsocketIncomingMessageResponse {
-  const data = JSON.parse(message);
+  const data = tryParseJson(message);
 
   const parsed: WebsocketIncomingMessageResponse = {
     channelId: data?.message?.channelId,
@@ -72,7 +85,7 @@ export function loadIncomingMessageToObject(
 export function loadIncomingVoiceUpdateToObject(
   message: string
 ): WebsocketVoiceUpdateResponse {
-  const data = JSON.parse(message);
+  const data = tryParseJson(message);
 
   const parsed: WebsocketVoiceUpdateResponse = {
     serverId: data?.message?.serverId,
@@ -88,7 +101,7 @@ export function loadIncomingVoiceUpdateToObject(
 export function loadIncomingPlaylistToObject(
   message: string
 ): WebsocketPlaylist {
-  const data = JSON.parse(message);
+  const data = tryParseJson(message);
 
   const parsed: WebsocketPlaylist = {
     serverId: data?.message?.serverId,
@@ -108,7 +121,7 @@ export function loadIncomingPlaylistToObject(
 export function loadIncomingPlaylistStateUpdateToObject(
   message: string
 ): WebsocketPlaylistStateUpdate {
-  const data = JSON.parse(message);
+  const data = tryParseJson(message);
 
   const parsed: WebsocketPlaylistStateUpdate = {
     serverId: data?.message?.serverId,
@@ -124,7 +137,7 @@ export function loadIncomingPlaylistStateUpdateToObject(
 export function loadIncomingPresenceUpdateToObject(
   message: string
 ): WebsocketPresenceUpdate {
-  const data = JSON.parse(message);
+  const data = tryParseJson(message);
 
   const parsed: WebsocketPresenceUpdate = {
     serverId: data?.message?.serverId,
@@ -139,7 +152,7 @@ export function loadIncomingPresenceUpdateToObject(
 export function loadIncomingToggleRoleResponseToObject(
   message: string
 ): WebsocketToggleRoleResponse {
-  const data = JSON.parse(message);
+  const data = tryParseJson(message);
 
   const parsed: WebsocketToggleRoleResponse = {
     serverId: data?.message?.serverId,
@@ -152,7 +165,7 @@ export function loadIncomingToggleRoleResponseToObject(
 }
 
 export const incomingMessageMockData: WebsocketChatMessage[] = Array.from(
-  { length: 30 },
+  { length: 300 },
   (_, i) => i + 1
 ).map((v, i) => {
   return {

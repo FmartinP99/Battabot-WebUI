@@ -28,7 +28,7 @@ export function RolesList({ memberId, memberRoleIds }: RolesListProps) {
               memberRoleIds.includes(role.id) ? "" : "opacity-30"
             } hover:opacity-100`}
         >
-          <span>{role.name}</span>
+          <span>{role?.name}</span>
         </div>
       ))}
     </div>

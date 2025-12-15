@@ -8,9 +8,18 @@ import { type RowComponentProps } from "react-window";
 import { useMemberListRows } from "@/app/hooks/useMemberListRows";
 import { isOfflineLikeStatus } from "./helpers/members_helper";
 
-export type MemberRow =
-  | { type: "member"; member: WebsocketInitMembers }
-  | { type: "role"; role: WebsocketInitRoles; count: number };
+export type MemberRow = Member | Role;
+
+interface Member {
+  type: "member";
+  member: WebsocketInitMembers;
+}
+
+interface Role {
+  type: "role";
+  role: WebsocketInitRoles;
+  count: number;
+}
 
 export interface MemberListRowProps {
   rows: MemberRow[];
@@ -29,20 +38,20 @@ export function MemberListRow({
         style={style}
         className={` ${isOfflineLike ? "opacity-30" : ""} hover:opacity-100`}
       >
-        <MemberModalItem
-          member={row.member}
-          key={(row.member?.memberId ?? "") + "_" + index}
-        />
+        <MemberModalItem member={row.member} key={row.member?.memberId ?? ""} />
       </div>
     );
   }
 
+  const hasRoleName = !!row?.role?.name;
   return (
     <div
       style={style}
       className="w-full h-[24px] px-2 text-xs font-semibold text-gray-400 text-left mt-[8px]"
     >
-      {row.role?.name} - {row.count}
+      {hasRoleName
+        ? `${row.role.name} - ${row.count}`
+        : `"Undefined - ${row.count}"`}
     </div>
   );
 }
