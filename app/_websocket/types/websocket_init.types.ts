@@ -44,7 +44,6 @@ export type WebsocketInitServerReduced = Omit<
   "channels" | "members" | "roles"
 >;
 
-
 export interface WebsocketInitResponse {
   servers?: WebsocketInitServer[];
 }
@@ -89,4 +88,11 @@ export interface WebsocketPresenceUpdate {
   memberId: string;
   newStatus: MemberStatus;
   newDisplayName: string;
+}
+
+export interface WebsocketToggleRoleResponse {
+  serverId: string;
+  roleId: string;
+  memberId: string;
+  roleIsAdded: boolean;
 }

@@ -9,6 +9,7 @@ import {
   WebsocketPlaylist,
   WebsocketPlaylistStateUpdate,
   WebsocketPresenceUpdate,
+  WebsocketToggleRoleResponse,
   WebsocketVoiceUpdateResponse,
 } from "./types/websocket_init.types";
 
@@ -130,6 +131,21 @@ export function loadIncomingPresenceUpdateToObject(
     memberId: data?.message?.memberId,
     newStatus: data?.message?.newStatus,
     newDisplayName: data?.message?.newDisplayName,
+  };
+
+  return parsed;
+}
+
+export function loadIncomingToggleRoleResponseToObject(
+  message: string
+): WebsocketToggleRoleResponse {
+  const data = JSON.parse(message);
+
+  const parsed: WebsocketToggleRoleResponse = {
+    serverId: data?.message?.serverId,
+    roleId: data?.message?.roleId,
+    memberId: data?.message?.memberId,
+    roleIsAdded: data?.message?.roleIsAdded,
   };
 
   return parsed;

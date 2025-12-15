@@ -111,3 +111,25 @@ export const isPast = (date: Date): boolean => {
 export function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
+
+export function getTextColorBasedOnBg(backgroundColor: string) {
+  let r, g, b;
+
+  if (backgroundColor.startsWith("#")) {
+    const hex = backgroundColor.replace("#", "");
+    r = parseInt(hex.substring(0, 2), 16);
+    g = parseInt(hex.substring(2, 4), 16);
+    b = parseInt(hex.substring(4, 6), 16);
+  } else if (backgroundColor.startsWith("rgb")) {
+    [r, g, b] = backgroundColor
+      .replace(/[^\d,]/g, "")
+      .split(",")
+      .map(Number);
+  } else {
+    return "#000";
+  }
+
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  return luminance > 140 ? "#000" : "#fff";
+}

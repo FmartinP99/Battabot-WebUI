@@ -16,6 +16,7 @@ import {
   updatePlaylistState,
   updatePresenceStates,
   setRoles,
+  setRoleForMember,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
@@ -25,6 +26,7 @@ import {
   loadIncomingPlaylistToObject,
   loadIncomingPlaylistStateUpdateToObject,
   loadIncomingPresenceUpdateToObject,
+  loadIncomingToggleRoleResponseToObject,
 } from "./websocketMapper";
 import {
   WebsocketChatMessage,
@@ -132,6 +134,14 @@ export const websocketMiddleware: Middleware =
               event.data
             );
             store.dispatch(updatePresenceStates(presenceUpdate));
+            break;
+
+          case WebsocketMessageType.TOGGLE_ROLE:
+            const toggleRole = loadIncomingToggleRoleResponseToObject(
+              event.data
+            );
+            store.dispatch(setRoleForMember(toggleRole));
+            break;
         }
       };
 

@@ -9,6 +9,7 @@ import {
   WebsocketPlaylistStateUpdate,
   WebsocketPresenceUpdate,
   WebsocketInitRoles,
+  WebsocketToggleRoleResponse,
 } from "./types/websocket_init.types";
 import {
   Music,
@@ -204,6 +205,46 @@ const websocketSlice = createSlice({
       member.status = newStatus;
       member.displayName = newDisplayName;
     },
+
+    setRoleForMember(
+      state,
+      action: PayloadAction<WebsocketToggleRoleResponse>
+    ) {
+      const { serverId, roleId, memberId, roleIsAdded } = action.payload;
+      if (!serverId || !roleId || !memberId) return;
+
+      const member = state.members[serverId]?.find(
+        (mem) => mem.memberId === memberId
+      );
+      if (!member) return;
+
+      const rolesOfServer = state.roles[serverId];
+      if (!rolesOfServer) return;
+
+      const newRole = rolesOfServer.find((r) => r.id === roleId);
+      if (!newRole) return;
+
+      const newRolePriority = newRole.priority;
+      if (roleIsAdded) {
+        const priorityMap = new Map(
+          rolesOfServer.map((r) => [r.id, r.priority])
+        );
+        const priorities = member.roleIds.map(
+          (id) => priorityMap.get(id) ?? -1
+        );
+
+        let insertIndex = member.roleIds.length;
+        for (let i = 0; i < priorities.length; i++) {
+          if (newRolePriority > priorities[i]) {
+            insertIndex = i;
+            break;
+          }
+          member.roleIds.splice(insertIndex, 0, newRole.id);
+          return;
+        }
+      }
+      member.roleIds = member.roleIds.filter((_roleId) => _roleId !== roleId);
+    },
   },
 });
 
@@ -224,6 +265,7 @@ export const {
   incrementPlaylistPlayedDuration,
   setPlaylistPlayedDuration,
   updatePresenceStates,
+  setRoleForMember,
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

@@ -1,11 +1,12 @@
 import { WebsocketInitMembers } from "../../../_websocket/types/websocket_init.types";
 import Member from "./Member";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import Remindme from "../../remindme/Remindme";
 import MemberPopupItemSelect from "./MemberPopupSelectItem";
 import { MemberSize } from "./enums/memberSize.enum";
+import { RolesList } from "../../roles/RolesList";
 
-export type MembersPopupType = "remindme" | "teszt";
+export type MembersPopupType = "remindme" | "roles" | "teszt";
 
 interface MemberPopupProps {
   member: WebsocketInitMembers;
@@ -19,10 +20,26 @@ export default function MemberPopup({ member }: MemberPopupProps) {
     setAction(actionName);
   };
 
+  let renderedComponent: ReactNode = null;
+  switch (action) {
+    case "remindme":
+      renderedComponent = <Remindme memberId={member.memberId ?? null} />;
+      break;
+    case "roles":
+      renderedComponent = (
+        <RolesList memberId={member.memberId} memberRoleIds={member.roleIds} />
+      );
+      break;
+  }
+
   return (
     <div className="flex flex-col w-[30vw] bg-primary-x1 rounded-lg shadow-2xl overflow-hidden">
       <div className="flex w-full justify-center border-b border-primary-x3 pb-4 pt-5 px-6 bg-gradient-to-b from-primary-x4 to-primary-x1">
-        <Member member={member} noMaxWidth={true} memberSize={MemberSize.LARGE} />
+        <Member
+          member={member}
+          noMaxWidth={true}
+          memberSize={MemberSize.LARGE}
+        />
       </div>
 
       <div className="mt-4 flex gap-6 p-6">
@@ -34,17 +51,13 @@ export default function MemberPopup({ member }: MemberPopupProps) {
           />
 
           <MemberPopupItemSelect
-            text="Teszt"
-            isSelected={action == "teszt"}
-            handleClick={() => handleClick("teszt")}
+            text="Roles"
+            isSelected={action == "roles"}
+            handleClick={() => handleClick("roles")}
           />
         </div>
 
-        <div className="flex-1 min-w-0">
-          {action === "remindme" && (
-            <Remindme memberId={member.memberId ?? null} />
-          )}
-        </div>
+        <div className="flex-1 min-w-0">{renderedComponent}</div>
       </div>
     </div>
   );
