@@ -17,6 +17,12 @@ const pxHeightMap: Record<MemberSize, number> = {
   [MemberSize.LARGE]: 45,
 };
 
+const circleRemHeightMap: Record<MemberSize, string> = {
+  [MemberSize.SMALL]: "0.5rem",
+  [MemberSize.MEDIUM]: "0.75rem",
+  [MemberSize.LARGE]: "1.125rem",
+};
+
 const textStyleMap: Record<MemberSize, string> = {
   [MemberSize.SMALL]: "text-sm",
   [MemberSize.MEDIUM]: "text-sm",
@@ -35,6 +41,7 @@ function Member({
   memberSize = MemberSize.MEDIUM,
 }: MemberProps) {
   const pxHeight = pxHeightMap[memberSize];
+  const circleSize = circleRemHeightMap[memberSize];
   const circleColor = MemberStatusColors[member.status];
   const { color } = useMemberRoleColor(member.roleIds);
 
@@ -57,7 +64,11 @@ function Member({
 
         <div
           className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-primary-x2"
-          style={{ backgroundColor: circleColor }}
+          style={{
+            backgroundColor: circleColor,
+            height: circleSize,
+            width: circleSize,
+          }}
         ></div>
       </div>
 
