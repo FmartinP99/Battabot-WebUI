@@ -89,7 +89,7 @@ export function Window({ children, name, position = "center" }: WindowProps) {
     bg-slate-800 rounded-xl shadow-xl
     p-8 md:p-10
     transition-all duration-500
-    max-h-[80vh] overflow-y-auto
+    max-h-[80vh] overflow-auto
   `}
       >
         <button

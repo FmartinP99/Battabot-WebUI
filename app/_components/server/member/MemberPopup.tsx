@@ -33,8 +33,8 @@ export default function MemberPopup({ member }: MemberPopupProps) {
   }
 
   return (
-    <div className="flex flex-col w-[30vw] bg-primary-x1 rounded-lg shadow-2xl overflow-hidden">
-      <div className="flex w-full justify-center border-b border-primary-x3 pb-4 pt-5 px-6 bg-gradient-to-b from-primary-x4 to-primary-x1">
+    <div className="flex h-[60vh] flex-col w-[35vw]  bg-primary-x1 rounded-lg shadow-2xl overflow-y-hidden">
+      <div className="flex min-h-0 w-full justify-center border-b border-primary-x3 pb-4 pt-5 px-6 bg-gradient-to-b from-primary-x4 to-primary-x1">
         <Member
           member={member}
           noMaxWidth={true}
@@ -42,14 +42,13 @@ export default function MemberPopup({ member }: MemberPopupProps) {
         />
       </div>
 
-      <div className="mt-4 flex gap-6 p-6">
-        <div className="pr-4 flex flex-col gap-2 border-r border-primary-x3 min-w-[120px]">
+      <div className="min-h-0 mt-4 flex gap-6 p-6 h-full ">
+        <div className="pr-4 flex flex-col min-h-0  gap-2 border-r border-primary-x3 w-[120px] text-ellipsis overflow-y-auto">
           <MemberPopupItemSelect
             text="Remindme"
             isSelected={action == "remindme"}
             handleClick={() => handleClick("remindme")}
           />
-
           <MemberPopupItemSelect
             text="Roles"
             isSelected={action == "roles"}
@@ -57,7 +56,9 @@ export default function MemberPopup({ member }: MemberPopupProps) {
           />
         </div>
 
-        <div className="flex-1 min-w-0">{renderedComponent}</div>
+        <div className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden px-1">
+          {renderedComponent}
+        </div>
       </div>
     </div>
   );

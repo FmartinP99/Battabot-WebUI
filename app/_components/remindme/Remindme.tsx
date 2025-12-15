@@ -40,7 +40,7 @@ export default function Remindme({ memberId }: { memberId: string }) {
           onChange={(e) => handleSetText(e.target.value)}
           placeholder="Type your message here."
           name="message"
-          rows={3}
+          rows={5}
           className="w-full bg-primary-x2 border border-primary-x3 rounded-md text-accent-x2 placeholder:text-accent-x4 focus:border-accent-x1 focus:ring-1 focus:ring-accent-x1 transition-colors resize-none p-3 text-sm"
         />
       </div>
