@@ -221,11 +221,12 @@ const websocketSlice = createSlice({
       const rolesOfServer = state.roles[serverId];
       if (!rolesOfServer) return;
 
-      const newRole = rolesOfServer.find((r) => r.id === roleId);
-      if (!newRole) return;
+      const modifiedRole = rolesOfServer.find((r) => r.id === roleId);
+      if (!modifiedRole) return;
 
-      const newRolePriority = newRole.priority;
       if (roleIsAdded) {
+        // to keep the RoleId array in descending priority order
+        const newRolePriority = modifiedRole.priority ?? -1;
         const priorityMap = new Map(
           rolesOfServer.map((r) => [r.id, r.priority])
         );
@@ -239,7 +240,8 @@ const websocketSlice = createSlice({
             insertIndex = i;
             break;
           }
-          member.roleIds.splice(insertIndex, 0, newRole.id);
+
+          member.roleIds.splice(insertIndex, 0, modifiedRole.id);
           return;
         }
       }
