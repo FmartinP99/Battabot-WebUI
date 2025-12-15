@@ -1,7 +1,5 @@
 import { ChannelType } from "../_components/server/channel/enums/channel.enum";
 import { MemberStatus } from "../_components/server/member/enums/memberStatus.enum";
-import { WebsocketMessageType } from "./enums/websocket_message_type.enum";
-import { WebSocketMessage } from "./types/websocket.types";
 import {
   WebsocketChatMessage,
   WebsocketIncomingMessageResponse,

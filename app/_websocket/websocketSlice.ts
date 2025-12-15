@@ -11,10 +11,7 @@ import {
   WebsocketInitRoles,
   WebsocketToggleRoleResponse,
 } from "./types/websocket_init.types";
-import {
-  Music,
-  PlaylistState,
-} from "../_components/server/musicPlayer/types/music.type";
+import { PlaylistState } from "../_components/server/musicPlayer/types/music.type";
 import { clamp } from "../helpers/utils";
 
 interface WebSocketState {
