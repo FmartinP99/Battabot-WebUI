@@ -11,4 +11,5 @@ The goal is to create a Discord-like interface for [BattaBot](https://github.com
 - Real-time status update for each member.
 - Real-time text messaging.
 - Ability to set reminders for each member.
+- Ability to set roles for each member.
 - Ability to control the music playlist in each server separately (with synchronized progress bar).
