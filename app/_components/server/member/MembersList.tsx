@@ -47,7 +47,7 @@ export function MemberListRow({
   return (
     <div
       style={style}
-      className="w-full h-[24px] px-2 text-xs font-semibold text-gray-400 text-left mt-[8px]"
+      className="w-full h-[24px] px-2 text-xs font-semibold text-gray-400 text-left mt-[8px] hover:cursor-default"
     >
       {hasRoleName
         ? `${row.role.name} - ${row.count}`
@@ -65,7 +65,7 @@ export default function MembersList({ members }: MemberListProps) {
   return (
     <div className="flex flex-col gap-1 overflow-hidden pl-3 pr-2 border-l border-primary-x1 pt-3 pb-2 w-[240px] bg-primary-x2">
       <div className="px-2 mb-2">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-2 hover:cursor-default">
           <h3 className="text-xs font-semibold text-accent-x3 uppercase tracking-wide">
             Members — {members.length}
           </h3>

@@ -34,7 +34,7 @@ export default function ChannelsList({
   return (
     <div className={channelListClasses}>
       <div className="mb-3 px-2">
-        <span className="text-xs font-semibold text-accent-x3 uppercase tracking-wide ">
+        <span className="text-xs font-semibold text-accent-x3 uppercase tracking-wide hover:cursor-default">
           Text Channels
         </span>
       </div>
@@ -52,7 +52,7 @@ export default function ChannelsList({
       </div>
 
       <div className="mt-4 mb-3 px-2">
-        <h3 className="text-xs font-semibold text-accent-x3 uppercase tracking-wide">
+        <h3 className="text-xs font-semibold text-accent-x3 uppercase tracking-wide hover:cursor-default">
           VOICE Channels
         </h3>
       </div>

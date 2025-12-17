@@ -21,7 +21,7 @@ export default function Header() {
 
   if (!selectedServer) {
     return (
-      <div className="flex items-center justify-center h-14 px-4 border-b border-primary-x3 bg-primary-x1">
+      <div className="flex items-center justify-center h-14 px-4 border-b border-primary-x3 bg-primary-x1 hover:cursor-default">
         <span className="text-lg font-semibold bg-gradient-to-r from-primary-action-focus to-accent-x5 bg-clip-text text-transparent">
           Battabot Web UI!
         </span>
@@ -43,7 +43,7 @@ export default function Header() {
           />
         </div>
 
-        <span className="text-base font-semibold text-accent-x2 truncate">
+        <span className="text-base font-semibold text-accent-x2 truncate hover:cursor-default">
           {selectedServer.guildName}
         </span>
       </div>
