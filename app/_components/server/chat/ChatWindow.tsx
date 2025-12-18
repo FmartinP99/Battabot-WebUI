@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import ChatMessage from "./ChatMessage";
+import ChatMessageGroup from "./ChatMessageGroup";
 import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
 import { useMessageContainer } from "@/app/hooks/useMessageContainer";
 
@@ -28,7 +28,7 @@ export default function ChatWindow({
     >
       {groups?.map((msgs, index) => (
         <Fragment key={(msgs[0]?.messageId ?? index) + "__msggroup"}>
-          <ChatMessage messages={msgs ?? []}></ChatMessage>
+          <ChatMessageGroup messages={msgs ?? []} />
           {index < groups.length - 1 ? (
             <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-1"></div>
           ) : null}

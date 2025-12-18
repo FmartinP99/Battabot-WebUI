@@ -9,11 +9,11 @@ import Modal from "../../shared/Modal";
 import MemberPopup from "../member/MemberPopup";
 import { useMemberRoleColor } from "@/app/hooks/useMemberRoleColor";
 
-interface ChatMessageProps {
+interface ChatMessageGroupProps {
   messages: WebsocketChatMessage[];
 }
 
-export default function ChatMessage({ messages }: ChatMessageProps) {
+export default function ChatMessageGroup({ messages }: ChatMessageGroupProps) {
   const members = useSelector(selectMembers);
   const selectedServerId = useSelector(selectSelectedServerId);
 
