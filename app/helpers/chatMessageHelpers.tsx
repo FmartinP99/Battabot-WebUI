@@ -31,7 +31,6 @@ function renderMessageWithImageNames(text: string) {
   const parts: JSX.Element[] = [];
   let lastIndex = 0;
 
-  // const imageurlMatches = Array.from(text.matchAll(imageUrlRegex));
   const urlMatches = Array.from(text.matchAll(urlRegex));
 
   urlMatches.forEach((match) => {
