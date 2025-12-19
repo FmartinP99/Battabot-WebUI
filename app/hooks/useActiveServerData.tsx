@@ -123,20 +123,6 @@ export function useActiveServerData() {
   }
 
   useEffect(() => {
-    if (!selectedServerId) return;
-    if (selectedChannels.length === 0) return;
-
-    const firstChannelId = selectedChannels.filter((ch) =>
-      isGuildText(ch.type)
-    )?.[0].channelId;
-
-    if (!firstChannelId) return;
-
-    dispatch(setSelectedChannelId(firstChannelId));
-  }, [selectedServerId]);
-
-  // teszt to-do: delete
-  useEffect(() => {
     if (!socketReady) return;
     if (!selectedServerId) return;
     if (songs) return;
@@ -154,8 +140,10 @@ export function useActiveServerData() {
   const activeChannelType =
     selectedChannels.find((ch) => ch.channelId === selectedChannelId)?.type ??
     ChannelType.Text;
-  
-  const isBotConnected: boolean = !!selectedChannels.find((ch) => ch.connectedMemberIds.includes(BotId!))
+
+  const isBotConnected: boolean = !!selectedChannels.find((ch) =>
+    ch.connectedMemberIds.includes(BotId!)
+  );
 
   return {
     servers,
@@ -172,6 +160,6 @@ export function useActiveServerData() {
     handleOnChannelClick,
     handleOnVoiceDisconnect,
     activeChannelType,
-    isBotConnected
+    isBotConnected,
   };
 }

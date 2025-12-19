@@ -43,7 +43,7 @@ export default function Server() {
             : []
           ).filter((msg) => msg.channelId === selectedChannelId)}
         />
-        <ChatInput />{" "}
+        <ChatInput />
       </>
     );
   } else if (isVoiceLike(activeChannelType) && isBotConnected) {

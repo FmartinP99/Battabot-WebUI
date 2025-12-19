@@ -89,11 +89,6 @@ export const websocketMiddleware: Middleware =
             store.dispatch(setRoles(_roles));
             store.dispatch(setMessages(_messages));
             store.dispatch(setSelectedServerId(_servers[0]?.guildId ?? null));
-            store.dispatch(
-              setSelectedChannelId(
-                _channels[_servers[0].guildId ?? null]?.[0].channelId ?? null
-              )
-            );
             break;
 
           case "incomingMessage":

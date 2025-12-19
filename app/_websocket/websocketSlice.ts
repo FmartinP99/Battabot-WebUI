@@ -13,6 +13,7 @@ import {
 } from "./types/websocket_init.types";
 import { PlaylistState } from "../_components/server/musicPlayer/types/music.type";
 import { clamp } from "../helpers/utils";
+import { isGuildText } from "../_components/server/channel/helpers/channel_helpers";
 
 interface WebSocketState {
   socketReady: boolean;
@@ -92,6 +93,12 @@ const websocketSlice = createSlice({
     setSelectedServerId(state, action: PayloadAction<string>) {
       if (state.servers.map((s) => s.guildId).includes(action.payload)) {
         state.selectedServerId = action.payload;
+
+        const firstTextChannel = state.channels[action.payload]?.find((ch) =>
+          isGuildText(ch.type)
+        );
+        if (!firstTextChannel) return;
+        state.selectedChannelId = firstTextChannel.channelId;
       }
     },
     setSelectedChannelId(state, action: PayloadAction<string>) {

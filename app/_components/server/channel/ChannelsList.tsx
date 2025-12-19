@@ -16,7 +16,7 @@ export default function ChannelsList({
   activeChannelId,
   onVoiceDisconnect,
 }: ChannelListProps) {
-  if (!activeChannelId) {
+  if (!channels) {
     return null;
   }
 
