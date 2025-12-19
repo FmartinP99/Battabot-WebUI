@@ -4,11 +4,11 @@ import Member from "./Member";
 import MemberPopup from "./MemberPopup";
 import Modal from "../../shared/Modal";
 
-interface MemberModalItemProps {
+interface MemberListMemberProps {
   member: WebsocketInitMembers;
 }
 
-function MemberModalItem({ member }: MemberModalItemProps) {
+function MemberListMember({ member }: MemberListMemberProps) {
   if (!member) {
     return null;
   }
@@ -17,7 +17,7 @@ function MemberModalItem({ member }: MemberModalItemProps) {
     <Modal>
       <Modal.Open opens={member.memberId?.toString()}>
         <div className="cursor-pointer hover:bg-primary-x4 active:bg-primary-x5 p-2.5 rounded-md transition-all duration-200 group">
-          <Member member={member} />
+          <Member member={member} showActivity={true} />
         </div>
       </Modal.Open>
 
@@ -28,4 +28,4 @@ function MemberModalItem({ member }: MemberModalItemProps) {
   );
 }
 
-export default React.memo(MemberModalItem);
+export default React.memo(MemberListMember);

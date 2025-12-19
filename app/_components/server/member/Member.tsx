@@ -28,12 +28,14 @@ interface MemberProps {
   member: WebsocketInitMembers;
   noMaxWidth?: boolean;
   memberSize?: MemberSize;
+  showActivity?: boolean;
 }
 
 function Member({
   member,
   noMaxWidth,
   memberSize = MemberSize.MEDIUM,
+  showActivity,
 }: MemberProps) {
   const pxHeight = pxHeightMap[memberSize];
   const circleSize = circleRemHeightMap[memberSize];
@@ -67,14 +69,24 @@ function Member({
         ></div>
       </div>
 
-      <span
-        style={{ color: color }}
-        className={`truncate self-center text-left text-[#e4e4e7] 
-                    font-medium transition-colors duration-200 hover:text-white 
+      <div className="flex min-h-0 flex-col truncate">
+        <span
+          style={{ color: color }}
+          className={`truncate text-left text-[#e4e4e7] 
+                    font-medium transition-colors duration-200 
                     ${textStyleMap[memberSize]}`}
-      >
-        {member.displayName}
-      </span>
+        >
+          {member.displayName}
+        </span>
+        {member.activityName && (
+          <span
+            className={`truncate  text-left text-[#e4e4e7b9] hover:text-white
+                    text-xs`}
+          >
+            {member.activityName}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

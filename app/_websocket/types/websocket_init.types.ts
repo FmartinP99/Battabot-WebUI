@@ -20,6 +20,7 @@ export interface WebsocketInitMembers {
   name: string;
   status: MemberStatus;
   roleIds: string[];
+  activityName?: string;
 }
 
 export interface WebsocketInitRoles {
@@ -88,6 +89,7 @@ export interface WebsocketPresenceUpdate {
   memberId: string;
   newStatus: MemberStatus;
   newDisplayName: string;
+  newActivityName?: string;
 }
 
 export interface WebsocketToggleRoleResponse {

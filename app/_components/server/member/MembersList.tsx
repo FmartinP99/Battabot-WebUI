@@ -2,7 +2,7 @@ import {
   WebsocketInitMembers,
   WebsocketInitRoles,
 } from "../../../_websocket/types/websocket_init.types";
-import MemberModalItem from "./MemberModalItem";
+import MemberListMember from "./MemberListMember";
 import { List } from "react-window";
 import { type RowComponentProps } from "react-window";
 import { useMemberListRows } from "@/app/hooks/useMemberListRows";
@@ -38,7 +38,10 @@ export function MemberListRow({
         style={style}
         className={` ${isOfflineLike ? "opacity-30" : ""} hover:opacity-100`}
       >
-        <MemberModalItem member={row.member} key={row.member?.memberId ?? ""} />
+        <MemberListMember
+          member={row.member}
+          key={row.member?.memberId ?? ""}
+        />
       </div>
     );
   }

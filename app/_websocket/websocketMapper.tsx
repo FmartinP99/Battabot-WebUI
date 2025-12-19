@@ -49,6 +49,7 @@ export function loadInitResponseToObject(
         bot: m.bot ?? false,
         status: m.status ?? MemberStatus.OFFLINE,
         roleIds: m.roleIds ?? [],
+        activityName: m.activityName,
       })),
       roles: guild.roles?.map((r: WebsocketInitRoles) => ({
         id: r.id,
@@ -142,6 +143,7 @@ export function loadIncomingPresenceUpdateToObject(
     memberId: data?.message?.memberId,
     newStatus: data?.message?.newStatus,
     newDisplayName: data?.message?.newDisplayName,
+    newActivityName: data?.message?.newActivityName,
   };
 
   return parsed;

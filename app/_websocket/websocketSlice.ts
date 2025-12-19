@@ -191,7 +191,8 @@ const websocketSlice = createSlice({
       state,
       action: PayloadAction<WebsocketPresenceUpdate>
     ) {
-      const { serverId, memberId, newDisplayName, newStatus } = action.payload;
+      const { serverId, memberId, newDisplayName, newActivityName, newStatus } =
+        action.payload;
       if (!serverId || !memberId) return;
 
       const member = state.members[serverId]?.find(
@@ -201,6 +202,7 @@ const websocketSlice = createSlice({
 
       member.status = newStatus;
       member.displayName = newDisplayName;
+      member.activityName = newActivityName;
     },
 
     setRoleForMember(
