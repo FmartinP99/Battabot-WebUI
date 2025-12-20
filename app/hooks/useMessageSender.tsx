@@ -7,10 +7,13 @@ import {
   selectSelectedServerId,
 } from "../store/selectors";
 import { sendMessageThroughWebsocket } from "../store/actions";
+import { useAppSelector } from "./storeHooks";
 
 export function useMessageSenderFromForm() {
-  const selectedServerId = useSelector(selectSelectedServerId);
-  const selectedChannelId = useSelector(selectSelectedChannelId);
+  const selectedServerId = useAppSelector(selectSelectedServerId);
+  const selectedChannelId = useAppSelector((state) =>
+    selectedServerId ? selectSelectedChannelId(state, selectedServerId) : null
+  );
   const dispatch = useDispatch();
   const [text, setText] = useState("");
 

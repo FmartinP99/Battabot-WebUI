@@ -1,14 +1,20 @@
 "use client";
 
-import { useSelector } from "react-redux";
 import { useMessageSenderFromForm } from "../../../hooks/useMessageSender";
 import { Button } from "../../ui/button";
 import { Textarea } from "../../ui/textarea";
-import { selectSelectedChannelId } from "../../../store/selectors";
+import {
+  selectSelectedChannelId,
+  selectSelectedServerId,
+} from "../../../store/selectors";
+import { useAppSelector } from "@/app/hooks/storeHooks";
 
 export default function ChatInput() {
   const { handleSendMessage, text, setText } = useMessageSenderFromForm();
-  const selectedChannelId = useSelector(selectSelectedChannelId);
+  const selectedServerId = useAppSelector(selectSelectedServerId);
+  const selectedChannelId = useAppSelector((state) =>
+    selectedServerId ? selectSelectedChannelId(state, selectedServerId) : null
+  );
 
   if (!selectedChannelId) {
     return null;

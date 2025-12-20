@@ -24,7 +24,7 @@ interface WebSocketState {
   roles: Record<string, WebsocketInitRoles[]>;
   messages: Record<string, WebsocketChatMessage[]>;
   selectedServerId: string | null;
-  selectedChannelId: string | null;
+  lastSelectedChannelIds: Record<string, string>;
   playlistStates: Record<string, PlaylistState>;
 }
 
@@ -37,7 +37,7 @@ const initialState: WebSocketState = {
   roles: {} as Record<string, WebsocketInitRoles[]>,
   messages: {} as Record<string, WebsocketChatMessage[]>,
   selectedServerId: null,
-  selectedChannelId: null,
+  lastSelectedChannelIds: {} as Record<string, string>,
   playlistStates: {} as Record<string, PlaylistState>,
 };
 
@@ -94,11 +94,17 @@ const websocketSlice = createSlice({
       if (state.servers.map((s) => s.guildId).includes(action.payload)) {
         state.selectedServerId = action.payload;
 
+        const lastSelectedChannelId =
+          state.lastSelectedChannelIds[action.payload];
+        if (lastSelectedChannelId) return;
+
         const firstTextChannel = state.channels[action.payload]?.find((ch) =>
           isGuildText(ch.type)
         );
         if (!firstTextChannel) return;
-        state.selectedChannelId = firstTextChannel.channelId;
+
+        state.lastSelectedChannelIds[action.payload] =
+          firstTextChannel.channelId;
       }
     },
     setSelectedChannelId(state, action: PayloadAction<string>) {
@@ -107,7 +113,7 @@ const websocketSlice = createSlice({
         (ch) => ch.channelId === action.payload
       );
       if (!channel) return;
-      state.selectedChannelId = action.payload;
+      state.lastSelectedChannelIds[state.selectedServerId] = action.payload;
     },
     setVoiceEvent(state, action: PayloadAction<WebsocketVoiceUpdateResponse>) {
       const serverId = action.payload.serverId;
@@ -230,28 +236,28 @@ const websocketSlice = createSlice({
       const modifiedRole = rolesOfServer.find((r) => r.id === roleId);
       if (!modifiedRole) return;
 
+  
       if (roleIsAdded) {
         // to keep the RoleId array in descending priority order
         const newRolePriority = modifiedRole.priority ?? -1;
         const priorityMap = new Map(
           rolesOfServer.map((r) => [r.id, r.priority])
         );
-        const priorities = member.roleIds.map(
+        const priorities = member.roleIds?.map(
           (id) => priorityMap.get(id) ?? -1
         );
 
-        let insertIndex = member.roleIds.length;
+        let insertIndex = member.roleIds?.length;
         for (let i = 0; i < priorities.length; i++) {
           if (newRolePriority > priorities[i]) {
             insertIndex = i;
             break;
           }
-
-          member.roleIds.splice(insertIndex, 0, modifiedRole.id);
-          return;
         }
+        member.roleIds?.splice(insertIndex, 0, modifiedRole.id);
+      } else {
+        member.roleIds = member.roleIds.filter((_roleId) => _roleId !== roleId);
       }
-      member.roleIds = member.roleIds.filter((_roleId) => _roleId !== roleId);
     },
   },
 });

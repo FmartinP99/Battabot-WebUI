@@ -4,8 +4,7 @@ import Image from "next/image";
 import { WebsocketInitServerReduced } from "../../_websocket/types/websocket_init.types";
 import defaultBg from "@/app/files/profpic.png";
 import { selectSelectedServerId } from "../../store/selectors";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
 import { setSelectedServerId } from "../../_websocket/websocketSlice";
 
 interface ServerPreviewProps {
@@ -14,7 +13,7 @@ interface ServerPreviewProps {
 
 export function ServerPreview({ server }: ServerPreviewProps) {
   const dispatch = useAppDispatch();
-  const selectedServerId = useSelector(selectSelectedServerId);
+  const selectedServerId = useAppSelector(selectSelectedServerId);
   const isActive = selectedServerId === server.guildId;
 
   return (

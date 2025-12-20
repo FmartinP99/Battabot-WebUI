@@ -30,7 +30,9 @@ export function useActiveServerData() {
   const members = useAppSelector(selectMembers);
   const channels = useAppSelector(selectChannels);
   const messages = useAppSelector(selectMessages);
-  const selectedChannelId = useAppSelector(selectSelectedChannelId);
+  const selectedChannelId = useAppSelector((state) =>
+    selectedServerId ? selectSelectedChannelId(state, selectedServerId) : null
+  );
   const dispatch = useAppDispatch();
   const socketReady = useSelector(selectSocketReady);
   const songs = useAppSelector((state) =>

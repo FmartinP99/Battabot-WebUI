@@ -1,6 +1,5 @@
 import Image from "next/image";
 import defaultBg from "@/app/files/profpic.png";
-import { useSelector } from "react-redux";
 import { formatEpoch } from "@/app/helpers/utils";
 import { selectSelectedServerId, selectMembers } from "@/app/store/selectors";
 import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
@@ -8,14 +7,15 @@ import ChatMessageFormatted from "./ChatMessageFormatted";
 import Modal from "../../shared/Modal";
 import MemberPopup from "../member/MemberPopup";
 import { useMemberRoleColor } from "@/app/hooks/useMemberRoleColor";
+import { useAppSelector } from "@/app/hooks/storeHooks";
 
 interface ChatMessageGroupProps {
   messages: WebsocketChatMessage[];
 }
 
 export default function ChatMessageGroup({ messages }: ChatMessageGroupProps) {
-  const members = useSelector(selectMembers);
-  const selectedServerId = useSelector(selectSelectedServerId);
+  const members = useAppSelector(selectMembers);
+  const selectedServerId = useAppSelector(selectSelectedServerId);
 
   const sender = members[selectedServerId ?? ""]?.find(
     (x) => x.memberId === messages?.[0]?.userId

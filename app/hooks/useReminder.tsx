@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "./storeHooks";
+import { useAppDispatch, useAppSelector } from "./storeHooks";
 import {
   selectSelectedChannelId,
   selectSelectedServerId,
@@ -12,11 +11,12 @@ import { sendMessageThroughWebsocket } from "../store/actions";
 export function useReminder(memberId: string) {
   const dispatch = useAppDispatch();
 
-  const selectedServerId = useSelector(selectSelectedServerId);
-  const selectedChannelId = useSelector(selectSelectedChannelId);
+  const selectedServerId = useAppSelector(selectSelectedServerId);
+  const selectedChannelId = useAppSelector((state) =>
+    selectedServerId ? selectSelectedChannelId(state, selectedServerId) : null
+  );
 
   const [date, setDate] = useState<Date>(new Date());
-
   const [text, setText] = useState<string>("");
 
   const handleSetText = (t: string) => {

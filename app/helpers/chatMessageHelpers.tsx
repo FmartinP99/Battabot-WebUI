@@ -1,83 +1,118 @@
-const imageUrlRegex =
-  /(https?:\/\/(?:cdn\.discordapp\.com|media\.discordapp\.net)\/[^\s]+)|(https?:\/\/[^\s]+?\.(?:png|jpe?g|gif|webp|svg))/gi;
+import Image from "next/image";
 
 const urlRegex = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
 
-function getImagesFromMessage(text: string) {
+const imageUrlRegex =
+  /(https?:\/\/(?:cdn\.discordapp\.com|media\.discordapp\.net)\/[^\s]+)|(https?:\/\/[^\s]+?\.(?:png|jpe?g|gif|webp|svg))/gi;
+
+const youtubeRegex =
+  /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/gi;
+
+function getMediaPreviewsFromMessage(text?: string) {
   if (!text) return [];
 
-  const matches = text.match(imageUrlRegex);
-  if (!matches) return [];
+  const elements: JSX.Element[] = [];
 
-  return matches.map((url, index) => (
-    <a
-      key={index}
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-block relative w-full max-h-[350px] mt-1"
-    >
-      <img
-        src={url}
-        className="block max-h-[350px] max-w-[full] rounded-lg object-contain mt-1 "
-      />
-    </a>
-  ));
+  imageUrlRegex.lastIndex = 0;
+  const imageMatches = text.matchAll(imageUrlRegex);
+
+  imageMatches.forEach((match) => {
+    const url = match[0];
+
+    elements.push(
+      <a
+        key={`img-${url}`}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full mt-1"
+      >
+        <div className="relative  max-h-[350px] aspect-video">
+          <Image
+            src={url}
+            alt="image preview"
+            fill
+            sizes="(max-width: 768px) 100vw, 600px"
+            className="rounded-lg object-cover"
+          />
+        </div>
+      </a>
+    );
+  });
+
+  youtubeRegex.lastIndex = 0;
+  const youtubeMatches = text.matchAll(youtubeRegex);
+  youtubeMatches.forEach((match) => {
+    const videoId = match[1];
+
+    elements.push(
+      <div
+        key={`yt-${videoId}`}
+        className="relative max-w-[600px] aspect-video mt-2 rounded-lg overflow-hidden"
+      >
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}`}
+          title="YouTube video preview"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full"
+        />
+      </div>
+    );
+  });
+
+  return elements;
 }
 
-function renderMessageWithImageNames(text: string) {
+function renderMessageWithImageNames(text?: string) {
   if (!text) return null;
 
-  const parts: JSX.Element[] = [];
-  let lastIndex = 0;
+  const elements: JSX.Element[] = [];
+  let cursor = 0;
 
-  const urlMatches = Array.from(text.matchAll(urlRegex));
+  const urls = Array.from(text.matchAll(new RegExp(urlRegex, "g")));
 
-  urlMatches.forEach((match) => {
+  urls.forEach((match, i) => {
     const url = match[0];
-    const index = match.index || 0;
+    const start = match.index ?? 0;
+    const end = start + url.length;
 
-    if (index > lastIndex) {
-      parts.push(<span key={lastIndex}>{text.slice(lastIndex, index)}</span>);
+    if (start > cursor) {
+      elements.push(
+        <span key={`text-${i}-${cursor}`}>{text.slice(cursor, start)}</span>
+      );
     }
 
     const isImage = imageUrlRegex.test(url);
+    const filename = isImage
+      ? decodeURIComponent(url.split("?")[0].split("/").pop() ?? "image")
+      : url;
 
-    if (isImage) {
-      const filename = url.split("?")[0].split("/").pop() || "image";
-      parts.push(
-        <a
-          key={index}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 cursor-pointer hover:bg-blue-800 hover:text-white px-1"
-        >
-          {filename}
-        </a>
-      );
-    } else {
-      parts.push(
-        <a
-          key={index}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 cursor-pointer hover:underline px-1"
-        >
-          {url}
-        </a>
-      );
-    }
+    elements.push(
+      <a
+        key={`url-${i}-${start}`}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={
+          isImage
+            ? "text-blue-500 hover:bg-blue-800 hover:text-white px-1 rounded"
+            : "text-blue-500 hover:underline px-1"
+        }
+        title={url}
+      >
+        {filename}
+      </a>
+    );
 
-    lastIndex = index + url.length;
+    cursor = end;
   });
 
-  if (lastIndex < text.length) {
-    parts.push(<span key={lastIndex}>{text.slice(lastIndex)}</span>);
+  if (cursor < text.length) {
+    elements.push(<span key={`text-end-${cursor}`}>{text.slice(cursor)}</span>);
   }
 
-  return <>{parts}</>;
+  return <>{elements}</>;
 }
 
-export { getImagesFromMessage, renderMessageWithImageNames };
+export { renderMessageWithImageNames, getMediaPreviewsFromMessage };

@@ -3,17 +3,17 @@
 import Image from "next/image";
 import ReconnectButton from "./ReconnectButton";
 import defaultBg from "@/app/files/profpic.png";
-import { useSelector } from "react-redux";
 import {
   selectSelectedServerId,
   selectServers,
   selectSocketReady,
 } from "../../store/selectors";
+import { useAppSelector } from "@/app/hooks/storeHooks";
 
 export default function Header() {
-  const socketReady = useSelector(selectSocketReady);
-  const servers = useSelector(selectServers);
-  const selectedServerId = useSelector(selectSelectedServerId);
+  const socketReady = useAppSelector(selectSocketReady);
+  const servers = useAppSelector(selectServers);
+  const selectedServerId = useAppSelector(selectSelectedServerId);
 
   const selectedServer = servers.find(
     (server) => server.guildId === selectedServerId

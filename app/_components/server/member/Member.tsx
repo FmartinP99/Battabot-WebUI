@@ -78,7 +78,7 @@ function Member({
         >
           {member.displayName}
         </span>
-        {member.activityName && (
+        {showActivity && member.activityName && (
           <span
             className={`truncate  text-left text-[#e4e4e7b9] hover:text-white
                     text-xs`}
