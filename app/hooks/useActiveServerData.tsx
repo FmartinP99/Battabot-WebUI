@@ -9,7 +9,7 @@ import {
   selectSelectedServerId,
   selectServers,
   selectSocketReady,
-  selectSongs,
+  selectSongsForSelectedServer,
 } from "../store/selectors";
 import { setSelectedChannelId } from "../_websocket/websocketSlice";
 import { useAppDispatch, useAppSelector } from "./storeHooks";
@@ -35,9 +35,7 @@ export function useActiveServerData() {
   );
   const dispatch = useAppDispatch();
   const socketReady = useSelector(selectSocketReady);
-  const songs = useAppSelector((state) =>
-    selectSongs(state, selectedServerId ?? "")
-  );
+  const songs = useAppSelector(selectSongsForSelectedServer);
 
   const selectedServer = useMemo(() => {
     return servers.find((server) => server.guildId === selectedServerId);
@@ -91,7 +89,6 @@ export function useActiveServerData() {
 
         if (!BotId || (BotId && channel.connectedMemberIds.includes(BotId)))
           return;
-
         // request that bot wants to join
 
         const payload: WebSocketMessage = {
@@ -105,7 +102,7 @@ export function useActiveServerData() {
         dispatch(sendMessageThroughWebsocket(payload));
       }
     },
-    [selectedChannelId]
+    [selectedChannelId, songs]
   );
 
   function handleOnVoiceDisconnect(channel: WebsocketInitChannels) {
@@ -127,7 +124,6 @@ export function useActiveServerData() {
   useEffect(() => {
     if (!socketReady) return;
     if (!selectedServerId) return;
-    if (songs) return;
 
     const payload: WebSocketMessage = {
       type: WebsocketMessageType.GET_MUSIC_PLAYLIST,
@@ -137,7 +133,7 @@ export function useActiveServerData() {
     };
 
     dispatch(sendMessageThroughWebsocket(payload));
-  }, [socketReady, selectedServerId, songs]);
+  }, [socketReady, selectedServerId]);
 
   const activeChannelType =
     selectedChannels.find((ch) => ch.channelId === selectedChannelId)?.type ??

@@ -1,5 +1,8 @@
 import { useMemo } from "react";
-import { selectSelectedServerId, selectSongs } from "../store/selectors";
+import {
+  selectSelectedServerId,
+  selectSongsForSelectedServer,
+} from "../store/selectors";
 import { useAppSelector } from "./storeHooks";
 import {
   createColumnHelper,
@@ -9,10 +12,7 @@ import {
 import { Music } from "../_components/server/musicPlayer/types/music.type";
 
 export function useMusicPlayerTable() {
-  const selectedServerId = useAppSelector(selectSelectedServerId);
-  const songs = useAppSelector((state) =>
-    selectSongs(state, selectedServerId ?? "")
-  );
+  const songs = useAppSelector(selectSongsForSelectedServer);
 
   const songsArray = useMemo(() => {
     if (!songs) return [];

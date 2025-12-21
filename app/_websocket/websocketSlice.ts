@@ -236,7 +236,6 @@ const websocketSlice = createSlice({
       const modifiedRole = rolesOfServer.find((r) => r.id === roleId);
       if (!modifiedRole) return;
 
-  
       if (roleIsAdded) {
         // to keep the RoleId array in descending priority order
         const newRolePriority = modifiedRole.priority ?? -1;

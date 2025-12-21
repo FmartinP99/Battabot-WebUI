@@ -2,11 +2,12 @@ import { WebsocketInitChannels } from "../../../_websocket/types/websocket_init.
 import { ChannelType } from "./enums/channel.enum";
 import Channel from "./Channel";
 import { useMemo } from "react";
+import ChannelAccordion from "./ChannelAccordion";
 
 interface ChannelListProps {
   channels: WebsocketInitChannels[];
-  onChannelClick: (channel: WebsocketInitChannels) => void;
   activeChannelId: string | null;
+  onChannelClick: (channel: WebsocketInitChannels) => void;
   onVoiceDisconnect: (channel: WebsocketInitChannels) => void;
 }
 
@@ -33,41 +34,21 @@ export default function ChannelsList({
 
   return (
     <div className={channelListClasses}>
-      <div className="mb-3 px-2">
-        <span className="text-xs font-semibold text-accent-x3 uppercase tracking-wide hover:cursor-default">
-          Text Channels
-        </span>
-      </div>
+      <ChannelAccordion
+        title="Text Channels"
+        channels={groupedChannels.text}
+        activeChannelId={activeChannelId}
+        onChannelClick={onChannelClick}
+        onVoiceDisconnect={onVoiceDisconnect}
+      />
 
-      <div className="flex flex-col gap-0.5">
-        {groupedChannels.text.map((channel) => (
-          <Channel
-            channel={channel}
-            isActive={activeChannelId === channel.channelId}
-            onChannelClick={onChannelClick}
-            key={channel.channelId + "_t"}
-            onVoiceDisconnect={onVoiceDisconnect}
-          />
-        ))}
-      </div>
-
-      <div className="mt-4 mb-3 px-2">
-        <h3 className="text-xs font-semibold text-accent-x3 uppercase tracking-wide hover:cursor-default">
-          VOICE Channels
-        </h3>
-      </div>
-
-      <div className="flex flex-col gap-0.5">
-        {groupedChannels.voice.map((channel) => (
-          <Channel
-            channel={channel}
-            isActive={activeChannelId === channel.channelId}
-            onChannelClick={onChannelClick}
-            key={channel.channelId + "_v"}
-            onVoiceDisconnect={onVoiceDisconnect}
-          />
-        ))}
-      </div>
+      <ChannelAccordion
+        title="Voice Channels"
+        channels={groupedChannels.voice}
+        activeChannelId={activeChannelId}
+        onChannelClick={onChannelClick}
+        onVoiceDisconnect={onVoiceDisconnect}
+      />
     </div>
   );
 }
