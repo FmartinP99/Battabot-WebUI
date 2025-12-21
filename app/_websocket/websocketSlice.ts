@@ -18,6 +18,7 @@ import { isGuildText } from "../_components/server/channel/helpers/channel_helpe
 interface WebSocketState {
   socketReady: boolean;
   websocket: WebSocket | null;
+  gmtOffsetInHour: number;
   servers: WebsocketInitServerReduced[];
   channels: Record<string, WebsocketInitChannels[]>;
   members: Record<string, WebsocketInitMembers[]>;
@@ -31,6 +32,7 @@ interface WebSocketState {
 const initialState: WebSocketState = {
   socketReady: false,
   websocket: null,
+  gmtOffsetInHour: 0,
   servers: [] as WebsocketInitServerReduced[],
   channels: {} as Record<string, WebsocketInitChannels[]>,
   members: {} as Record<string, WebsocketInitMembers[]>,

@@ -46,6 +46,7 @@ export type WebsocketInitServerReduced = Omit<
 >;
 
 export interface WebsocketInitResponse {
+  gmtOffsetInHour: number;
   servers?: WebsocketInitServer[];
 }
 
