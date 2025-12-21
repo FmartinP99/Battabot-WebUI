@@ -10,9 +10,14 @@ export type MembersPopupType = "remindme" | "roles" | "teszt";
 
 interface MemberPopupProps {
   member: WebsocketInitMembers;
+  onCloseModal?: VoidFunction;
 }
 
-export default function MemberPopup({ member }: MemberPopupProps) {
+/** onCloseModal will be overWritten by Modal.Window */
+export default function MemberPopup({
+  member,
+  onCloseModal,
+}: MemberPopupProps) {
   const [action, setAction] = useState<MembersPopupType>("remindme");
 
   const handleClick = (actionName: MembersPopupType) => {
@@ -23,7 +28,12 @@ export default function MemberPopup({ member }: MemberPopupProps) {
   let renderedComponent: ReactNode = null;
   switch (action) {
     case "remindme":
-      renderedComponent = <Remindme memberId={member.memberId ?? null} />;
+      renderedComponent = (
+        <Remindme
+          onCloseModal={onCloseModal}
+          memberId={member.memberId ?? null}
+        />
+      );
       break;
     case "roles":
       renderedComponent = (

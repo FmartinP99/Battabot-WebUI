@@ -5,7 +5,12 @@ import { useReminder } from "../../hooks/useReminder";
 import { Textarea } from "../ui/textarea";
 import RemindmeControl from "./RemindmeControl";
 
-export default function Remindme({ memberId }: { memberId: string }) {
+interface RemindmeProps {
+  memberId: string;
+  onCloseModal?: VoidFunction;
+}
+
+export default function Remindme({ memberId, onCloseModal }: RemindmeProps) {
   const { date, setValidDate, sendReminder, text, handleSetText } =
     useReminder(memberId);
 
@@ -45,7 +50,9 @@ export default function Remindme({ memberId }: { memberId: string }) {
         />
       </div>
       <Button
-        onClick={sendReminder}
+        onClick={() => {
+          sendReminder();
+        }}
         variant="outline"
         className="w-full font-semibold bg-gradient-to-br from-accent-x1 to-primary-action-hover hover:from-primary-action-hover hover:to-accent-x7 text-white border-none shadow-lg hover:shadow-accent-x1/30 transition-all duration-300 hover:scale-[1.02] active:scale-95"
       >
