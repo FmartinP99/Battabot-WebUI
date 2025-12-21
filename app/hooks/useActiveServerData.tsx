@@ -1,6 +1,12 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { WebsocketInitChannels } from "../_websocket/types/websocket_init.types";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  ChannelType,
+  WebsocketGetMusicPlaylistQuery,
+  WebsocketInitChannels,
+  WebsocketMessageType,
+  WebsocketVoiceStateUpdateQuery,
+} from "../_websocket/types/websocket_init.types";
+import { useSelector } from "react-redux";
 import {
   selectChannels,
   selectMembers,
@@ -19,8 +25,6 @@ import {
 } from "../_components/server/channel/helpers/channel_helpers";
 import { sendMessageThroughWebsocket } from "../store/actions";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
-import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
-import { ChannelType } from "../_components/server/channel/enums/channel.enum";
 import { BotId } from "../consts/botId";
 import { MemberStatus } from "../_components/server/member/enums/memberStatus.enum";
 
@@ -97,7 +101,7 @@ export function useActiveServerData() {
             serverId: selectedServerId,
             channelId: channel.channelId,
             isDisconnect: false,
-          },
+          } as WebsocketVoiceStateUpdateQuery,
         };
         dispatch(sendMessageThroughWebsocket(payload));
       }
@@ -113,7 +117,7 @@ export function useActiveServerData() {
         serverId: selectedServerId,
         channelId: channel.channelId,
         isDisconnect: true,
-      },
+      } as WebsocketVoiceStateUpdateQuery,
     };
 
     dispatch(sendMessageThroughWebsocket(payload));
@@ -129,7 +133,7 @@ export function useActiveServerData() {
       type: WebsocketMessageType.GET_MUSIC_PLAYLIST,
       message: {
         serverId: selectedServerId,
-      },
+      } as WebsocketGetMusicPlaylistQuery,
     };
 
     dispatch(sendMessageThroughWebsocket(payload));

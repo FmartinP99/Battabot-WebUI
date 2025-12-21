@@ -1,6 +1,7 @@
-import { WebsocketInitChannels } from "../../../_websocket/types/websocket_init.types";
-import { ChannelType } from "./enums/channel.enum";
-import Channel from "./Channel";
+import {
+  ChannelType,
+  WebsocketInitChannels,
+} from "../../../_websocket/types/websocket_init.types";
 import { useMemo } from "react";
 import ChannelAccordion from "./ChannelAccordion";
 

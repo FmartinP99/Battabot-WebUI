@@ -1,13 +1,16 @@
 import { useCallback, useState } from "react";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
-import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   selectSelectedChannelId,
   selectSelectedServerId,
 } from "../store/selectors";
 import { sendMessageThroughWebsocket } from "../store/actions";
 import { useAppSelector } from "./storeHooks";
+import {
+  WebsocketMessageType,
+  WebsocketSendMessageQuery,
+} from "../_websocket/types/websocket_init.types";
 
 export function useMessageSenderFromForm() {
   const selectedServerId = useAppSelector(selectSelectedServerId);
@@ -26,7 +29,7 @@ export function useMessageSenderFromForm() {
         serverId: selectedServerId,
         channelId: selectedChannelId,
         text,
-      },
+      } as WebsocketSendMessageQuery,
     };
 
     dispatch(sendMessageThroughWebsocket(payload));

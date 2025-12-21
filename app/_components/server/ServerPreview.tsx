@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { WebsocketInitServerReduced } from "../../_websocket/types/websocket_init.types";
 import defaultBg from "@/app/files/profpic.png";
 import { selectSelectedServerId } from "../../store/selectors";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
 import { setSelectedServerId } from "../../_websocket/websocketSlice";
+import { WebsocketInitServerReduced } from "@/app/_websocket/types/websocket_init_reduced.types";
 
 interface ServerPreviewProps {
   server: WebsocketInitServerReduced;

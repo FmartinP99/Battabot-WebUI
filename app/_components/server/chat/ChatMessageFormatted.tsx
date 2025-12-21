@@ -1,6 +1,5 @@
-import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
+import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init_reduced.types";
 import {
-  getImagesFromMessage,
   getMediaPreviewsFromMessage,
   renderMessageWithImageNames,
 } from "@/app/helpers/chatMessageHelpers";

@@ -13,10 +13,9 @@ import {
   selectPlaylistState,
   selectSelectedServerId,
 } from "@/app/store/selectors";
-import { Music } from "./types/music.type";
 import { WebSocketMessage } from "@/app/_websocket/types/websocket.types";
-import { WebsocketMessageType } from "@/app/_websocket/enums/websocket_message_type.enum";
 import { sendMessageThroughWebsocket } from "@/app/store/actions";
+import { WebsocketMessageType, WebsocketMusic, WebsocketPlaylistSongSkipQuery } from "@/app/_websocket/types/websocket_init.types";
 
 export default function Playlist() {
   const { table } = useMusicPlayerTable();
@@ -27,13 +26,15 @@ export default function Playlist() {
   );
   const dispatch = useAppDispatch();
 
-  function handleSelectNewSong(music: Music) {
+  function handleSelectNewSong(music: WebsocketMusic) {
+    if(!selectedServerId) return
+
     const payload: WebSocketMessage = {
       type: WebsocketMessageType.PLAYLIST_SONG_SKIP,
       message: {
         serverId: selectedServerId,
         songIndex: music.index,
-      },
+      } as WebsocketPlaylistSongSkipQuery,
     };
     dispatch(sendMessageThroughWebsocket(payload));
   }

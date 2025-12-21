@@ -6,8 +6,13 @@ import {
 import { useAppDispatch, useAppSelector } from "./storeHooks";
 import { clamp } from "../helpers/utils";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
-import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
 import { sendMessageThroughWebsocket } from "../store/actions";
+import {
+  WebsocketMessageType,
+  WebsocketPlaylistPauseQuery,
+  WebsocketPlaylistResumeQuery,
+  WebsocketPlaylistSongSkipQuery,
+} from "../_websocket/types/websocket_init.types";
 
 export default function useMusicPlayerControls() {
   const selectedServerId = useAppSelector(selectSelectedServerId);
@@ -24,7 +29,7 @@ export default function useMusicPlayerControls() {
       type: WebsocketMessageType.PLAYLIST_PAUSE,
       message: {
         serverId: selectedServerId,
-      },
+      } as WebsocketPlaylistPauseQuery,
     };
 
     dispatch(sendMessageThroughWebsocket(payload));
@@ -35,7 +40,7 @@ export default function useMusicPlayerControls() {
       type: WebsocketMessageType.PLAYLIST_RESUME,
       message: {
         serverId: selectedServerId,
-      },
+      } as WebsocketPlaylistResumeQuery,
     };
 
     dispatch(sendMessageThroughWebsocket(payload));
@@ -62,7 +67,7 @@ export default function useMusicPlayerControls() {
         message: {
           serverId: selectedServerId,
           songIndex: newIndex,
-        },
+        } as WebsocketPlaylistSongSkipQuery,
       };
 
       dispatch(sendMessageThroughWebsocket(payload));

@@ -1,14 +1,31 @@
-import { WebsocketMessageType } from "../enums/websocket_message_type.enum";
 import {
-  WebsocketChatMessage,
+  WebsocketGetMusicPlaylistQuery,
   WebsocketInitChannels,
   WebsocketInitMembers,
-  WebsocketInitServerReduced,
+  WebsocketMessageType,
+  WebsocketPlaylistPauseQuery,
+  WebsocketPlaylistResumeQuery,
+  WebsocketPlaylistSongSkipQuery,
+  WebsocketSendMessageQuery,
+  WebsocketSetReminderQuery,
+  WebsocketVoiceStateUpdateQuery,
 } from "./websocket_init.types";
+import {
+  WebsocketChatMessage,
+  WebsocketInitServerReduced,
+} from "./websocket_init_reduced.types";
 
 export interface WebSocketMessage {
   type: WebsocketMessageType;
-  message: Record<string, unknown>;
+  message:
+    | WebsocketSetReminderQuery
+    | WebsocketPlaylistSongSkipQuery
+    | WebsocketVoiceStateUpdateQuery
+    | WebsocketGetMusicPlaylistQuery
+    | WebsocketSendMessageQuery
+    | WebsocketPlaylistPauseQuery
+    | WebsocketPlaylistResumeQuery
+    | WebsocketPlaylistSongSkipQuery;
 }
 
 export interface WebsocketProviderValue {

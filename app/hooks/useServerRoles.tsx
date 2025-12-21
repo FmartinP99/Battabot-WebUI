@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { sendMessageThroughWebsocket } from "../store/actions";
 import {
@@ -7,6 +6,10 @@ import {
   selectRolesByServerId,
 } from "../store/selectors";
 import { useAppDispatch, useAppSelector } from "./storeHooks";
+import {
+  WebsocketMessageType,
+  WebsocketToggleRoleQuery,
+} from "../_websocket/types/websocket_init.types";
 
 export function useServerRoles(memberId?: string) {
   const dispatch = useAppDispatch();
@@ -27,7 +30,7 @@ export function useServerRoles(memberId?: string) {
           serverId: selectedServerId,
           roleId,
           memberId,
-        },
+        } as WebsocketToggleRoleQuery,
       };
 
       dispatch(sendMessageThroughWebsocket(payload));

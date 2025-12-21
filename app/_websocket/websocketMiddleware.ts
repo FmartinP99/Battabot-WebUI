@@ -1,6 +1,5 @@
 import { Middleware } from "@reduxjs/toolkit";
 import { WebSocketMessage } from "./types/websocket.types";
-import { WebsocketMessageType } from "./enums/websocket_message_type.enum";
 import {
   setSocketReady,
   setWebSocket,
@@ -10,7 +9,6 @@ import {
   setMessages,
   addMessage,
   setSelectedServerId,
-  setSelectedChannelId,
   setVoiceEvent,
   setPlaylistState,
   updatePlaylistState,
@@ -29,11 +27,12 @@ import {
   loadIncomingToggleRoleResponseToObject,
 } from "./websocketMapper";
 import {
-  WebsocketChatMessage,
   WebsocketInitChannels,
   WebsocketInitMembers,
   WebsocketInitRoles,
+  WebsocketMessageType,
 } from "./types/websocket_init.types";
+import { WebsocketChatMessage } from "./types/websocket_init_reduced.types";
 
 export const websocketMiddleware: Middleware =
   (store: any) => (next: any) => (action: any) => {
@@ -73,7 +72,7 @@ export const websocketMiddleware: Middleware =
 
             initParsed.servers.forEach((server) => {
               _channels[server.guildId] =
-                server.channels.filter((chn) => chn.channelId) ?? [];
+                server.channels?.filter((chn) => chn.channelId) ?? [];
               _members[server.guildId] =
                 server.members?.filter((mem) => mem.memberId) ?? [];
               _roles[server.guildId] =

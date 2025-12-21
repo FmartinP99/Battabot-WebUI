@@ -2,8 +2,8 @@
 
 import { Fragment } from "react";
 import ChatMessageGroup from "./ChatMessageGroup";
-import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
 import { useMessageContainer } from "@/app/hooks/useMessageContainer";
+import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init_reduced.types";
 
 interface ChatWindowProps {
   activeChannelId: string | null;

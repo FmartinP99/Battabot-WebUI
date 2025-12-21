@@ -2,12 +2,12 @@ import Image from "next/image";
 import defaultBg from "@/app/files/profpic.png";
 import { formatEpoch } from "@/app/helpers/utils";
 import { selectSelectedServerId, selectMembers } from "@/app/store/selectors";
-import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init.types";
 import ChatMessageFormatted from "./ChatMessageFormatted";
 import Modal from "../../shared/Modal";
 import MemberPopup from "../member/MemberPopup";
 import { useMemberRoleColor } from "@/app/hooks/useMemberRoleColor";
 import { useAppSelector } from "@/app/hooks/storeHooks";
+import { WebsocketChatMessage } from "@/app/_websocket/types/websocket_init_reduced.types";
 
 interface ChatMessageGroupProps {
   messages: WebsocketChatMessage[];

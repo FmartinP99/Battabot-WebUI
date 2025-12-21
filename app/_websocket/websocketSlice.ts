@@ -1,19 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  WebsocketInitServerReduced,
   WebsocketInitChannels,
   WebsocketInitMembers,
-  WebsocketChatMessage,
-  WebsocketVoiceUpdateResponse,
-  WebsocketPlaylist,
-  WebsocketPlaylistStateUpdate,
-  WebsocketPresenceUpdate,
+  WebsocketVoiceStateUpdateResponse,
+  WebsocketGetMusicPlaylistResponse,
+  WebsocketPlaylistStateUpdateResponse,
+  WebsocketPresenceUpdateResponse,
   WebsocketInitRoles,
   WebsocketToggleRoleResponse,
+  WebsocketPlaylistState,
 } from "./types/websocket_init.types";
-import { PlaylistState } from "../_components/server/musicPlayer/types/music.type";
 import { clamp } from "../helpers/utils";
 import { isGuildText } from "../_components/server/channel/helpers/channel_helpers";
+import { WebsocketChatMessage, WebsocketInitServerReduced } from "./types/websocket_init_reduced.types";
 
 interface WebSocketState {
   socketReady: boolean;
@@ -26,7 +25,7 @@ interface WebSocketState {
   messages: Record<string, WebsocketChatMessage[]>;
   selectedServerId: string | null;
   lastSelectedChannelIds: Record<string, string>;
-  playlistStates: Record<string, PlaylistState>;
+  playlistStates: Record<string, WebsocketPlaylistState>;
 }
 
 const initialState: WebSocketState = {
@@ -40,7 +39,7 @@ const initialState: WebSocketState = {
   messages: {} as Record<string, WebsocketChatMessage[]>,
   selectedServerId: null,
   lastSelectedChannelIds: {} as Record<string, string>,
-  playlistStates: {} as Record<string, PlaylistState>,
+  playlistStates: {} as Record<string, WebsocketPlaylistState>,
 };
 
 const websocketSlice = createSlice({
@@ -117,7 +116,10 @@ const websocketSlice = createSlice({
       if (!channel) return;
       state.lastSelectedChannelIds[state.selectedServerId] = action.payload;
     },
-    setVoiceEvent(state, action: PayloadAction<WebsocketVoiceUpdateResponse>) {
+    setVoiceEvent(
+      state,
+      action: PayloadAction<WebsocketVoiceStateUpdateResponse>
+    ) {
       const serverId = action.payload.serverId;
       const memberId = action.payload.memberId;
       if (!serverId || !memberId) return;
@@ -150,7 +152,10 @@ const websocketSlice = createSlice({
       }
     },
 
-    setPlaylistState(state, action: PayloadAction<WebsocketPlaylist>) {
+    setPlaylistState(
+      state,
+      action: PayloadAction<WebsocketGetMusicPlaylistResponse>
+    ) {
       const playlistState = action.payload.playlistState;
       if (!playlistState) return;
       state.playlistStates[action.payload.serverId] = playlistState;
@@ -182,7 +187,7 @@ const websocketSlice = createSlice({
 
     updatePlaylistState(
       state,
-      action: PayloadAction<WebsocketPlaylistStateUpdate>
+      action: PayloadAction<WebsocketPlaylistStateUpdateResponse>
     ) {
       const {
         serverId,
@@ -204,7 +209,7 @@ const websocketSlice = createSlice({
 
     updatePresenceStates(
       state,
-      action: PayloadAction<WebsocketPresenceUpdate>
+      action: PayloadAction<WebsocketPresenceUpdateResponse>
     ) {
       const { serverId, memberId, newDisplayName, newActivityName, newStatus } =
         action.payload;

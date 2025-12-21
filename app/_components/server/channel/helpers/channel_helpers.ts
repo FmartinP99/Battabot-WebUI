@@ -1,4 +1,4 @@
-import { ChannelType } from "../enums/channel.enum";
+import { ChannelType } from "@/app/_websocket/types/websocket_init.types";
 
 const voiceLike = new Set([ChannelType.Voice, ChannelType.StageVoice]);
 

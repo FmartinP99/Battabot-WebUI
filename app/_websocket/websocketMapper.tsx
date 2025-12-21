@@ -1,19 +1,19 @@
-import { ChannelType } from "../_components/server/channel/enums/channel.enum";
 import { MemberStatus } from "../_components/server/member/enums/memberStatus.enum";
 import {
-  WebsocketChatMessage,
   WebsocketIncomingMessageResponse,
   WebsocketInitChannels,
   WebsocketInitMembers,
   WebsocketInitResponse,
   WebsocketInitRoles,
   WebsocketInitServer,
-  WebsocketPlaylist,
-  WebsocketPlaylistStateUpdate,
-  WebsocketPresenceUpdate,
+  WebsocketGetMusicPlaylistResponse,
+  WebsocketPlaylistStateUpdateResponse,
+  WebsocketPresenceUpdateResponse,
   WebsocketToggleRoleResponse,
-  WebsocketVoiceUpdateResponse,
+  WebsocketVoiceStateUpdateResponse,
+  ChannelType,
 } from "./types/websocket_init.types";
+import { WebsocketChatMessage } from "./types/websocket_init_reduced.types";
 
 function tryParseJson(data: string) {
   let rawData: any;
@@ -84,10 +84,10 @@ export function loadIncomingMessageToObject(
 
 export function loadIncomingVoiceUpdateToObject(
   message: string
-): WebsocketVoiceUpdateResponse {
+): WebsocketVoiceStateUpdateResponse {
   const data = tryParseJson(message);
 
-  const parsed: WebsocketVoiceUpdateResponse = {
+  const parsed: WebsocketVoiceStateUpdateResponse = {
     serverId: data?.message?.serverId,
     memberId: data?.message?.memberId,
     epoch: data?.message?.epoch,
@@ -100,10 +100,10 @@ export function loadIncomingVoiceUpdateToObject(
 
 export function loadIncomingPlaylistToObject(
   message: string
-): WebsocketPlaylist {
+): WebsocketGetMusicPlaylistResponse {
   const data = tryParseJson(message);
 
-  const parsed: WebsocketPlaylist = {
+  const parsed: WebsocketGetMusicPlaylistResponse = {
     serverId: data?.message?.serverId,
     playlistState: {
       serverId: data?.message?.serverId,
@@ -120,10 +120,10 @@ export function loadIncomingPlaylistToObject(
 
 export function loadIncomingPlaylistStateUpdateToObject(
   message: string
-): WebsocketPlaylistStateUpdate {
+): WebsocketPlaylistStateUpdateResponse {
   const data = tryParseJson(message);
 
-  const parsed: WebsocketPlaylistStateUpdate = {
+  const parsed: WebsocketPlaylistStateUpdateResponse = {
     serverId: data?.message?.serverId,
     selectedSong: data?.message?.playlistState?.music,
     selectedModifiedAt: data?.message?.playlistState?.modifiedAt,
@@ -136,10 +136,10 @@ export function loadIncomingPlaylistStateUpdateToObject(
 
 export function loadIncomingPresenceUpdateToObject(
   message: string
-): WebsocketPresenceUpdate {
+): WebsocketPresenceUpdateResponse {
   const data = tryParseJson(message);
 
-  const parsed: WebsocketPresenceUpdate = {
+  const parsed: WebsocketPresenceUpdateResponse = {
     serverId: data?.message?.serverId,
     memberId: data?.message?.memberId,
     newStatus: data?.message?.newStatus,

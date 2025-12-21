@@ -5,8 +5,8 @@ import {
   selectSelectedServerId,
 } from "../store/selectors";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
-import { WebsocketMessageType } from "../_websocket/enums/websocket_message_type.enum";
 import { sendMessageThroughWebsocket } from "../store/actions";
+import { WebsocketMessageType, WebsocketSetReminderQuery } from "../_websocket/types/websocket_init.types";
 
 export function useReminder(memberId: string) {
   const dispatch = useAppDispatch();
@@ -41,7 +41,7 @@ export function useReminder(memberId: string) {
         memberId,
         date,
         text: text,
-      },
+      } as WebsocketSetReminderQuery,
     };
 
     dispatch(sendMessageThroughWebsocket(payload));
