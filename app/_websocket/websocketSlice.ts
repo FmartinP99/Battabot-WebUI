@@ -9,10 +9,15 @@ import {
   WebsocketInitRoles,
   WebsocketToggleRoleResponse,
   WebsocketPlaylistState,
+  WebsocketReminder,
+  WebsocketGetRemindersResponse,
 } from "./types/websocket_init.types";
 import { clamp } from "../helpers/utils";
 import { isGuildText } from "../_components/server/channel/helpers/channel_helpers";
-import { WebsocketChatMessage, WebsocketInitServerReduced } from "./types/websocket_init_reduced.types";
+import {
+  WebsocketChatMessage,
+  WebsocketInitServerReduced,
+} from "./types/websocket_init_reduced.types";
 
 interface WebSocketState {
   socketReady: boolean;
@@ -26,6 +31,7 @@ interface WebSocketState {
   selectedServerId: string | null;
   lastSelectedChannelIds: Record<string, string>;
   playlistStates: Record<string, WebsocketPlaylistState>;
+  reminders: Record<string, Record<string, WebsocketReminder[]>>;
 }
 
 const initialState: WebSocketState = {
@@ -40,6 +46,7 @@ const initialState: WebSocketState = {
   selectedServerId: null,
   lastSelectedChannelIds: {} as Record<string, string>,
   playlistStates: {} as Record<string, WebsocketPlaylistState>,
+  reminders: {} as Record<string, Record<string, WebsocketReminder[]>>,
 };
 
 const websocketSlice = createSlice({
@@ -265,6 +272,26 @@ const websocketSlice = createSlice({
         member.roleIds = member.roleIds.filter((_roleId) => _roleId !== roleId);
       }
     },
+    setReminders(state, action: PayloadAction<WebsocketGetRemindersResponse>) {
+      debugger;
+      if (!action.payload.success) {
+        // to-do: something error-handling, maybe error-toast?
+        return;
+      }
+
+      const { serverId, memberId, reminders } = action.payload;
+      // to-do: feedback that something is missing?
+      if (!serverId || !memberId || !reminders) return;
+
+      const memberExists = !!state.members[serverId]?.find(
+        (member) => member.memberId === memberId
+      );
+      if (!memberExists) return;
+
+      const newReminders = {} as Record<string, WebsocketReminder[]>;
+      newReminders[memberId] = reminders;
+      state.reminders[serverId] = newReminders;
+    },
   },
 });
 
@@ -286,6 +313,7 @@ export const {
   setPlaylistPlayedDuration,
   updatePresenceStates,
   setRoleForMember,
+  setReminders,
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

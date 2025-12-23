@@ -1,10 +1,16 @@
 // Generated using python-to-typescript-interfaces.
 // See https://github.com/NalyzeSolutions/python_to_typescript_interfaces
 
+export interface WebsocketBaseResponse {
+    success: boolean;
+    errorText: string | null;
+}
+
 export enum WebsocketMessageType {
     NULL = "",
     INIT = "init",
     SEND_MESSAGE = "sendMessage",
+    INCOMING_MESSAGE = "incomingMessage",
     SET_REMINDER = "setReminder",
     VOICE_STATE_UPDATE = "voiceStateUpdate",
     GET_MUSIC_PLAYLIST = "getMusicPlaylist",
@@ -14,6 +20,7 @@ export enum WebsocketMessageType {
     PLAYLIST_RESUME = "playlistResume",
     PRESENCE_UPDATE = "presenceUpdate",
     TOGGLE_ROLE = "toggleRole",
+    GET_REMINDERS = "getReminders",
 }
 
 export enum MemberStatus {
@@ -39,6 +46,10 @@ export enum ChannelType {
     Directory = "14",
     Forum = "15",
     GuildDirectory = "16",
+}
+
+export interface WebsocketInitQuery {
+    text: string;
 }
 
 export interface WebsocketInitChannels {
@@ -189,4 +200,30 @@ export interface WebsocketToggleRoleResponse {
     roleId: string;
     memberId: string;
     roleIsAdded: boolean;
+}
+
+export interface WebsocketGetRemindersQuery {
+    serverId: string;
+    memberId: string;
+}
+
+export enum WebsocketReminderStatus {
+    HAPPENED = "Happened",
+    DUE = "Due",
+    PENDING = "Pending",
+}
+
+export interface WebsocketReminder {
+    id: number;
+    channel_id: string;
+    created_at: Date;
+    remind_time: Date;
+    remind_text: string;
+    status: WebsocketReminderStatus;
+}
+
+export interface WebsocketGetRemindersResponse extends WebsocketBaseResponse {
+    serverId: string;
+    memberId: string;
+    reminders: Array<WebsocketReminder>;
 }

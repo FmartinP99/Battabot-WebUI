@@ -50,3 +50,9 @@ export const selectPlaylistState = (state: RootState, serverId: string) =>
 
 export const selectRolesByServerId = (state: RootState, serverId: string) =>
   state.websocket.roles[serverId];
+
+export const selectRemindersByServerIdAndMemberId = (
+  state: RootState,
+  serverId: string,
+  memberId: string
+) => state.websocket.reminders[serverId]?.[memberId] ?? [];

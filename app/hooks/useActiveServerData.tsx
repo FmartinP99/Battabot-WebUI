@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   ChannelType,
   WebsocketGetMusicPlaylistQuery,
+  WebsocketGetRemindersQuery,
   WebsocketInitChannels,
   WebsocketMessageType,
   WebsocketVoiceStateUpdateQuery,
@@ -124,6 +125,18 @@ export function useActiveServerData() {
 
     // to-do: maybe on disconect set a text channel as active channel?
   }
+
+  // to-do: just test delete later
+  useEffect(() => {
+    const payload: WebSocketMessage = {
+      type: WebsocketMessageType.GET_REMINDERS,
+      message: {
+        serverId: selectedServerId,
+        memberId: "215108241481269248",
+      } as WebsocketGetRemindersQuery,
+    };
+    dispatch(sendMessageThroughWebsocket(payload));
+  }, [selectedServerId]);
 
   useEffect(() => {
     if (!socketReady) return;

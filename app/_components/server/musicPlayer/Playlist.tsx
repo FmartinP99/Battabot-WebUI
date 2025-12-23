@@ -28,7 +28,7 @@ export default function Playlist() {
 
   function handleSelectNewSong(music: WebsocketMusic) {
     if(!selectedServerId) return
-
+    
     const payload: WebSocketMessage = {
       type: WebsocketMessageType.PLAYLIST_SONG_SKIP,
       message: {

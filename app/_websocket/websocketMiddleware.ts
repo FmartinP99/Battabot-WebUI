@@ -15,6 +15,7 @@ import {
   updatePresenceStates,
   setRoles,
   setRoleForMember,
+  setReminders,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
@@ -25,10 +26,12 @@ import {
   loadIncomingPlaylistStateUpdateToObject,
   loadIncomingPresenceUpdateToObject,
   loadIncomingToggleRoleResponseToObject,
+  loadIncomingGetRemindersResponseToObject,
 } from "./websocketMapper";
 import {
   WebsocketInitChannels,
   WebsocketInitMembers,
+  WebsocketInitQuery,
   WebsocketInitRoles,
   WebsocketMessageType,
 } from "./types/websocket_init.types";
@@ -46,7 +49,7 @@ export const websocketMiddleware: Middleware =
 
         const payload: WebSocketMessage = {
           type: WebsocketMessageType.INIT,
-          message: { text: "Hello from the frontend!" },
+          message: { text: "Hello from the frontend!" } as WebsocketInitQuery,
         };
         socket.send(JSON.stringify(payload));
       };
@@ -57,7 +60,7 @@ export const websocketMiddleware: Middleware =
         console.dir(message);
 
         switch (message.msgtype) {
-          case "init":
+          case WebsocketMessageType.INIT:
             const initParsed = loadInitResponseToObject(event.data);
             if (!initParsed?.servers) return;
 
@@ -90,7 +93,7 @@ export const websocketMiddleware: Middleware =
             store.dispatch(setSelectedServerId(_servers[0]?.guildId ?? null));
             break;
 
-          case "incomingMessage":
+          case WebsocketMessageType.INCOMING_MESSAGE:
             const incoming = loadIncomingMessageToObject(event.data);
             store.dispatch(
               addMessage({
@@ -135,6 +138,13 @@ export const websocketMiddleware: Middleware =
               event.data
             );
             store.dispatch(setRoleForMember(toggleRole));
+            break;
+
+          case WebsocketMessageType.GET_REMINDERS:
+            const reminders = loadIncomingGetRemindersResponseToObject(
+              event.data
+            );
+            store.dispatch(setReminders(reminders));
             break;
         }
       };

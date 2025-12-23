@@ -5,8 +5,9 @@ import Remindme from "../../remindme/Remindme";
 import MemberPopupItemSelect from "./MemberPopupSelectItem";
 import { MemberSize } from "./enums/memberSize.enum";
 import { RolesList } from "../../roles/RolesList";
+import PersonalRemindersList from "../../remindme/PersonalRemindersList";
 
-export type MembersPopupType = "remindme" | "roles" | "teszt";
+export type MembersPopupType = "remindme" | "reminders" | "roles" | "teszt";
 
 interface MemberPopupProps {
   member: WebsocketInitMembers;
@@ -35,6 +36,9 @@ export default function MemberPopup({
         />
       );
       break;
+    case "reminders":
+      renderedComponent = <PersonalRemindersList memberId={member.memberId} />;
+      break;
     case "roles":
       renderedComponent = (
         <RolesList memberId={member.memberId} memberRoleIds={member.roleIds} />
@@ -58,6 +62,11 @@ export default function MemberPopup({
             text="Remindme"
             isSelected={action == "remindme"}
             handleClick={() => handleClick("remindme")}
+          />
+          <MemberPopupItemSelect
+            text="Reminders"
+            isSelected={action == "reminders"}
+            handleClick={() => handleClick("reminders")}
           />
           <MemberPopupItemSelect
             text="Roles"
