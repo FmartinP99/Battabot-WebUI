@@ -88,7 +88,6 @@ export interface WebsocketInitServer {
 }
 
 export interface WebsocketInitResponse {
-    gmtOffsetInHour: number;
     servers: Array<WebsocketInitServer> | null;
 }
 
@@ -216,8 +215,8 @@ export enum WebsocketReminderStatus {
 export interface WebsocketReminder {
     id: number;
     channel_id: string;
-    created_at: Date;
-    remind_time: Date;
+    created_at: number;
+    remind_time: number;
     remind_text: string;
     status: WebsocketReminderStatus;
 }

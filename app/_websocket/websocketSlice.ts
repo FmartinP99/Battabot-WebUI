@@ -11,6 +11,7 @@ import {
   WebsocketPlaylistState,
   WebsocketReminder,
   WebsocketGetRemindersResponse,
+  WebsocketMessageType,
 } from "./types/websocket_init.types";
 import { clamp } from "../helpers/utils";
 import { isGuildText } from "../_components/server/channel/helpers/channel_helpers";
@@ -19,10 +20,16 @@ import {
   WebsocketInitServerReduced,
 } from "./types/websocket_init_reduced.types";
 
+function getDefaultLoaders(): Record<WebsocketMessageType, boolean> {
+  return Object.values(WebsocketMessageType).reduce((acc, type) => {
+    acc[type] = false;
+    return acc;
+  }, {} as Record<WebsocketMessageType, boolean>);
+}
+
 interface WebSocketState {
   socketReady: boolean;
   websocket: WebSocket | null;
-  gmtOffsetInHour: number;
   servers: WebsocketInitServerReduced[];
   channels: Record<string, WebsocketInitChannels[]>;
   members: Record<string, WebsocketInitMembers[]>;
@@ -31,13 +38,13 @@ interface WebSocketState {
   selectedServerId: string | null;
   lastSelectedChannelIds: Record<string, string>;
   playlistStates: Record<string, WebsocketPlaylistState>;
-  reminders: Record<string, Record<string, WebsocketReminder[]>>;
+  currentReminders: Record<string, Record<string, WebsocketReminder[]>>;
+  loaders: Record<WebsocketMessageType, boolean>;
 }
 
 const initialState: WebSocketState = {
   socketReady: false,
   websocket: null,
-  gmtOffsetInHour: 0,
   servers: [] as WebsocketInitServerReduced[],
   channels: {} as Record<string, WebsocketInitChannels[]>,
   members: {} as Record<string, WebsocketInitMembers[]>,
@@ -46,7 +53,8 @@ const initialState: WebSocketState = {
   selectedServerId: null,
   lastSelectedChannelIds: {} as Record<string, string>,
   playlistStates: {} as Record<string, WebsocketPlaylistState>,
-  reminders: {} as Record<string, Record<string, WebsocketReminder[]>>,
+  currentReminders: {} as Record<string, Record<string, WebsocketReminder[]>>,
+  loaders: getDefaultLoaders(),
 };
 
 const websocketSlice = createSlice({
@@ -273,7 +281,6 @@ const websocketSlice = createSlice({
       }
     },
     setReminders(state, action: PayloadAction<WebsocketGetRemindersResponse>) {
-      debugger;
       if (!action.payload.success) {
         // to-do: something error-handling, maybe error-toast?
         return;
@@ -290,7 +297,13 @@ const websocketSlice = createSlice({
 
       const newReminders = {} as Record<string, WebsocketReminder[]>;
       newReminders[memberId] = reminders;
-      state.reminders[serverId] = newReminders;
+      state.currentReminders[serverId] = newReminders;
+    },
+    setLoader(
+      state,
+      action: PayloadAction<{ key: WebsocketMessageType; value: boolean }>
+    ) {
+      state.loaders[action.payload.key] = action.payload.value;
     },
   },
 });
@@ -298,6 +311,7 @@ const websocketSlice = createSlice({
 export const {
   setSocketReady,
   setWebSocket,
+  setGmtOffset,
   setServers,
   setChannels,
   setMembers,
@@ -314,6 +328,7 @@ export const {
   updatePresenceStates,
   setRoleForMember,
   setReminders,
+  setLoader,
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

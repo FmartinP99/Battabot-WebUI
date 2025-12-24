@@ -16,7 +16,7 @@ function MemberListMember({ member }: MemberListMemberProps) {
   return (
     <Modal>
       <Modal.Open opens={member.memberId?.toString()}>
-        <div className="cursor-pointer hover:bg-primary-x4 active:bg-primary-x5 p-2.5 rounded-md transition-all duration-200 group">
+        <div className="cursor-pointer hover:bg-primary-x4 active:bg-primary-x5 p-2.5 rounded-md transition-all duration-200 group h-[50px]">
           <Member member={member} showActivity={true} />
         </div>
       </Modal.Open>

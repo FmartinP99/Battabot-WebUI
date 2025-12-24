@@ -1,3 +1,4 @@
+import { WebsocketMessageType } from "../_websocket/types/websocket_init.types";
 import { RootState } from "../store/store";
 
 export const selectWebSocketState = (state: RootState) => state.websocket;
@@ -55,4 +56,7 @@ export const selectRemindersByServerIdAndMemberId = (
   state: RootState,
   serverId: string,
   memberId: string
-) => state.websocket.reminders[serverId]?.[memberId] ?? [];
+) => state.websocket.currentReminders[serverId]?.[memberId] ?? [];
+
+export const selectLoader = (state: RootState, key: WebsocketMessageType) =>
+  state.websocket.loaders[key];

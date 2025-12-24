@@ -1,9 +1,15 @@
 import { WebsocketChatMessage } from "../_websocket/types/websocket_init_reduced.types";
 
-export function formatEpoch(epoch: number): string {
-  if (epoch < 1e12) epoch *= 1000;
+export function formatEpoch(
+  epochInUtc: number,
+  gmtOffsetInHour: number = 0
+): string {
+  if (epochInUtc < 1e12) epochInUtc *= 1000;
 
-  const date = new Date(epoch);
+  const clientOffsetMinutes = new Date(epochInUtc).getTimezoneOffset();
+  const offsetDifferenceHours = gmtOffsetInHour - clientOffsetMinutes / 60;
+  const shiftedEpoch = epochInUtc + offsetDifferenceHours * 60 * 60 * 1000;
+  const date = new Date(shiftedEpoch);
   const now = new Date();
 
   const two = (n: number) => String(n).padStart(2, "0");
@@ -19,13 +25,20 @@ export function formatEpoch(epoch: number): string {
     now.getMonth(),
     now.getDate()
   ).getTime();
+
+  const tomorrowStart = todayStart + 24 * 60 * 60 * 1000;
+  const dayAfterTomorrowStart = tomorrowStart + 24 * 60 * 60 * 1000;
   const yesterdayStart = todayStart - 24 * 60 * 60 * 1000;
 
-  if (epoch >= todayStart) {
+  if (shiftedEpoch >= tomorrowStart && shiftedEpoch < dayAfterTomorrowStart) {
+    return `Tomorrow ${HHmm}`;
+  }
+
+  if (shiftedEpoch >= todayStart) {
     return HHmm;
   }
 
-  if (epoch >= yesterdayStart) {
+  if (shiftedEpoch >= yesterdayStart) {
     return `Yesterday ${HHmm}`;
   }
 

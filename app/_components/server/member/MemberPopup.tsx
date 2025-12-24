@@ -19,7 +19,7 @@ export default function MemberPopup({
   member,
   onCloseModal,
 }: MemberPopupProps) {
-  const [action, setAction] = useState<MembersPopupType>("remindme");
+  const [action, setAction] = useState<MembersPopupType>("reminders");
 
   const handleClick = (actionName: MembersPopupType) => {
     if (actionName === action) return;

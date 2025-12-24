@@ -32,7 +32,6 @@ export function loadInitResponseToObject(
   const data = tryParseJson(message);
 
   const parsed: WebsocketInitResponse = {
-    gmtOffsetInHour: data?.message?.gmtOffsetInHour ?? 0,
     servers: data?.message?.serverDatas?.map((guild: WebsocketInitServer) => ({
       guildId: guild.guildId,
       guildName: guild.guildName ?? "Undefined",

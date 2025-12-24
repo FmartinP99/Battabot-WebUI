@@ -36,7 +36,9 @@ export function MemberListRow({
     return (
       <div
         style={style}
-        className={` ${isOfflineLike ? "opacity-30" : ""} hover:opacity-100`}
+        className={` ${
+          isOfflineLike ? "opacity-30" : ""
+        } hover:opacity-100 h-[30px]`}
       >
         <MemberListMember
           member={row.member}
@@ -82,7 +84,7 @@ export default function MembersList({ members }: MemberListProps) {
           className="scrollbar-hide-nonhover pr-1"
           rowComponent={MemberListRow}
           rowCount={rows.length}
-          rowHeight={(index) => (rows[index].type === "role" ? 24 : 48)}
+          rowHeight={(index) => (rows[index].type === "role" ? 30 : 50)}
           rowProps={{ rows }}
         />
 
