@@ -38,6 +38,9 @@ import {
   WebsocketMessageType,
 } from "./types/websocket_init.types";
 import { WebsocketChatMessage } from "./types/websocket_init_reduced.types";
+import { useAppSelector } from "../hooks/storeHooks";
+import { selectLoader } from "../store/selectors";
+import { toWebsocketMessageType } from "../helpers/utils";
 
 export const websocketMiddleware: Middleware =
   (store: any) => (next: any) => (action: any) => {
@@ -60,6 +63,16 @@ export const websocketMiddleware: Middleware =
         const message = JSON.parse(event.data);
 
         console.dir(message);
+
+        const msgType = toWebsocketMessageType(message.msgtype);
+        if (!msgType) return;
+        // if there is an active loader for this message, we automatically disable it on response
+        store.dispatch(
+          setLoader({
+            key: msgType,
+            value: false,
+          })
+        );
 
         switch (message.msgtype) {
           case WebsocketMessageType.INIT:
@@ -147,12 +160,6 @@ export const websocketMiddleware: Middleware =
               event.data
             );
             store.dispatch(setReminders(reminders));
-            store.dispatch(
-              setLoader({
-                key: WebsocketMessageType.GET_REMINDERS,
-                value: false,
-              })
-            );
             break;
         }
       };

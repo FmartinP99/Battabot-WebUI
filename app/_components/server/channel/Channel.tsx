@@ -1,6 +1,6 @@
 import { WebsocketInitChannels } from "@/app/_websocket/types/websocket_init.types";
 import { getPrefix } from "./helpers/channel_helpers";
-import { selectMembersByActiveServer } from "@/app/store/selectors";
+import { selectAllMembersByActiveServer } from "@/app/store/selectors";
 import { useAppSelector } from "@/app/hooks/storeHooks";
 import Member from "../member/Member";
 import { MemberSize } from "../member/enums/memberSize.enum";
@@ -21,7 +21,7 @@ export default function Channel({
   onChannelClick,
   onVoiceDisconnect,
 }: ChannelProps) {
-  const members = useAppSelector(selectMembersByActiveServer);
+  const members = useAppSelector(selectAllMembersByActiveServer);
 
   const channelClasses = clsx(
     "group relative truncate cursor-pointer flex items-center gap-2 px-2 py-1.5 rounded-md transition-all duration-200 ease-in-out",

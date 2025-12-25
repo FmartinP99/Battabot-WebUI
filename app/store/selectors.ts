@@ -18,18 +18,38 @@ export const selectSelectedServer = (state: RootState) =>
 
 export const selectChannels = (state: RootState) => state.websocket.channels;
 
-export const selectChannelsByServerId = (state: RootState, serverId: string) =>
-  state.websocket.channels[serverId] ?? [];
-
+export const selectChannelByActiveServer = (
+  state: RootState,
+  channelId: string
+) => {
+  const selectedServerId = selectSelectedServerId(state);
+  if (!selectedServerId) return null;
+  return (
+    state.websocket.channels[selectedServerId].find(
+      (ch) => ch.channelId === channelId
+    ) ?? null
+  );
+};
 export const selectMembers = (state: RootState) => state.websocket.members;
 
 export const selectMembersByServerId = (state: RootState, serverId: string) =>
   state.websocket.members[serverId] ?? [];
 
-export const selectMembersByActiveServer = (state: RootState) => {
+export const selectAllMembersByActiveServer = (state: RootState) => {
   const selectedServerId = selectSelectedServerId(state);
   if (!selectedServerId) return undefined;
   return state.websocket.members[selectedServerId];
+};
+
+export const selectMemberByActiveServer = (
+  state: RootState,
+  memberId: string
+) => {
+  const selectedServerId = selectSelectedServerId(state);
+  if (!selectedServerId) return undefined;
+  return state.websocket.members[selectedServerId]?.find(
+    (mem) => mem.memberId === memberId
+  );
 };
 
 export const selectMessages = (state: RootState) => state.websocket.messages;

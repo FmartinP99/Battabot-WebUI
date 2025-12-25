@@ -4,6 +4,7 @@ import {
   WebsocketMessageType,
   WebsocketGetRemindersQuery,
   WebsocketReminder,
+  WebsocketGetRemindersResponse,
 } from "../_websocket/types/websocket_init.types";
 import { setLoaderValue, sendMessageThroughWebsocket } from "../store/actions";
 import {
@@ -18,6 +19,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { formatEpoch } from "../helpers/utils";
+import { setReminders } from "../_websocket/websocketSlice";
 
 export function usePersonalReminders(memberId: string) {
   const dispatch = useAppDispatch();
@@ -46,6 +48,15 @@ export function usePersonalReminders(memberId: string) {
         key: WebsocketMessageType.GET_REMINDERS,
         value: true,
       })
+    );
+
+    // clearing it out in case of an error
+    dispatch(
+      setReminders({
+        serverId: selectedServerId,
+        memberId,
+        reminders: [] as WebsocketReminder[],
+      } as WebsocketGetRemindersResponse)
     );
 
     const payload: WebSocketMessage = {

@@ -7,7 +7,7 @@ import { MemberSize } from "./enums/memberSize.enum";
 import { RolesList } from "../../roles/RolesList";
 import PersonalRemindersList from "../../remindme/PersonalRemindersList";
 
-export type MembersPopupType = "remindme" | "reminders" | "roles" | "teszt";
+export type MembersPopupType = "remindme" | "reminders" | "roles";
 
 interface MemberPopupProps {
   member: WebsocketInitMembers;
@@ -19,7 +19,7 @@ export default function MemberPopup({
   member,
   onCloseModal,
 }: MemberPopupProps) {
-  const [action, setAction] = useState<MembersPopupType>("reminders");
+  const [action, setAction] = useState<MembersPopupType>("remindme");
 
   const handleClick = (actionName: MembersPopupType) => {
     if (actionName === action) return;

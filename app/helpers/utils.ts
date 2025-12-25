@@ -1,3 +1,4 @@
+import { WebsocketMessageType } from "../_websocket/types/websocket_init.types";
 import { WebsocketChatMessage } from "../_websocket/types/websocket_init_reduced.types";
 
 export function formatEpoch(
@@ -145,4 +146,14 @@ export function getTextColorBasedOnBg(backgroundColor: string) {
   const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
   return luminance > 140 ? "#000" : "#fff";
+}
+
+export function toWebsocketMessageType(
+  value: string
+): WebsocketMessageType | null {
+  return Object.values(WebsocketMessageType).includes(
+    value as WebsocketMessageType
+  )
+    ? (value as WebsocketMessageType)
+    : null;
 }
