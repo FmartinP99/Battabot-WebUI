@@ -36,6 +36,7 @@ export default function useMusicPlayerControls() {
   }, [selectedServerId]);
 
   const resume = useCallback(() => {
+    debugger;
     const payload: WebSocketMessage = {
       type: WebsocketMessageType.PLAYLIST_RESUME,
       message: {
@@ -46,10 +47,9 @@ export default function useMusicPlayerControls() {
     dispatch(sendMessageThroughWebsocket(payload));
   }, [selectedServerId]);
 
-  const togglePlay = useCallback(
-    () => (isPaused ? resume() : pause()),
-    [isPaused, pause, resume]
-  );
+  const togglePlay = useCallback(() => {
+    isPaused ? resume() : pause();
+  }, [isPaused, pause, resume]);
 
   const skip = useCallback(
     (direction: 1 | -1) => {

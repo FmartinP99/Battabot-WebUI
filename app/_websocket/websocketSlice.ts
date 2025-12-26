@@ -297,7 +297,10 @@ const websocketSlice = createSlice({
 
       const newReminders = {} as Record<string, WebsocketReminder[]>;
       newReminders[memberId] = reminders;
-      state.currentReminders[serverId] = newReminders;
+      state.currentReminders[serverId] = {
+        ...state.currentReminders[serverId],
+        ...newReminders,
+      };
     },
     setLoader(
       state,
@@ -311,7 +314,7 @@ const websocketSlice = createSlice({
 export const {
   setSocketReady,
   setWebSocket,
-  setGmtOffset,
+
   setServers,
   setChannels,
   setMembers,

@@ -33,7 +33,7 @@ export function usePersonalReminders(memberId: string) {
   const reminders = useAppSelector((state) =>
     selectedServerId && memberId
       ? selectRemindersByServerIdAndMemberId(state, selectedServerId, memberId)
-      : undefined
+      : []
   );
 
   const isLoading = useAppSelector((state) =>
@@ -68,7 +68,7 @@ export function usePersonalReminders(memberId: string) {
     };
 
     dispatch(sendMessageThroughWebsocket(payload));
-  }, [selectedServerId, memberId, dispatch]);
+  }, [selectedServerId, memberId]);
 
   const columnHelper = createColumnHelper<WebsocketReminder>();
   const columns = [
