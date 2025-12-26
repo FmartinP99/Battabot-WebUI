@@ -15,6 +15,9 @@ import {
   updatePresenceStates,
   setRoles,
   setRoleForMember,
+  setReminders,
+  setLoader,
+  setGmtOffset,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
@@ -25,18 +28,23 @@ import {
   loadIncomingPlaylistStateUpdateToObject,
   loadIncomingPresenceUpdateToObject,
   loadIncomingToggleRoleResponseToObject,
+  loadIncomingGetRemindersResponseToObject,
 } from "./websocketMapper";
 import {
   WebsocketInitChannels,
   WebsocketInitMembers,
+  WebsocketInitQuery,
   WebsocketInitRoles,
   WebsocketMessageType,
 } from "./types/websocket_init.types";
 import { WebsocketChatMessage } from "./types/websocket_init_reduced.types";
+import { useAppSelector } from "../hooks/storeHooks";
+import { selectLoader } from "../store/selectors";
+import { toWebsocketMessageType } from "../helpers/utils";
 
 export const websocketMiddleware: Middleware =
   (store: any) => (next: any) => (action: any) => {
-    if (action.type === "websocket/connect") {
+    if (action.type === "websocket/connectAction") {
       const socket = new WebSocket("ws://localhost:8000/ws");
 
       socket.onopen = () => {
@@ -46,7 +54,7 @@ export const websocketMiddleware: Middleware =
 
         const payload: WebSocketMessage = {
           type: WebsocketMessageType.INIT,
-          message: { text: "Hello from the frontend!" },
+          message: { text: "Hello from the frontend!" } as WebsocketInitQuery,
         };
         socket.send(JSON.stringify(payload));
       };
@@ -56,8 +64,18 @@ export const websocketMiddleware: Middleware =
 
         console.dir(message);
 
+        const msgType = toWebsocketMessageType(message.msgtype);
+        if (!msgType) return;
+        // if there is an active loader for this message, we automatically disable it on response
+        store.dispatch(
+          setLoader({
+            key: msgType,
+            value: false,
+          })
+        );
+
         switch (message.msgtype) {
-          case "init":
+          case WebsocketMessageType.INIT:
             const initParsed = loadInitResponseToObject(event.data);
             if (!initParsed?.servers) return;
 
@@ -90,7 +108,7 @@ export const websocketMiddleware: Middleware =
             store.dispatch(setSelectedServerId(_servers[0]?.guildId ?? null));
             break;
 
-          case "incomingMessage":
+          case WebsocketMessageType.INCOMING_MESSAGE:
             const incoming = loadIncomingMessageToObject(event.data);
             store.dispatch(
               addMessage({
@@ -136,6 +154,13 @@ export const websocketMiddleware: Middleware =
             );
             store.dispatch(setRoleForMember(toggleRole));
             break;
+
+          case WebsocketMessageType.GET_REMINDERS:
+            const reminders = loadIncomingGetRemindersResponseToObject(
+              event.data
+            );
+            store.dispatch(setReminders(reminders));
+            break;
         }
       };
 
@@ -149,7 +174,7 @@ export const websocketMiddleware: Middleware =
       };
     }
 
-    if (action.type === "websocket/sendMessage") {
+    if (action.type === "websocket/sendMessageAction") {
       const state = store.getState() as any;
       const socket: WebSocket | null = state.websocket.websocket;
       const socketReady: boolean = state.websocket.socketReady;
@@ -159,6 +184,15 @@ export const websocketMiddleware: Middleware =
       } else {
         console.warn("Socket not ready yet");
       }
+    }
+
+    if (action.type === "websocket/setLoaderValueAction") {
+      store.dispatch(
+        setLoader({
+          key: action.payload.key,
+          value: action.payload.value,
+        })
+      );
     }
 
     return next(action);

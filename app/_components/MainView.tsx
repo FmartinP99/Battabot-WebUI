@@ -12,7 +12,7 @@ export default function MainView() {
   }, [dispatch]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-46px-1rem)]">
+    <div className="flex flex-col h-[calc(100vh-40px)]">
       <Header />
       <div className="flex flex-1 mt-4 overflow-hidden">
         <ServersList />

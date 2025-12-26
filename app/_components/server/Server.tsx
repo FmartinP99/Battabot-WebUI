@@ -27,7 +27,7 @@ export default function Server() {
     return (
       <div className="relative grid items-center justify-center self-center w-[100vw]  ">
         <Spinner />
-        <p className="text-xl text-primary-200">Loading servers...</p>
+        <p className="mt-5 text-xl text-primary-200">Loading servers...</p>
       </div>
     );
 

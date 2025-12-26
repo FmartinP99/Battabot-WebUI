@@ -16,7 +16,7 @@ const buttonVariants = cva(
         outline:
           "border border-input  shadow-sm transition-colors duration-500",
         outlineClickable:
-          "border border-input shadow-sm transition-colors duration-500 active:scale-95 active:opacity-80 active:shadow-inner transform",
+          "border border-input shadow-sm transition-colors duration-500 active:scale-95 active:opacity-80 active:shadow-inner transform cursor-pointer",
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",

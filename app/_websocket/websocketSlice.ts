@@ -9,15 +9,27 @@ import {
   WebsocketInitRoles,
   WebsocketToggleRoleResponse,
   WebsocketPlaylistState,
+  WebsocketReminder,
+  WebsocketGetRemindersResponse,
+  WebsocketMessageType,
 } from "./types/websocket_init.types";
 import { clamp } from "../helpers/utils";
 import { isGuildText } from "../_components/server/channel/helpers/channel_helpers";
-import { WebsocketChatMessage, WebsocketInitServerReduced } from "./types/websocket_init_reduced.types";
+import {
+  WebsocketChatMessage,
+  WebsocketInitServerReduced,
+} from "./types/websocket_init_reduced.types";
+
+function getDefaultLoaders(): Record<WebsocketMessageType, boolean> {
+  return Object.values(WebsocketMessageType).reduce((acc, type) => {
+    acc[type] = false;
+    return acc;
+  }, {} as Record<WebsocketMessageType, boolean>);
+}
 
 interface WebSocketState {
   socketReady: boolean;
   websocket: WebSocket | null;
-  gmtOffsetInHour: number;
   servers: WebsocketInitServerReduced[];
   channels: Record<string, WebsocketInitChannels[]>;
   members: Record<string, WebsocketInitMembers[]>;
@@ -26,12 +38,13 @@ interface WebSocketState {
   selectedServerId: string | null;
   lastSelectedChannelIds: Record<string, string>;
   playlistStates: Record<string, WebsocketPlaylistState>;
+  currentReminders: Record<string, Record<string, WebsocketReminder[]>>;
+  loaders: Record<WebsocketMessageType, boolean>;
 }
 
 const initialState: WebSocketState = {
   socketReady: false,
   websocket: null,
-  gmtOffsetInHour: 0,
   servers: [] as WebsocketInitServerReduced[],
   channels: {} as Record<string, WebsocketInitChannels[]>,
   members: {} as Record<string, WebsocketInitMembers[]>,
@@ -40,6 +53,8 @@ const initialState: WebSocketState = {
   selectedServerId: null,
   lastSelectedChannelIds: {} as Record<string, string>,
   playlistStates: {} as Record<string, WebsocketPlaylistState>,
+  currentReminders: {} as Record<string, Record<string, WebsocketReminder[]>>,
+  loaders: getDefaultLoaders(),
 };
 
 const websocketSlice = createSlice({
@@ -265,12 +280,41 @@ const websocketSlice = createSlice({
         member.roleIds = member.roleIds.filter((_roleId) => _roleId !== roleId);
       }
     },
+    setReminders(state, action: PayloadAction<WebsocketGetRemindersResponse>) {
+      if (!action.payload.success) {
+        // to-do: something error-handling, maybe error-toast?
+        return;
+      }
+
+      const { serverId, memberId, reminders } = action.payload;
+      // to-do: feedback that something is missing?
+      if (!serverId || !memberId || !reminders) return;
+
+      const memberExists = !!state.members[serverId]?.find(
+        (member) => member.memberId === memberId
+      );
+      if (!memberExists) return;
+
+      const newReminders = {} as Record<string, WebsocketReminder[]>;
+      newReminders[memberId] = reminders;
+      state.currentReminders[serverId] = {
+        ...state.currentReminders[serverId],
+        ...newReminders,
+      };
+    },
+    setLoader(
+      state,
+      action: PayloadAction<{ key: WebsocketMessageType; value: boolean }>
+    ) {
+      state.loaders[action.payload.key] = action.payload.value;
+    },
   },
 });
 
 export const {
   setSocketReady,
   setWebSocket,
+
   setServers,
   setChannels,
   setMembers,
@@ -286,6 +330,8 @@ export const {
   setPlaylistPlayedDuration,
   updatePresenceStates,
   setRoleForMember,
+  setReminders,
+  setLoader,
 } = websocketSlice.actions;
 
 export default websocketSlice.reducer;

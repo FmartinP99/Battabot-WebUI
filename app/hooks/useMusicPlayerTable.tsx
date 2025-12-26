@@ -1,15 +1,12 @@
 import { useMemo } from "react";
-import {
-  selectSelectedServerId,
-  selectSongsForSelectedServer,
-} from "../store/selectors";
+import { selectSongsForSelectedServer } from "../store/selectors";
 import { useAppSelector } from "./storeHooks";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Music } from "../_components/server/musicPlayer/types/music.type";
+import { WebsocketMusic } from "../_websocket/types/websocket_init.types";
 
 export function useMusicPlayerTable() {
   const songs = useAppSelector(selectSongsForSelectedServer);
@@ -22,7 +19,7 @@ export function useMusicPlayerTable() {
   const columns = useMemo(() => {
     if (!songsArray.length) return [];
 
-    const columnHelper = createColumnHelper<Music>();
+    const columnHelper = createColumnHelper<WebsocketMusic>();
 
     return [
       columnHelper.accessor("index", {

@@ -12,6 +12,7 @@ import {
   WebsocketToggleRoleResponse,
   WebsocketVoiceStateUpdateResponse,
   ChannelType,
+  WebsocketGetRemindersResponse,
 } from "./types/websocket_init.types";
 import { WebsocketChatMessage } from "./types/websocket_init_reduced.types";
 
@@ -31,7 +32,6 @@ export function loadInitResponseToObject(
   const data = tryParseJson(message);
 
   const parsed: WebsocketInitResponse = {
-    gmtOffsetInHour: data?.message?.gmtOffsetInHour ?? 0,
     servers: data?.message?.serverDatas?.map((guild: WebsocketInitServer) => ({
       guildId: guild.guildId,
       guildName: guild.guildName ?? "Undefined",
@@ -160,6 +160,22 @@ export function loadIncomingToggleRoleResponseToObject(
     roleId: data?.message?.roleId,
     memberId: data?.message?.memberId,
     roleIsAdded: data?.message?.roleIsAdded,
+  };
+
+  return parsed;
+}
+
+export function loadIncomingGetRemindersResponseToObject(
+  message: string
+): WebsocketGetRemindersResponse {
+  const data = tryParseJson(message);
+
+  const parsed: WebsocketGetRemindersResponse = {
+    success: data?.message?.success ?? false,
+    errorText: data?.message?.errorText,
+    serverId: data?.message?.serverId,
+    memberId: data?.message?.memberId,
+    reminders: data?.message?.reminders,
   };
 
   return parsed;

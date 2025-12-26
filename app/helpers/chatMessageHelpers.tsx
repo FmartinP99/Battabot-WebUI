@@ -1,4 +1,6 @@
 import Image from "next/image";
+import ChatMemberMention from "../_components/server/chat/ChatMemberMention";
+import ChatChannelMention from "../_components/server/chat/ChatChannelMention";
 
 const urlRegex = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
 
@@ -7,6 +9,8 @@ const imageUrlRegex =
 
 const youtubeRegex =
   /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/gi;
+
+const mentionRegex = /<([@#])(\d+)>/g;
 
 function getMediaPreviewsFromMessage(text?: string) {
   if (!text) return [];
@@ -64,7 +68,7 @@ function getMediaPreviewsFromMessage(text?: string) {
   return elements;
 }
 
-function renderMessageWithImageNames(text?: string) {
+function formatMessageToRichText(text?: string) {
   if (!text) return null;
 
   const elements: JSX.Element[] = [];
@@ -108,6 +112,33 @@ function renderMessageWithImageNames(text?: string) {
     cursor = end;
   });
 
+  // getting  mentions
+  const mentions = Array.from(text.matchAll(new RegExp(mentionRegex, "g")));
+  mentions.forEach((match, i) => {
+    const mention = match[0];
+    const type = match[1];
+    const start = match.index ?? 0;
+    const end = start + mention.length;
+
+    if (start > cursor) {
+      elements.push(
+        <span key={`text-${i}-${cursor}`}>{text.slice(cursor, start)}</span>
+      );
+    }
+
+    if (type === "@") {
+      elements.push(
+        <ChatMemberMention key={`mmention-${i}-${start}`} mention={mention} />
+      );
+    } else {
+      elements.push(
+        <ChatChannelMention key={`cmention-${i}-${start}`} mention={mention} />
+      );
+    }
+
+    cursor = end;
+  });
+
   if (cursor < text.length) {
     elements.push(<span key={`text-end-${cursor}`}>{text.slice(cursor)}</span>);
   }
@@ -115,4 +146,4 @@ function renderMessageWithImageNames(text?: string) {
   return <>{elements}</>;
 }
 
-export { renderMessageWithImageNames, getMediaPreviewsFromMessage };
+export { formatMessageToRichText, getMediaPreviewsFromMessage };

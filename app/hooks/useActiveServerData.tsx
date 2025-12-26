@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   ChannelType,
   WebsocketGetMusicPlaylistQuery,
+  WebsocketGetRemindersQuery,
   WebsocketInitChannels,
   WebsocketMessageType,
   WebsocketVoiceStateUpdateQuery,
