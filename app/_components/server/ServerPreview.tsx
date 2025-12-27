@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
 import { setSelectedServerId } from "../../_websocket/websocketSlice";
 import { WebsocketInitServerReduced } from "@/app/_websocket/types/websocket_init_reduced.types";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 interface ServerPreviewProps {
   server: WebsocketInitServerReduced;
