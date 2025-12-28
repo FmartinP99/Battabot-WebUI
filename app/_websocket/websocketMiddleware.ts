@@ -17,7 +17,6 @@ import {
   setRoleForMember,
   setReminders,
   setLoader,
-  setGmtOffset,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,

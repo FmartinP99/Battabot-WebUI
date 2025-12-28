@@ -56,6 +56,7 @@ export function usePersonalReminders(memberId: string) {
         serverId: selectedServerId,
         memberId,
         reminders: [] as WebsocketReminder[],
+        success: true,
       } as WebsocketGetRemindersResponse)
     );
 

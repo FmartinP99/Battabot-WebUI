@@ -19,6 +19,7 @@ import {
   WebsocketChatMessage,
   WebsocketInitServerReduced,
 } from "./types/websocket_init_reduced.types";
+import toast from "react-hot-toast";
 
 function getDefaultLoaders(): Record<WebsocketMessageType, boolean> {
   return Object.values(WebsocketMessageType).reduce((acc, type) => {
@@ -281,14 +282,19 @@ const websocketSlice = createSlice({
       }
     },
     setReminders(state, action: PayloadAction<WebsocketGetRemindersResponse>) {
-      if (!action.payload.success) {
-        // to-do: something error-handling, maybe error-toast?
+      if (!action.payload?.success) {
+        toast.error(
+          action.payload.errorText ??
+            "Error while getting reminders for this user!",
+          {
+            id: WebsocketMessageType.GET_REMINDERS,
+          }
+        );
         return;
       }
 
       const { serverId, memberId, reminders } = action.payload;
-      // to-do: feedback that something is missing?
-      if (!serverId || !memberId || !reminders) return;
+      if (!serverId || !memberId) return;
 
       const memberExists = !!state.members[serverId]?.find(
         (member) => member.memberId === memberId
@@ -296,7 +302,7 @@ const websocketSlice = createSlice({
       if (!memberExists) return;
 
       const newReminders = {} as Record<string, WebsocketReminder[]>;
-      newReminders[memberId] = reminders;
+      newReminders[memberId] = reminders ?? [];
       state.currentReminders[serverId] = {
         ...state.currentReminders[serverId],
         ...newReminders,

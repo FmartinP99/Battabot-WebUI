@@ -9,6 +9,12 @@ import {
   TableRow,
 } from "../ui/table";
 import { flexRender } from "@tanstack/react-table";
+import {
+  WebsocketMessageType,
+  WebsocketReminderStatus,
+} from "@/app/_websocket/types/websocket_init.types";
+import clsx from "clsx";
+import { statusClassMap } from "./helpers/remindme_helpers";
 
 interface PersonalRemindersListProps {
   memberId: string;
@@ -39,7 +45,7 @@ export default function PersonalRemindersList({
     <Table className="overflow-y-auto">
       <TableHeader>
         {table.getHeaderGroups()?.map((headerGroup) => (
-          <TableRow key={headerGroup.id} className="uppercase">
+          <TableRow key={headerGroup.id} className="uppercase cursor-default">
             {headerGroup.headers?.map((header) => (
               <TableHead key={header.id} className="text-white">
                 {header.isPlaceholder
@@ -58,9 +64,14 @@ export default function PersonalRemindersList({
           <TableRow
             onClick={() => handleSetSelectedIndex(row.original.id)}
             key={row.id}
-            className={`cursor-pointer hover:bg-white/5  border-b-white/20
-                ${row.getValue("id") === selectedIndex ? "bg-white/10" : ""}
-            `}
+            className={clsx(
+              "cursor-pointer border-b-white/20 hover:bg-white/5",
+              row.getValue("id") === selectedIndex && "bg-white/10",
+              statusClassMap[
+                (row.getValue("status") as WebsocketReminderStatus) ??
+                  WebsocketReminderStatus.DUE
+              ]
+            )}
           >
             {row.getVisibleCells()?.map((cell) => (
               <TableCell key={cell.id} className="text-left ">
