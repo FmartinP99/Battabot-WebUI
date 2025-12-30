@@ -217,13 +217,13 @@ function getMediaPreviewsFromMessage(text?: string) {
         rel="noopener noreferrer"
         className="block w-full mt-1"
       >
-        <div className="relative  max-h-[350px] aspect-video">
+        <div className="relative  max-h-[350px] aspect-video ">
           <Image
             src={url}
             alt="image preview"
             fill
-            sizes="(max-width: 768px) 100vw, 600px"
-            className="rounded-lg object-cover"
+            sizes="(max-width: 768px)  600px"
+            className="rounded-lg object-contain object-left"
           />
         </div>
       </a>
