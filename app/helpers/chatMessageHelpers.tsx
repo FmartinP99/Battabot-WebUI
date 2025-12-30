@@ -4,6 +4,8 @@ import ChatChannelMention from "../_components/server/chat/ChatChannelMention";
 
 const urlRegex = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
 
+const timestampRegex = /<t:(\d{1,}):?([tTdDfFR])?>/g;
+
 const imageUrlRegex =
   /(https?:\/\/(?:cdn\.discordapp\.com|media\.discordapp\.net)\/[^\s]+)|(https?:\/\/[^\s]+?\.(?:png|jpe?g|gif|webp|svg))/gi;
 
@@ -11,6 +13,182 @@ const youtubeRegex =
   /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/gi;
 
 const mentionRegex = /<([@#])(\d+)>/g;
+
+type Token =
+  | { kind: "url"; start: number; end: number; value: string }
+  | {
+      kind: "mention";
+      start: number;
+      end: number;
+      value: string;
+      mentionType: string;
+    }
+  | {
+      kind: "timestamp";
+      start: number;
+      end: number;
+      unix: number;
+      format?: string;
+    };
+
+function formatMessageToRichText(text?: string) {
+  if (!text) return null;
+
+  const tokens: Token[] = [];
+  const elements: JSX.Element[] = [];
+  let cursor = 0;
+
+  const urls = Array.from(text.matchAll(new RegExp(urlRegex, "g")));
+  const mentions = Array.from(text.matchAll(new RegExp(mentionRegex, "g")));
+  const timestamps = Array.from(text.matchAll(timestampRegex));
+  urls.forEach((match, i) => {
+    const start = match.index!;
+    tokens.push({
+      kind: "url",
+      start,
+      end: start + match[0].length,
+      value: match[0],
+    });
+  });
+
+  mentions.forEach((match, i) => {
+    const start = match.index!;
+    tokens.push({
+      kind: "mention",
+      start,
+      end: start + match[0].length,
+      value: match[0],
+      mentionType: match[1],
+    });
+  });
+
+  timestamps.forEach((match, i) => {
+    const start = match.index!;
+    tokens.push({
+      kind: "timestamp",
+      start,
+      end: start + match[0].length,
+      unix: Number(match[1]),
+      format: match[2],
+    });
+  });
+
+  // longer token wins
+  tokens.sort((a, b) => {
+    if (a.start !== b.start) return a.start - b.start;
+    return b.end - a.end;
+  });
+
+  tokens.forEach((token, i) => {
+    if (token.start > cursor) {
+      elements.push(
+        <span key={`text-${cursor}`}>{text.slice(cursor, token.start)}</span>
+      );
+    }
+
+    switch (token.kind) {
+      case "url": {
+        const isImage = imageUrlRegex.test(token.value);
+        const filename = isImage
+          ? decodeURIComponent(
+              token.value.split("?")[0].split("/").pop() ?? "image"
+            )
+          : token.value;
+
+        elements.push(
+          <a
+            key={`url-${i}`}
+            href={token.value}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={
+              isImage
+                ? "text-blue-500 hover:bg-blue-800 hover:text-white p-1 rounded"
+                : "text-blue-500 hover:underline p-1"
+            }
+          >
+            {filename}
+          </a>
+        );
+        break;
+      }
+      case "mention":
+        elements.push(
+          token.mentionType === "@" ? (
+            <ChatMemberMention key={`mention-${i}`} mention={token.value} />
+          ) : (
+            <ChatChannelMention key={`mention-${i}`} mention={token.value} />
+          )
+        );
+        break;
+
+      case "timestamp":
+        elements.push(
+          <span
+            key={`timestamp-${i}`}
+            className="bg-gray-700 p-1 rounded"
+            title={new Date(token.unix * 1000).toISOString()}
+          >
+            {formatDiscordTimestamp(token.unix, token.format)}
+          </span>
+        );
+        break;
+    }
+    cursor = token.end;
+  });
+
+  if (cursor < text.length) {
+    elements.push(<span key="text-end">{text.slice(cursor)}</span>);
+  }
+
+  return <>{elements}</>;
+}
+
+function formatDiscordTimestamp(unix: number, format?: string) {
+  const date = new Date(unix * 1000);
+
+  switch (format) {
+    case "t":
+      return date.toLocaleTimeString();
+    case "T":
+      return date.toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+    case "d":
+      return date.toLocaleDateString();
+    case "D":
+      return date.toLocaleDateString(undefined, { dateStyle: "long" });
+    case "f":
+    case undefined:
+      return `${date.toLocaleDateString(undefined, {
+        dateStyle: "long",
+      })} ${date.toLocaleTimeString()}`;
+    case "F":
+      return date.toLocaleString(undefined, {
+        dateStyle: "full",
+        timeStyle: "short",
+        hourCycle: "h24",
+      });
+    case "R": {
+      const diff = date.getTime() - Date.now();
+      const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
+
+      const seconds = Math.round(diff / 1000);
+      const minutes = Math.round(seconds / 60);
+      const hours = Math.round(minutes / 60);
+      const days = Math.round(hours / 24);
+
+      if (Math.abs(days) >= 1) return rtf.format(days, "day");
+      if (Math.abs(hours) >= 1) return rtf.format(hours, "hour");
+      if (Math.abs(minutes) >= 1) return rtf.format(minutes, "minute");
+      return rtf.format(seconds, "second");
+    }
+    default:
+      return date.toString();
+  }
+}
 
 function getMediaPreviewsFromMessage(text?: string) {
   if (!text) return [];
@@ -66,84 +244,6 @@ function getMediaPreviewsFromMessage(text?: string) {
   });
 
   return elements;
-}
-
-function formatMessageToRichText(text?: string) {
-  if (!text) return null;
-
-  const elements: JSX.Element[] = [];
-  let cursor = 0;
-
-  const urls = Array.from(text.matchAll(new RegExp(urlRegex, "g")));
-
-  urls.forEach((match, i) => {
-    const url = match[0];
-    const start = match.index ?? 0;
-    const end = start + url.length;
-
-    if (start > cursor) {
-      elements.push(
-        <span key={`text-${i}-${cursor}`}>{text.slice(cursor, start)}</span>
-      );
-    }
-
-    const isImage = imageUrlRegex.test(url);
-    const filename = isImage
-      ? decodeURIComponent(url.split("?")[0].split("/").pop() ?? "image")
-      : url;
-
-    elements.push(
-      <a
-        key={`url-${i}-${start}`}
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={
-          isImage
-            ? "text-blue-500 hover:bg-blue-800 hover:text-white px-1 rounded"
-            : "text-blue-500 hover:underline px-1"
-        }
-        title={url}
-      >
-        {filename}
-      </a>
-    );
-
-    cursor = end;
-  });
-
-  // getting  mentions
-  const mentions = Array.from(text.matchAll(new RegExp(mentionRegex, "g")));
-  mentions.forEach((match, i) => {
-    const mention = match[0];
-    const type = match[1];
-    const start = match.index ?? 0;
-    const end = start + mention.length;
-
-    if (start > cursor) {
-      elements.push(
-        <span key={`text-${i}-${cursor}`}>{text.slice(cursor, start)}</span>
-      );
-    }
-
-    if (type === "@") {
-      elements.push(
-        <ChatMemberMention key={`mmention-${i}-${start}`} mention={mention} />
-      );
-    } else {
-      elements.push(
-        <ChatChannelMention key={`cmention-${i}-${start}`} mention={mention} />
-      );
-    }
-
-    cursor = end;
-  });
-
-  if (cursor < text.length) {
-    elements.push(<span key={`text-end-${cursor}`}>{text.slice(cursor)}</span>);
-  }
-
-  return <>{elements}</>;
 }
 
 export { formatMessageToRichText, getMediaPreviewsFromMessage };

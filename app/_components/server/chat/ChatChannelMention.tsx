@@ -1,3 +1,4 @@
+import React from "react";
 import ChatMentionedEntity from "./ChatMentionedEntity";
 import { useChatChannelMention } from "@/app/hooks/useChatChannelMention";
 
@@ -5,7 +6,7 @@ interface ChatChannelMentionProps {
   mention: string;
 }
 
-export default function ChatChannelMention({
+function ChatChannelMention({
   mention,
 }: ChatChannelMentionProps) {
   const { channel, handleOnChannelClick } = useChatChannelMention(mention);
@@ -14,7 +15,9 @@ export default function ChatChannelMention({
 
   return (
     <span onClick={() => handleOnChannelClick(channel)}>
-      <ChatMentionedEntity>{channel.name}</ChatMentionedEntity>
+      <ChatMentionedEntity>#{channel.name}</ChatMentionedEntity>
     </span>
   );
 }
+
+export default React.memo(ChatChannelMention);
