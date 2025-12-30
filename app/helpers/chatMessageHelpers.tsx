@@ -14,22 +14,30 @@ const youtubeRegex =
 
 const mentionRegex = /<([@#])(\d+)>/g;
 
-type Token =
-  | { kind: "url"; start: number; end: number; value: string }
-  | {
-      kind: "mention";
-      start: number;
-      end: number;
-      value: string;
-      mentionType: string;
-    }
-  | {
-      kind: "timestamp";
-      start: number;
-      end: number;
-      unix: number;
-      format?: string;
-    };
+type UrlToken = {
+  kind: "url";
+  start: number;
+  end: number;
+  value: string;
+};
+
+type MentionToken = {
+  kind: "mention";
+  start: number;
+  end: number;
+  value: string;
+  mentionType: string;
+};
+
+type TimestampToken = {
+  kind: "timestamp";
+  start: number;
+  end: number;
+  unix: number;
+  format?: string;
+};
+
+type Token = UrlToken | MentionToken | TimestampToken;
 
 function formatMessageToRichText(text?: string) {
   if (!text) return null;
