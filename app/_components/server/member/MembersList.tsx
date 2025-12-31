@@ -52,7 +52,7 @@ export function MemberListRow({
   return (
     <div
       style={style}
-      className="w-full h-[24px] px-2 text-xs font-semibold text-gray-400 text-left mt-[8px] hover:cursor-default"
+      className="w-full h-[24px] px-2 text-sm font-semibold text-gray-400 text-left pt-[16px] hover:cursor-default"
     >
       {hasRoleName
         ? `${row.role.name} - ${row.count}`
