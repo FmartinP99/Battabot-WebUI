@@ -17,6 +17,7 @@ import {
   setRoleForMember,
   setReminders,
   setLoader,
+  setEmotes,
 } from "./websocketSlice";
 import {
   loadIncomingMessageToObject,
@@ -31,6 +32,7 @@ import {
 } from "./websocketMapper";
 import {
   WebsocketInitChannels,
+  WebsocketInitEmotes,
   WebsocketInitMembers,
   WebsocketInitQuery,
   WebsocketInitRoles,
@@ -80,12 +82,10 @@ export const websocketMiddleware: Middleware =
 
             const _servers = initParsed.servers;
             const _channels: Record<string, WebsocketInitChannels[]> = {};
-
             const _members: Record<string, WebsocketInitMembers[]> = {};
-
             const _messages: Record<string, WebsocketChatMessage[]> = {};
-
             const _roles: Record<string, WebsocketInitRoles[]> = {};
+            const _emotes: Record<string, WebsocketInitEmotes[]> = {};
 
             initParsed.servers.forEach((server) => {
               _channels[server.guildId] =
@@ -94,6 +94,8 @@ export const websocketMiddleware: Middleware =
                 server.members?.filter((mem) => mem.memberId) ?? [];
               _roles[server.guildId] =
                 server.roles?.filter((role) => role.id) ?? [];
+              _emotes[server.guildId] =
+                server.emotes?.filter((emote) => emote.id) ?? [];
               _messages[server.guildId] = [];
             });
 
@@ -103,6 +105,7 @@ export const websocketMiddleware: Middleware =
             store.dispatch(setChannels(_channels));
             store.dispatch(setMembers(_members));
             store.dispatch(setRoles(_roles));
+            store.dispatch(setEmotes(_emotes));
             store.dispatch(setMessages(_messages));
             store.dispatch(setSelectedServerId(_servers[0]?.guildId ?? null));
             break;

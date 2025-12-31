@@ -78,6 +78,15 @@ export interface WebsocketInitRoles {
     displaySeparately: boolean;
 }
 
+export interface WebsocketInitEmotes {
+    id: string;
+    name: string;
+    rawStr: string;
+    animated: boolean;
+    available: boolean;
+    url: string;
+}
+
 export interface WebsocketInitServer {
     guildId: string;
     guildName: string;
@@ -85,6 +94,7 @@ export interface WebsocketInitServer {
     channels: Array<WebsocketInitChannels> | null;
     members: Array<WebsocketInitMembers> | null;
     roles: Array<WebsocketInitRoles> | null;
+    emotes: Array<WebsocketInitEmotes> | null;
 }
 
 export interface WebsocketInitResponse {

@@ -13,6 +13,7 @@ import {
   WebsocketVoiceStateUpdateResponse,
   ChannelType,
   WebsocketGetRemindersResponse,
+  WebsocketInitEmotes,
 } from "./types/websocket_init.types";
 import { WebsocketChatMessage } from "./types/websocket_init_reduced.types";
 
@@ -58,6 +59,14 @@ export function loadInitResponseToObject(
         priority: r.priority ?? -1,
         color: r.color ?? "#000000",
         displaySeparately: r.displaySeparately ?? false,
+      })),
+      emotes: guild.emotes?.map((r: WebsocketInitEmotes) => ({
+        id: r.id,
+        name: r.name ?? "Undefined",
+        rawStr: r.rawStr ?? "",
+        animated: r.animated ?? false,
+        available: r.available ?? false,
+        url: r.url ?? "",
       })),
     })),
   };

@@ -12,6 +12,7 @@ import {
   WebsocketReminder,
   WebsocketGetRemindersResponse,
   WebsocketMessageType,
+  WebsocketInitEmotes,
 } from "./types/websocket_init.types";
 import { clamp } from "../helpers/utils";
 import { isGuildText } from "../_components/server/channel/helpers/channel_helpers";
@@ -35,6 +36,7 @@ interface WebSocketState {
   channels: Record<string, WebsocketInitChannels[]>;
   members: Record<string, WebsocketInitMembers[]>;
   roles: Record<string, WebsocketInitRoles[]>;
+  emotes: Record<string, WebsocketInitEmotes[]>;
   messages: Record<string, WebsocketChatMessage[]>;
   selectedServerId: string | null;
   lastSelectedChannelIds: Record<string, string>;
@@ -50,6 +52,7 @@ const initialState: WebSocketState = {
   channels: {} as Record<string, WebsocketInitChannels[]>,
   members: {} as Record<string, WebsocketInitMembers[]>,
   roles: {} as Record<string, WebsocketInitRoles[]>,
+  emotes: {} as Record<string, WebsocketInitEmotes[]>,
   messages: {} as Record<string, WebsocketChatMessage[]>,
   selectedServerId: null,
   lastSelectedChannelIds: {} as Record<string, string>,
@@ -90,6 +93,12 @@ const websocketSlice = createSlice({
       action: PayloadAction<Record<string, WebsocketInitRoles[]>>
     ) {
       state.roles = action.payload;
+    },
+    setEmotes(
+      state,
+      action: PayloadAction<Record<string, WebsocketInitEmotes[]>>
+    ) {
+      state.emotes = action.payload;
     },
     setMessages(
       state,
@@ -325,6 +334,7 @@ export const {
   setChannels,
   setMembers,
   setRoles,
+  setEmotes,
   setMessages,
   addMessage,
   setSelectedServerId,
