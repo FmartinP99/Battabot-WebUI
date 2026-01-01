@@ -2,17 +2,15 @@ import Image from "next/image";
 import ChatMemberMention from "../_components/server/chat/ChatMemberMention";
 import ChatChannelMention from "../_components/server/chat/ChatChannelMention";
 
-const urlRegex = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
-
-const timestampRegex = /<t:(\d{1,}):?([tTdDfFR])?>/g;
-
 const imageUrlRegex =
   /(https?:\/\/(?:cdn\.discordapp\.com|media\.discordapp\.net)\/[^\s]+)|(https?:\/\/[^\s]+?\.(?:png|jpe?g|gif|webp|svg))/gi;
-
 const youtubeRegex =
   /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/gi;
 
+const urlRegex = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
+const timestampRegex = /<t:(\d{1,}):?([tTdDfFR])?>/g;
 const mentionRegex = /<([@#])(\d+)>/g;
+const emojiRegex = /<(a?):([a-zA-Z0-9_]+):(\d+)>/g;
 
 type UrlToken = {
   kind: "url";
@@ -37,7 +35,17 @@ type TimestampToken = {
   format?: string;
 };
 
-type Token = UrlToken | MentionToken | TimestampToken;
+type EmojiToken = {
+  kind: "emoji";
+  start: number;
+  end: number;
+  id: string;
+  name: string;
+  rawStr: string;
+  animated: boolean;
+};
+
+type Token = UrlToken | MentionToken | TimestampToken | EmojiToken;
 
 function formatMessageToRichText(text?: string) {
   if (!text) return null;
@@ -49,6 +57,7 @@ function formatMessageToRichText(text?: string) {
   const urls = Array.from(text.matchAll(new RegExp(urlRegex, "g")));
   const mentions = Array.from(text.matchAll(new RegExp(mentionRegex, "g")));
   const timestamps = Array.from(text.matchAll(timestampRegex));
+  const emojis = Array.from(text.matchAll(emojiRegex));
   urls.forEach((match, i) => {
     const start = match.index!;
     tokens.push({
@@ -81,11 +90,27 @@ function formatMessageToRichText(text?: string) {
     });
   });
 
+  emojis.forEach((match) => {
+    const start = match.index!;
+    tokens.push({
+      kind: "emoji",
+      start,
+      end: start + match[0].length,
+      id: match[3],
+      name: match[2],
+      rawStr: match[0],
+      animated: match[1] === "a",
+    });
+  });
+
   // longer token wins
   tokens.sort((a, b) => {
     if (a.start !== b.start) return a.start - b.start;
     return b.end - a.end;
   });
+
+  const isEmojiOnly = isEmojiOnlyMessage(text, tokens);
+  const size = isEmojiOnly ? "3rem" : "1.25em";
 
   tokens.forEach((token, i) => {
     if (token.start > cursor) {
@@ -141,6 +166,23 @@ function formatMessageToRichText(text?: string) {
           </span>
         );
         break;
+
+      case "emoji":
+        const ext = token.animated ? "gif" : "png";
+        elements.push(
+          <span
+            key={token.start}
+            className="inline-flex items-center justify-center leading-none align-middle cursor-pointer"
+          >
+            <img
+              src={`https://cdn.discordapp.com/emojis/${token.id}.${ext}`}
+              alt={token.rawStr}
+              style={{ width: size, height: size }}
+              className="align-middle"
+              draggable={false}
+            />
+          </span>
+        );
     }
     cursor = token.end;
   });
@@ -150,6 +192,19 @@ function formatMessageToRichText(text?: string) {
   }
 
   return <>{elements}</>;
+}
+
+function isEmojiOnlyMessage(text: string, tokens: Token[]): boolean {
+  let cursor = 0;
+
+  for (const token of tokens) {
+    const between = text.slice(cursor, token.start);
+    if (between.trim().length > 0) return false;
+
+    cursor = token.end;
+  }
+
+  return text.slice(cursor).trim().length === 0;
 }
 
 function formatDiscordTimestamp(unix: number, format?: string) {
