@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import MainView from "./_components/MainView";
 import { store } from "./store/store";
 import { Toaster } from "react-hot-toast";
+import { TooltipProvider } from "./_components/ui/tooltip";
 
 export default function Page() {
   return (
@@ -22,7 +23,9 @@ export default function Page() {
 
       <div className="relative z-10 text-center max-h-screen">
         <Provider store={store}>
-          <MainView />
+          <TooltipProvider delayDuration={0}>
+            <MainView />
+          </TooltipProvider>
         </Provider>
       </div>
     </>

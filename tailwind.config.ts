@@ -9,6 +9,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fill: {
+        x1: "#2a3441",
+        x2: "#1e2633",
+        x3: "#3a4556",
+        x4: "#2f3845",
+        x5: "#35404f",
+      },
       colors: {
         primary: {
           action: {

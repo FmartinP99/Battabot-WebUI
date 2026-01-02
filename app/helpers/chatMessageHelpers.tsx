@@ -1,6 +1,11 @@
 import Image from "next/image";
 import ChatMemberMention from "../_components/server/chat/ChatMemberMention";
 import ChatChannelMention from "../_components/server/chat/ChatChannelMention";
+import {
+  EmoteExtension,
+  EmoteSize,
+} from "../_components/emote/interfaces/DiscordEmote";
+import Emote from "../_components/emote/Emote";
 
 const imageUrlRegex =
   /(https?:\/\/(?:cdn\.discordapp\.com|media\.discordapp\.net)\/[^\s]+)|(https?:\/\/[^\s]+?\.(?:png|jpe?g|gif|webp|svg))/gi;
@@ -110,7 +115,7 @@ function formatMessageToRichText(text?: string) {
   });
 
   const isEmojiOnly = isEmojiOnlyMessage(text, tokens);
-  const size = isEmojiOnly ? "3rem" : "1.25em";
+  const size: EmoteSize = isEmojiOnly ? EmoteSize.JUMBO : EmoteSize.SMALL;
 
   tokens.forEach((token, i) => {
     if (token.start > cursor) {
@@ -168,20 +173,20 @@ function formatMessageToRichText(text?: string) {
         break;
 
       case "emoji":
-        const ext = token.animated ? "gif" : "png";
+        const ext: EmoteExtension = token.animated
+          ? EmoteExtension.GIF
+          : EmoteExtension.PNG;
         elements.push(
-          <span
+          <Emote
             key={token.start}
-            className="inline-flex items-center justify-center leading-none align-middle cursor-pointer"
-          >
-            <img
-              src={`https://cdn.discordapp.com/emojis/${token.id}.${ext}`}
-              alt={token.rawStr}
-              style={{ width: size, height: size }}
-              className="align-middle"
-              draggable={false}
-            />
-          </span>
+            size={size}
+            emote={{
+              id: token.id,
+              name: token.name,
+              rawStr: token.rawStr,
+              ext: ext,
+            }}
+          />
         );
     }
     cursor = token.end;
