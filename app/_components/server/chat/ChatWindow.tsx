@@ -20,7 +20,7 @@ export default function ChatWindow({
   return (
     <div
       ref={containerRef}
-      className="flex-1 max-h-full max-w-full overflow-x-hidden min-w-0 px-4 scrollbar-hide-nonhover scrollbar-transition"
+      className="flex-1 overflow-y-auto max-w-full overflow-x-hidden min-w-0 px-4 scrollbar-hide-nonhover scrollbar-transition"
     >
       <div
         style={{

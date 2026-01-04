@@ -1,12 +1,16 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { groupMessages } from "../helpers/utils";
 import { useVirtualizer } from "@tanstack/react-virtual";
+
+const BOTTOM_THRESHOLD = 150;
 
 export function useMessageContainer(
   activeChannelId: string | null,
   messages?: any[]
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isNearBottomRef = useRef(true);
+  const lastTotalSizeRef = useRef(0);
 
   const isChannelInactive = !activeChannelId;
 
@@ -26,18 +30,31 @@ export function useMessageContainer(
     const el = containerRef.current;
     if (!el) return;
 
-    const scrollToBottom = () => {
-      el.scrollTop = rowVirtualizer.getTotalSize();
+    const onScroll = () => {
+      const { scrollTop, clientHeight } = el;
+      const totalSize = rowVirtualizer.getTotalSize();
+
+      isNearBottomRef.current =
+        totalSize - (scrollTop + clientHeight) < BOTTOM_THRESHOLD;
+      console.log(totalSize - (scrollTop + clientHeight));
     };
 
-    const id = requestAnimationFrame(() => {
-      scrollToBottom();
+    el.addEventListener("scroll", onScroll);
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [rowVirtualizer]);
 
-      setTimeout(scrollToBottom, 1);
-    });
+  useLayoutEffect(() => {
+    const totalSize = rowVirtualizer.getTotalSize();
+    const sizeIncreased = totalSize > lastTotalSizeRef.current;
 
-    return () => cancelAnimationFrame(id);
-  }, [groups?.length, rowVirtualizer]);
+    if (sizeIncreased && isNearBottomRef.current) {
+      rowVirtualizer.scrollToIndex(groups.length - 1, {
+        align: "end",
+      });
+    }
+
+    lastTotalSizeRef.current = totalSize;
+  }, [messages, groups.length, rowVirtualizer]);
 
   return {
     containerRef,
