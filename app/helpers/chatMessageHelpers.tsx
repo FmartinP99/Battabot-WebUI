@@ -16,6 +16,7 @@ const urlRegex = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
 const timestampRegex = /<t:(\d{1,}):?([tTdDfFR])?>/g;
 const mentionRegex = /<([@#])(\d+)>/g;
 const emojiRegex = /<(a?):([a-zA-Z0-9_]+):(\d+)>/g;
+const unicodeEmojiRegex = /\p{Extended_Pictographic}/gu;
 
 type UrlToken = {
   kind: "url";
@@ -50,7 +51,19 @@ type EmojiToken = {
   animated: boolean;
 };
 
-type Token = UrlToken | MentionToken | TimestampToken | EmojiToken;
+type UnicodeEmojiToken = {
+  kind: "unicode_emoji";
+  start: number;
+  end: number;
+  value: string;
+};
+
+type Token =
+  | UrlToken
+  | MentionToken
+  | TimestampToken
+  | EmojiToken
+  | UnicodeEmojiToken;
 
 function formatMessageToRichText(text?: string) {
   if (!text) return null;
@@ -63,6 +76,8 @@ function formatMessageToRichText(text?: string) {
   const mentions = Array.from(text.matchAll(new RegExp(mentionRegex, "g")));
   const timestamps = Array.from(text.matchAll(timestampRegex));
   const emojis = Array.from(text.matchAll(emojiRegex));
+  const unicodeEmojis = Array.from(text.matchAll(unicodeEmojiRegex));
+
   urls.forEach((match, i) => {
     const start = match.index!;
     tokens.push({
@@ -105,6 +120,16 @@ function formatMessageToRichText(text?: string) {
       name: match[2],
       rawStr: match[0],
       animated: match[1] === "a",
+    });
+  });
+
+  unicodeEmojis.forEach((match) => {
+    const start = match.index!;
+    tokens.push({
+      kind: "unicode_emoji",
+      start,
+      end: start + match[0].length,
+      value: match[0],
     });
   });
 
@@ -188,6 +213,23 @@ function formatMessageToRichText(text?: string) {
             }}
           />
         );
+        break;
+
+      case "unicode_emoji":
+        elements.push(
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: size,
+              width: size,
+              height: size,
+            }}
+          >
+            {token.value}
+          </span>
+        );
     }
     cursor = token.end;
   });
@@ -201,8 +243,11 @@ function formatMessageToRichText(text?: string) {
 
 function isEmojiOnlyMessage(text: string, tokens: Token[]): boolean {
   let cursor = 0;
-
   for (const token of tokens) {
+    if (token.kind !== "emoji" && token.kind !== "unicode_emoji") {
+      return false;
+    }
+
     const between = text.slice(cursor, token.start);
     if (between.trim().length > 0) return false;
 
