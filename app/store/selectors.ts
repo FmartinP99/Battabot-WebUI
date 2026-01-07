@@ -94,3 +94,6 @@ export const selectRemindersByServerIdAndMemberId = createSelector(
   (currentReminders, serverId, memberId) =>
     currentReminders[serverId]?.[memberId] ?? []
 );
+
+export const selectEmotesByServerId = (state: RootState, serverId: string) =>
+  state.websocket.emotes[serverId];

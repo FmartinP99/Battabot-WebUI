@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { WebSocketMessage } from "../_websocket/types/websocket.types";
 import { useDispatch } from "react-redux";
 import {
@@ -11,6 +11,7 @@ import {
   WebsocketMessageType,
   WebsocketSendMessageQuery,
 } from "../_websocket/types/websocket_init.types";
+import { insertOrReplaceEmoji } from "../_components/server/chat/helpers/chatInputHelpers";
 
 export function useMessageSenderFromForm() {
   const selectedServerId = useAppSelector(selectSelectedServerId);
@@ -18,7 +19,10 @@ export function useMessageSenderFromForm() {
     selectedServerId ? selectSelectedChannelId(state, selectedServerId) : null
   );
   const dispatch = useDispatch();
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [text, setText] = useState("");
+  const [emoteText, setEmoteText] = useState<string | null>(null);
+  const [showEmoteList, setShowEmoteList] = useState<boolean>(false);
 
   const sendMessage = useCallback(() => {
     if (!text.trim()) return;
@@ -48,5 +52,37 @@ export function useMessageSenderFromForm() {
     [sendMessage]
   );
 
-  return { handleSendMessage, text, setText };
+  function handleSelectListItemClick(strToInsert: string) {
+    if (!textAreaRef || !strToInsert) return;
+    const textarea = textAreaRef.current;
+    if (!textarea) return;
+    const startIndex = textarea.selectionStart;
+    const { newValue, newCursorStart } = insertOrReplaceEmoji(
+      textarea.value,
+      startIndex,
+      strToInsert
+    );
+
+    setText(newValue);
+    requestAnimationFrame(() => {
+      const cursorPos = newCursorStart + strToInsert.length;
+      textarea.focus();
+      textarea.setSelectionRange(cursorPos, cursorPos);
+      setShowEmoteList(false);
+    });
+  }
+
+  return {
+    handleSendMessage,
+    text,
+    setText,
+    selectedServerId,
+    selectedChannelId,
+    textAreaRef,
+    handleSelectListItemClick,
+    showEmoteList,
+    setShowEmoteList,
+    emoteText,
+    setEmoteText,
+  };
 }

@@ -36,7 +36,6 @@ export function useMessageContainer(
 
       isNearBottomRef.current =
         totalSize - (scrollTop + clientHeight) < BOTTOM_THRESHOLD;
-      console.log(totalSize - (scrollTop + clientHeight));
     };
 
     el.addEventListener("scroll", onScroll);

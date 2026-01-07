@@ -157,3 +157,24 @@ export function toWebsocketMessageType(
     ? (value as WebsocketMessageType)
     : null;
 }
+
+export function getWordAtCursor(
+  value: string,
+  cursorPos: number
+): { word: string; start: number; end: number } | null {
+  if (!value || cursorPos < 0) return null;
+
+  let start = cursorPos;
+  let end = cursorPos;
+
+  while (start > 0 && !/\s/.test(value[start - 1])) {
+    start--;
+  }
+
+  while (end < value.length && !/\s/.test(value[end])) {
+    end++;
+  }
+
+  const word = value.slice(start, end);
+  return word ? { word, start, end } : null;
+}

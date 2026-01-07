@@ -6,17 +6,15 @@ import {
   EmoteSize,
 } from "../_components/emote/interfaces/DiscordEmote";
 import Emote from "../_components/emote/Emote";
-
-const imageUrlRegex =
-  /(https?:\/\/(?:cdn\.discordapp\.com|media\.discordapp\.net)\/[^\s]+)|(https?:\/\/[^\s]+?\.(?:png|jpe?g|gif|webp|svg))/gi;
-const youtubeRegex =
-  /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/gi;
-
-const urlRegex = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
-const timestampRegex = /<t:(\d{1,}):?([tTdDfFR])?>/g;
-const mentionRegex = /<([@#])(\d+)>/g;
-const emojiRegex = /<(a?):([a-zA-Z0-9_]+):(\d+)>/g;
-const unicodeEmojiRegex = /\p{Extended_Pictographic}/gu;
+import {
+  emojiRegex,
+  imageUrlRegex,
+  mentionRegex,
+  timestampRegex,
+  unicodeEmojiRegex,
+  urlRegex,
+  youtubeRegex,
+} from "./regexes";
 
 type UrlToken = {
   kind: "url";

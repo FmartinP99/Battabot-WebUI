@@ -9,10 +9,7 @@ import {
   TableRow,
 } from "../ui/table";
 import { flexRender } from "@tanstack/react-table";
-import {
-  WebsocketMessageType,
-  WebsocketReminderStatus,
-} from "@/app/_websocket/types/websocket_init.types";
+import { WebsocketReminderStatus } from "@/app/_websocket/types/websocket_init.types";
 import clsx from "clsx";
 import { statusClassMap } from "./helpers/remindme_helpers";
 
