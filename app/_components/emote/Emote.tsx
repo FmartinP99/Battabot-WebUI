@@ -7,6 +7,7 @@ import {
   TooltipArrow,
 } from "../ui/tooltip";
 import EmoteTooltip from "./EmoteTooltip";
+import { isValidDiscordEmote } from "./helpers/guards";
 
 interface EmoteProps {
   emote: DiscordEmote;
@@ -14,6 +15,8 @@ interface EmoteProps {
 }
 
 function Emote({ emote, size = EmoteSize.SMALL }: EmoteProps) {
+  if (!isValidDiscordEmote(emote)) return null;
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>

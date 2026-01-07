@@ -8,16 +8,19 @@ export function insertOrReplaceEmoji(
   strToInsert: string
 ): { newValue: string; newCursorStart: number } {
   const wordInfo = getWordAtCursor(value, cursor);
-  let newValue: string = "";
-
-  if (wordInfo && wordInfo.word.startsWith(":")) {
-    newValue =
-      value.slice(0, wordInfo.start) + strToInsert + value.slice(wordInfo.end);
-    return { newValue, newCursorStart: wordInfo.start };
-  } else {
-    newValue = value.slice(0, cursor) + strToInsert + value.slice(cursor);
-    return { newValue, newCursorStart: cursor };
+  if (wordInfo?.word.startsWith(":")) {
+    return {
+      newValue:
+        value.slice(0, wordInfo.start) +
+        strToInsert +
+        value.slice(wordInfo.end),
+      newCursorStart: wordInfo.start,
+    };
   }
+  return {
+    newValue: value.slice(0, cursor) + strToInsert + value.slice(cursor),
+    newCursorStart: cursor,
+  };
 }
 
 export const handleKeyDownForEmoteSelectList = ({

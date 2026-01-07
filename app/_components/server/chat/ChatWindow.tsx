@@ -39,11 +39,8 @@ export default function ChatWindow({
               ref={(el) => {
                 if (el) rowVirtualizer.measureElement(el);
               }}
+              className="top-0 left-0 absolute w-full"
               style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
                 transform: `translateY(${virtualRow.start}px)`,
               }}
             >

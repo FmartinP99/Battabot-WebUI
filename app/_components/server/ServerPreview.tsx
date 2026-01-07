@@ -29,7 +29,7 @@ export function ServerPreview({ server }: ServerPreviewProps) {
             className={`${
               isActive ? "bg-slate-200 border-slate-200 rounded-sm" : ""
             } w-[5px] h-auto`}
-          ></div>
+          />
 
           <Image
             className="rounded-full object-cover"

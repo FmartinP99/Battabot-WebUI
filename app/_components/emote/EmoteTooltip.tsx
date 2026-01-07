@@ -1,11 +1,14 @@
 import React from "react";
 import { DiscordEmote, EmoteSize } from "./interfaces/DiscordEmote";
+import { isValidDiscordEmote } from "./helpers/guards";
 
 interface EmoteTooltipProps {
   emote: DiscordEmote;
 }
 
 function EmoteTooltip({ emote }: EmoteTooltipProps) {
+  if (!isValidDiscordEmote(emote)) return null;
+
   return (
     <div className="flex min-w-0 gap-3 justify-center items-center bg-primary-x1  p-2 rounded border-[1px] border-primary-x2">
       <img
