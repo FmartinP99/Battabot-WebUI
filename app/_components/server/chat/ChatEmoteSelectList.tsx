@@ -3,7 +3,7 @@ import { selectEmotesByServerId } from "@/app/store/selectors";
 import React from "react";
 import ChatEmoteSelectListItem from "./ChatEmoteSelectListItem";
 import { useSelectList } from "@/app/hooks/useSelectList";
-import { handleKeyDownForEmoteSelectList } from "@/app/helpers/selectlistHelpers";
+import { handleKeyDownForEmoteSelectList } from "./helpers/chatInputHelpers";
 
 interface ChatEmoteSelectListProps {
   serverId: string;
