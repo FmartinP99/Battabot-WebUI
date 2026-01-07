@@ -45,7 +45,7 @@ export default function ChatEmoteSelectList({
           key={emote.id}
           emote={emote}
           isActive={idx === selectedIndex}
-          onItemClick={() => handleSelectListItemClick!(emote.rawStr)}
+          onItemClick={() => handleSelectListItemClick(emote.rawStr)}
         />
       ))}
     </div>

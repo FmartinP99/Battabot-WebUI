@@ -111,7 +111,7 @@ const websocketSlice = createSlice({
       action: PayloadAction<{ serverId: string; message: WebsocketChatMessage }>
     ) {
       const { serverId, message } = action.payload;
-      if (!message?.text.length) {
+      if (!message?.text?.length || !serverId) {
         return;
       }
       const serverMessages = state.messages[serverId] ?? [];
