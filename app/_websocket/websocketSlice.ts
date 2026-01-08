@@ -13,6 +13,7 @@ import {
   WebsocketGetRemindersResponse,
   WebsocketMessageType,
   WebsocketInitEmotes,
+  WebsocketIncomingMessageResponse,
 } from "./types/websocket_init.types";
 import { clamp } from "../helpers/utils";
 import { isGuildText } from "../_components/server/channel/helpers/channel_helpers";
@@ -37,7 +38,7 @@ interface WebSocketState {
   members: Record<string, WebsocketInitMembers[]>;
   roles: Record<string, WebsocketInitRoles[]>;
   emotes: Record<string, WebsocketInitEmotes[]>;
-  messages: Record<string, WebsocketChatMessage[]>;
+  messages: Record<string, Record<string, WebsocketChatMessage[]>>;
   selectedServerId: string | null;
   lastSelectedChannelIds: Record<string, string>;
   playlistStates: Record<string, WebsocketPlaylistState>;
@@ -53,7 +54,7 @@ const initialState: WebSocketState = {
   members: {} as Record<string, WebsocketInitMembers[]>,
   roles: {} as Record<string, WebsocketInitRoles[]>,
   emotes: {} as Record<string, WebsocketInitEmotes[]>,
-  messages: {} as Record<string, WebsocketChatMessage[]>,
+  messages: {} as Record<string, Record<string, WebsocketChatMessage[]>>,
   selectedServerId: null,
   lastSelectedChannelIds: {} as Record<string, string>,
   playlistStates: {} as Record<string, WebsocketPlaylistState>,
@@ -102,21 +103,29 @@ const websocketSlice = createSlice({
     },
     setMessages(
       state,
-      action: PayloadAction<Record<string, WebsocketChatMessage[]>>
+      action: PayloadAction<
+        Record<string, Record<string, WebsocketChatMessage[]>>
+      >
     ) {
       state.messages = action.payload;
     },
-    addMessage(
-      state,
-      action: PayloadAction<{ serverId: string; message: WebsocketChatMessage }>
-    ) {
-      const { serverId, message } = action.payload;
-      if (!message?.text?.length || !serverId) {
+    addMessage(state, action: PayloadAction<WebsocketIncomingMessageResponse>) {
+      const message = action.payload;
+      if (!message?.text?.length || !message.serverId || !message.channelId) {
         return;
       }
-      const serverMessages = state.messages[serverId] ?? [];
-      if (!serverMessages.some((msg) => msg.messageId === message.messageId)) {
-        state.messages[serverId] = [...serverMessages, message];
+      const serverMessages =
+        state.messages[message.serverId][message.channelId] ?? [];
+
+      if (
+        !new Set(serverMessages.map((msg) => msg.messageId)).has(
+          message.messageId
+        )
+      ) {
+        state.messages[message.serverId][message.channelId] = [
+          ...serverMessages,
+          message,
+        ];
       }
     },
     setSelectedServerId(state, action: PayloadAction<string>) {

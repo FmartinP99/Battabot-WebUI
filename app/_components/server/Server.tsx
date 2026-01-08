@@ -38,10 +38,11 @@ export default function Server() {
       <>
         <ChatWindow
           activeChannelId={selectedChannelId ?? null}
-          messages={(messages && selectedServerId
-            ? messages[selectedServerId] ?? []
-            : []
-          ).filter((msg) => msg.channelId === selectedChannelId)}
+          messages={
+            messages && selectedServerId && selectedChannelId
+              ? messages[selectedServerId][selectedChannelId] ?? []
+              : []
+          }
         />
         <ChatInput />
       </>

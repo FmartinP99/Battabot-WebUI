@@ -5,7 +5,6 @@ import { Button } from "../../ui/button";
 import { Textarea } from "../../ui/textarea";
 import { getWordAtCursor } from "@/app/helpers/utils";
 import ChatEmoteSelectList from "./ChatEmoteSelectList";
-import { useState } from "react";
 
 export default function ChatInput() {
   const {

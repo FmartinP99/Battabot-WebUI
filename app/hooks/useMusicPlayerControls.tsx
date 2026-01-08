@@ -36,7 +36,6 @@ export default function useMusicPlayerControls() {
   }, [selectedServerId]);
 
   const resume = useCallback(() => {
-    debugger;
     const payload: WebSocketMessage = {
       type: WebsocketMessageType.PLAYLIST_RESUME,
       message: {

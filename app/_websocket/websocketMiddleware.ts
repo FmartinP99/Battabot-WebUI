@@ -39,8 +39,6 @@ import {
   WebsocketMessageType,
 } from "./types/websocket_init.types";
 import { WebsocketChatMessage } from "./types/websocket_init_reduced.types";
-import { useAppSelector } from "../hooks/storeHooks";
-import { selectLoader } from "../store/selectors";
 import { toWebsocketMessageType } from "../helpers/utils";
 
 export const websocketMiddleware: Middleware =
@@ -83,23 +81,33 @@ export const websocketMiddleware: Middleware =
             const _servers = initParsed.servers;
             const _channels: Record<string, WebsocketInitChannels[]> = {};
             const _members: Record<string, WebsocketInitMembers[]> = {};
-            const _messages: Record<string, WebsocketChatMessage[]> = {};
+            const _messages: Record<
+              string,
+              Record<string, WebsocketChatMessage[]>
+            > = {};
             const _roles: Record<string, WebsocketInitRoles[]> = {};
             const _emotes: Record<string, WebsocketInitEmotes[]> = {};
 
             initParsed.servers.forEach((server) => {
               _channels[server.guildId] =
                 server.channels?.filter((chn) => chn.channelId) ?? [];
+
               _members[server.guildId] =
                 server.members?.filter((mem) => mem.memberId) ?? [];
+
               _roles[server.guildId] =
                 server.roles?.filter((role) => role.id) ?? [];
+
               _emotes[server.guildId] =
                 server.emotes?.filter((emote) => emote.id) ?? [];
-              _messages[server.guildId] = [];
+
+              _messages[server.guildId] = Object.fromEntries(
+                server.channels?.map((ch) => [ch.channelId, []]) || []
+              );
             });
 
-            _messages["762674310187843607"] = incomingMessageMockData;
+            _messages["762674310187843607"]["802245735994884154"] =
+              incomingMessageMockData;
 
             store.dispatch(setServers(_servers ?? []));
             store.dispatch(setChannels(_channels));
@@ -112,18 +120,7 @@ export const websocketMiddleware: Middleware =
 
           case WebsocketMessageType.INCOMING_MESSAGE:
             const incoming = loadIncomingMessageToObject(event.data);
-            store.dispatch(
-              addMessage({
-                serverId: incoming.serverId,
-                message: {
-                  userId: incoming.userId,
-                  channelId: incoming.channelId,
-                  text: incoming.text,
-                  epoch: incoming.epoch,
-                  messageId: incoming.messageId,
-                },
-              })
-            );
+            store.dispatch(addMessage(incoming));
             break;
           case WebsocketMessageType.VOICE_STATE_UPDATE:
             const voiceUpdate = loadIncomingVoiceUpdateToObject(event.data);

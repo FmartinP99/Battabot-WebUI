@@ -191,7 +191,7 @@ export function loadIncomingGetRemindersResponseToObject(
 }
 
 export const incomingMessageMockData: WebsocketChatMessage[] = Array.from(
-  { length: 300 },
+  { length: 30000 },
   (_, i) => i + 1
 ).map((v, i) => {
   return {
@@ -199,6 +199,6 @@ export const incomingMessageMockData: WebsocketChatMessage[] = Array.from(
     messageId: "1439176029838114848" + i,
     userId: "802239701738192977",
     text: "test" + i,
-    epoch: 1763196703 + i * 300,
+    epoch: 763196703 + i * 300,
   } as WebsocketChatMessage;
 });
