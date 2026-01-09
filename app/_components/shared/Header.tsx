@@ -30,12 +30,12 @@ export default function Header() {
   }
 
   return (
-    <div className="flex flex-row gap-4 items-center h-14 px-4 border-b border-primary-x3 bg-primary-x1 shadow-sm">
+    <div className="flex flex-row gap-4 items-center h-7 px-4 border-b border-primary-x3 bg-primary-x1 shadow-sm">
       <div className="flex items-center gap-3 flex-1 justify-center">
         <div className="relative group">
           <div className="absolute inset-0 bg-primary-action-focus rounded-full opacity-0 group-hover:opacity-20 blur-sm transition-opacity duration-300" />
           <Image
-            className="relative rounded-full object-cover w-8 h-8 ring-2 ring-primary-x3 group-hover:ring-primary-action-focus transition-all duration-300"
+            className="relative rounded-full object-cover w-5 h-5 ring-2 ring-primary-x3 group-hover:ring-primary-action-focus transition-all duration-300"
             src={selectedServer.iconUrl || defaultBg}
             alt="Server icon"
             width="32"
