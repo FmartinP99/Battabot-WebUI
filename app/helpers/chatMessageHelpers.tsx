@@ -63,7 +63,10 @@ type Token =
   | EmojiToken
   | UnicodeEmojiToken;
 
-function formatMessageToRichText(text?: string) {
+function formatMessageToRichText(
+  text?: string,
+  emoteSize?: EmoteSize
+): JSX.Element | null {
   if (!text) return null;
 
   const tokens: Token[] = [];
@@ -137,8 +140,11 @@ function formatMessageToRichText(text?: string) {
     return b.end - a.end;
   });
 
-  const isEmojiOnly = isEmojiOnlyMessage(text, tokens);
-  const size: EmoteSize = isEmojiOnly ? EmoteSize.JUMBO : EmoteSize.SMALL;
+  let size: EmoteSize | undefined = emoteSize;
+  if (!size) {
+    const isEmojiOnly = isEmojiOnlyMessage(text, tokens);
+    size = isEmojiOnly ? EmoteSize.JUMBO : EmoteSize.SMALL;
+  }
 
   tokens.forEach((token, i) => {
     if (token.start > cursor) {

@@ -8,3 +8,7 @@ export const timestampRegex = /<t:(\d{1,}):?([tTdDfFR])?>/g;
 export const mentionRegex = /<([@#])(\d+)>/g;
 export const emojiRegex = /<(a?):([a-zA-Z0-9_]+):(\d+)>/g;
 export const unicodeEmojiRegex = /\p{Extended_Pictographic}/gu;
+
+export const specialWordRegex = /^<[^<>]+>$/;
+export const previousSpecialWordRegex = /<[^<>]*>$/;
+export const nextSpecialWordRegex = /^<[^<>]*>/;

@@ -8,6 +8,7 @@ import ChatWindow from "./chat/ChatWindow";
 import { isTextLike, isVoiceLike } from "./channel/helpers/channel_helpers";
 import { ReactNode } from "react";
 import MusicPlayer from "./musicPlayer/MusicPlayer";
+import ChatMirroredInput from "./chat/ChatMirroredInput";
 
 export default function Server() {
   const {
@@ -44,7 +45,7 @@ export default function Server() {
               : []
           }
         />
-        <ChatInput />
+        <ChatInput  />
       </>
     );
   } else if (isVoiceLike(activeChannelType) && isBotConnected) {

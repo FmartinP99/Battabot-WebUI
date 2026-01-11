@@ -123,3 +123,13 @@ html {
     cursor: pointer;
   }
 }
+
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s step-start infinite;
+}

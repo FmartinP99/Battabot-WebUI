@@ -5,6 +5,11 @@ import { Button } from "../../ui/button";
 import { Textarea } from "../../ui/textarea";
 import { getWordAtCursor } from "@/app/helpers/utils";
 import ChatEmoteSelectList from "./ChatEmoteSelectList";
+import ChatMirroredInput from "./ChatMirroredInput";
+import {
+  handleArrowSkipSpecialWord,
+  handleBackspaceDeleteSpecialWord,
+} from "./helpers/chatInputHelpers";
 
 export default function ChatInput() {
   const {
@@ -45,17 +50,44 @@ export default function ChatInput() {
           <div className="relative bg-primary-x1 rounded-lg overflow-hidden transition-all duration-200 hover:bg-primary-x4 ">
             <div className="flex items-end gap-2 p-3">
               <div className="flex-1 relative">
+                <ChatMirroredInput
+                  mirroredText={text}
+                  targetRef={textAreaRef}
+                  className="text-left overflow-y-auto bg-transparent border-none focus:outline-none focus:ring-0 text-accent-x2 placeholder:text-accent-x4 min-h-[40px] max-h-[200px] py-1 px-2 text-sm"
+                />
+
                 <Textarea
                   ref={textAreaRef}
                   name="message"
                   placeholder="Type your message..."
-                  className="w-full resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-accent-x2 placeholder:text-accent-x4 min-h-[40px] max-h-[200px] py-1 px-2 text-sm"
+                  className="  resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-accent-x2 placeholder:text-accent-x4 min-h-[40px] max-h-[200px] py-1 px-2 text-sm"
                   rows={1}
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey && !showEmoteList) {
                       handleSendMessage(e);
+                    }
+
+                    if (!textAreaRef.current) return;
+
+                    if (e.key === "Backspace") {
+                      e.preventDefault();
+                      const newValue = handleBackspaceDeleteSpecialWord(
+                        textAreaRef.current
+                      );
+                      setEmoteText(null);
+                      setText(newValue ?? "");
+                    }
+
+                    if (e.key === "ArrowLeft") {
+                      e.preventDefault();
+                      handleArrowSkipSpecialWord(textAreaRef.current, "left");
+                    }
+
+                    if (e.key === "ArrowRight") {
+                      e.preventDefault();
+                      handleArrowSkipSpecialWord(textAreaRef.current, "right");
                     }
                   }}
                   onInput={(e) => {
