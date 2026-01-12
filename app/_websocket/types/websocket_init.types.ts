@@ -68,6 +68,7 @@ export interface WebsocketInitMembers {
     roleIds: Array<string>;
     activityName: string | null;
     status: MemberStatus;
+    rawStr: string;
 }
 
 export interface WebsocketInitRoles {

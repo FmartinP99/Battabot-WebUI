@@ -3,6 +3,7 @@ import React from "react";
 import { EmoteExtension, EmoteSize } from "../../emote/interfaces/DiscordEmote";
 import { isValidWebsocketInitEmote } from "../../emote/helpers/guards";
 import clsx from "clsx";
+import { DUMMY_EMOTE } from "@/app/helpers/consts";
 
 interface ChatEmoteSelectListItemProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -22,21 +23,28 @@ const ChatEmoteSelectListItem = React.forwardRef<
     !isActive && "bg-opacity-30"
   );
 
+  const renderedComponent =
+    emote === DUMMY_EMOTE ? (
+      <span>{emote.name}</span>
+    ) : (
+      <span>:{emote.name}:</span>
+    );
+
   return (
     <div ref={ref} onClick={() => onItemClick(emote.rawStr)} {...props}>
       <div className={selectListItemClasses}>
-        <img
-          src={`https://cdn.discordapp.com/emojis/${emote.id}.${
-            emote.animated ? EmoteExtension.GIF : EmoteExtension.PNG
-          }`}
-          alt={emote.rawStr}
-          style={{ width: EmoteSize.SMALL, height: EmoteSize.SMALL }}
-          className="align-middle"
-          draggable={false}
-        />
-        <div>
-          <span>:{emote.name}:</span>
-        </div>
+        {emote.url && (
+          <img
+            src={`https://cdn.discordapp.com/emojis/${emote.id}.${
+              emote.animated ? EmoteExtension.GIF : EmoteExtension.PNG
+            }`}
+            alt={emote.rawStr}
+            style={{ width: EmoteSize.SMALL, height: EmoteSize.SMALL }}
+            className="align-middle"
+            draggable={false}
+          />
+        )}
+        <div>{renderedComponent}</div>
       </div>
     </div>
   );

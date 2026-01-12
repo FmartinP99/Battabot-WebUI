@@ -8,8 +8,15 @@ import ChatEmoteSelectList from "./ChatEmoteSelectList";
 import ChatMirroredInput from "./ChatMirroredInput";
 import {
   handleArrowSkipSpecialWord,
-  handleBackspaceDeleteSpecialWord,
+  handleSpecialDelete,
 } from "./helpers/chatInputHelpers";
+import ChatMemberSelectList from "./ChatMemberSelectList";
+import { ReactNode } from "react";
+import { ShowerHead } from "lucide-react";
+
+const selectListClasses =
+  "absolute bottom-full  left-1/2 w-[99%] -translate-x-1/2  shadow-lg mb-0.5 rounded-lg z-50 bg-primary-x3 py-1";
+const selectListItemClasses = "space-y-1 overflow-y-auto max-h-[30vh]";
 
 export default function ChatInput() {
   const {
@@ -24,27 +31,45 @@ export default function ChatInput() {
     setShowEmoteList,
     emoteText,
     setEmoteText,
+    showMemberList,
+    setShowMemberList,
+    memberText,
+    setMemberText,
+    resetItemListsVisibility,
   } = useMessageSenderFromForm();
 
   if (!selectedChannelId || !selectedServerId) {
     return null;
   }
 
+  let renderedSelectListComponent: ReactNode = null;
+
+  if (showEmoteList) {
+    renderedSelectListComponent = (
+      <ChatEmoteSelectList
+        serverId={selectedServerId}
+        handleSelectListItemClick={handleSelectListItemClick}
+        filter={emoteText}
+        className={selectListItemClasses}
+      />
+    );
+  } else if (showMemberList) {
+    renderedSelectListComponent = (
+      <ChatMemberSelectList
+        serverId={selectedServerId}
+        handleSelectListItemClick={handleSelectListItemClick}
+        filter={memberText}
+        className={selectListItemClasses}
+      />
+    );
+  }
+
   return (
     <div className="relative w-full">
-      {showEmoteList && (
-        <div
-          className="absolute bottom-full  left-1/2 w-[99%] -translate-x-1/2  shadow-lg mb-0.5 rounded-lg z-50
-         bg-primary-x3 py-1"
-        >
-          <ChatEmoteSelectList
-            serverId={selectedServerId}
-            handleSelectListItemClick={handleSelectListItemClick}
-            filter={emoteText}
-            className="space-y-1 overflow-y-auto max-h-[30vh] "
-          />
-        </div>
+      {renderedSelectListComponent !== null && (
+        <div className={selectListClasses}>{renderedSelectListComponent}</div>
       )}
+
       <div className="w-full bg-primary-x2 border-t border-primary-x1">
         <div className="relative">
           <div className="relative bg-primary-x1 rounded-lg overflow-hidden transition-all duration-200 hover:bg-primary-x4 ">
@@ -65,19 +90,42 @@ export default function ChatInput() {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey && !showEmoteList) {
+                    if (
+                      e.key === "Enter" &&
+                      !e.shiftKey &&
+                      !showEmoteList &&
+                      !showMemberList
+                    ) {
                       handleSendMessage(e);
                     }
 
                     if (!textAreaRef.current) return;
 
-                    if (e.key === "Backspace") {
+                    if (e.key === "Backspace" || e.key === "Delete") {
                       e.preventDefault();
-                      const newValue = handleBackspaceDeleteSpecialWord(
-                        textAreaRef.current
+
+                      const direction =
+                        e.key === "Backspace" ? "backward" : "forward";
+
+                      const result = handleSpecialDelete(
+                        textAreaRef.current,
+                        direction
                       );
-                      setEmoteText(null);
-                      setText(newValue ?? "");
+
+                      if (result) {
+                        setText(result.newValue ?? "");
+
+                        const wordAtCursor = getWordAtCursor(
+                          result.newValue,
+                          result.newCursor
+                        );
+                        if (!wordAtCursor || !wordAtCursor?.word.length) {
+                          resetItemListsVisibility();
+                        }
+                      } else {
+                        resetItemListsVisibility();
+                        setText("");
+                      }
                     }
 
                     if (e.key === "ArrowLeft") {
@@ -91,17 +139,26 @@ export default function ChatInput() {
                     }
                   }}
                   onInput={(e) => {
+                    resetItemListsVisibility();
+
                     const target = e.currentTarget;
                     const value = target.value;
                     const cursorPos = target.selectionStart;
                     const result = getWordAtCursor(value, cursorPos);
-                    if (result && result.word[0] === ":") {
-                      setShowEmoteList(true);
-                      setEmoteText(result.word.slice(1));
-                      return;
+
+                    if (result) {
+                      if (result.word[0] === ":") {
+                        setShowEmoteList(true);
+                        setEmoteText(result.word.slice(1));
+                        return;
+                      }
+
+                      if (result.word[0] === "@") {
+                        setShowMemberList(true);
+                        setMemberText(result.word.slice(1));
+                        return;
+                      }
                     }
-                    setShowEmoteList(false);
-                    setEmoteText(null);
                   }}
                 />
               </div>

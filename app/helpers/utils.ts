@@ -1,5 +1,6 @@
 import { WebsocketMessageType } from "../_websocket/types/websocket_init.types";
 import { WebsocketChatMessage } from "../_websocket/types/websocket_init_reduced.types";
+import { nextSpecialWordRegex, specialWordRegex } from "./regexes";
 
 export function formatEpoch(
   epochInUtc: number,
@@ -158,10 +159,17 @@ export function toWebsocketMessageType(
     : null;
 }
 
+export interface WordAtCursorToken {
+  word: string;
+  isWordSpecial: boolean;
+  start: number;
+  end: number;
+}
+
 export function getWordAtCursor(
   value: string,
   cursorPos: number
-): { word: string; start: number; end: number } | null {
+): WordAtCursorToken | null {
   if (!value || cursorPos < 0) return null;
 
   let start = cursorPos;
@@ -176,5 +184,14 @@ export function getWordAtCursor(
   }
 
   const word = value.slice(start, end);
-  return word ? { word, start, end } : null;
+  const isWordSpecial = specialWordRegex.test(word);
+
+  return word
+    ? {
+        word,
+        isWordSpecial,
+        start,
+        end,
+      }
+    : null;
 }

@@ -38,6 +38,9 @@ export const selectChannelByActiveServer = (
 
 export const selectMembers = (state: RootState) => state.websocket.members;
 
+export const selectMembersByServerId = (state: RootState, serverId: string) =>
+  state.websocket.members[serverId];
+
 export const selectAllMembersByActiveServer = (state: RootState) => {
   const selectedServerId = selectSelectedServerId(state);
   if (!selectedServerId) return [];

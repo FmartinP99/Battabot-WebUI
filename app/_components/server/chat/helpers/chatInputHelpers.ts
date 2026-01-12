@@ -1,15 +1,17 @@
-import { WebsocketInitEmotes } from "@/app/_websocket/types/websocket_init.types";
-import { specialWordRegex } from "@/app/helpers/regexes";
+import {
+  nextSpecialWordRegex,
+  previousSpecialWordRegex,
+} from "@/app/helpers/regexes";
 import { HandleKeyDownContext } from "@/app/helpers/selectlistHelpers";
 import { getWordAtCursor } from "@/app/helpers/utils";
 
-export function insertOrReplaceEmoji(
+export function insertOrReplaceEmojiAndMention(
   value: string,
   cursor: number,
   strToInsert: string
 ): { newValue: string; newCursorStart: number } {
   const wordInfo = getWordAtCursor(value, cursor);
-  if (wordInfo?.word.startsWith(":")) {
+  if (wordInfo?.word.startsWith(":") || wordInfo?.word.startsWith("@")) {
     return {
       newValue:
         value.slice(0, wordInfo.start) +
@@ -24,13 +26,13 @@ export function insertOrReplaceEmoji(
   };
 }
 
-export const handleKeyDownForEmoteSelectList = ({
+export const handleKeyDownForSelectListBasic = ({
   e,
   items,
   selectedIndex,
   setSelectedIndex,
   onSelect,
-}: HandleKeyDownContext<WebsocketInitEmotes>) => {
+}: HandleKeyDownContext<any>) => {
   if (!items.length) return;
 
   if (e.key === "ArrowDown") {
@@ -45,38 +47,56 @@ export const handleKeyDownForEmoteSelectList = ({
   }
 };
 
-export function handleBackspaceDeleteSpecialWord(
-  textarea: HTMLTextAreaElement
-): string | null {
+export function handleSpecialDelete(
+  textarea: HTMLTextAreaElement,
+  direction: "backward" | "forward"
+): { newValue: string; newCursor: number } | null {
   const value = textarea.value;
   const cursorPos = textarea.selectionStart;
-  if (cursorPos === 0) return null;
 
-  const textBeforeCursor = value.slice(0, cursorPos);
-  const match = textBeforeCursor.match(specialWordRegex);
-
-  let deleteStart: number;
-  if (match) {
-    deleteStart = cursorPos - match[0].length;
-  } else {
-    deleteStart = cursorPos - 1;
+  if (
+    (direction === "backward" && cursorPos === 0) ||
+    (direction === "forward" && cursorPos === value.length)
+  ) {
+    return null;
   }
 
-  const newValue = value.slice(0, deleteStart) + value.slice(cursorPos);
-  textarea.value = newValue;
-  textarea.setSelectionRange(deleteStart, deleteStart);
+  let newValue = value;
+  let newCursor = cursorPos;
 
-  return newValue;
+  if (direction === "backward") {
+    const before = value.slice(0, cursorPos);
+    const match = before.match(previousSpecialWordRegex);
+    const start = match ? cursorPos - match[0].length : cursorPos - 1;
+
+    newValue = value.slice(0, start) + value.slice(cursorPos);
+    newCursor = start;
+
+    textarea.value = newValue;
+    textarea.setSelectionRange(newCursor, newCursor);
+    return { newValue, newCursor };
+  } else {
+    const after = value.slice(cursorPos);
+    const match = after.match(nextSpecialWordRegex);
+    const end = match ? cursorPos + match[0].length : cursorPos + 1;
+
+    newValue = value.slice(0, cursorPos) + value.slice(end);
+    newCursor = cursorPos;
+
+    textarea.value = newValue;
+    textarea.setSelectionRange(newCursor, newCursor);
+    return { newValue, newCursor };
+  }
 }
 
 function findPreviousSpecialWord(text: string) {
-  const match = text.match(/<[^<>]*>$/); // last <…> at end of string
+  const match = text.match(previousSpecialWordRegex); // last <…> at end of string
   if (!match) return null;
   return match[0];
 }
 
 function findNextSpecialWord(text: string) {
-  const match = text.match(/^<[^<>]*>/); // first <…> at start of string
+  const match = text.match(nextSpecialWordRegex); // first <…> at start of string
   if (!match) return null;
   return match[0];
 }

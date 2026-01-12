@@ -52,6 +52,7 @@ export function loadInitResponseToObject(
         status: m.status ?? MemberStatus.OFFLINE,
         roleIds: m.roleIds ?? [],
         activityName: m.activityName,
+        rawStr: m.rawStr,
       })),
       roles: guild.roles?.map((r: WebsocketInitRoles) => ({
         id: r.id,

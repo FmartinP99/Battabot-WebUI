@@ -11,7 +11,7 @@ import {
   WebsocketMessageType,
   WebsocketSendMessageQuery,
 } from "../_websocket/types/websocket_init.types";
-import { insertOrReplaceEmoji } from "../_components/server/chat/helpers/chatInputHelpers";
+import { insertOrReplaceEmojiAndMention } from "../_components/server/chat/helpers/chatInputHelpers";
 
 export function useMessageSenderFromForm() {
   const selectedServerId = useAppSelector(selectSelectedServerId);
@@ -21,8 +21,12 @@ export function useMessageSenderFromForm() {
   const dispatch = useDispatch();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [text, setText] = useState("");
+
   const [emoteText, setEmoteText] = useState<string | null>(null);
   const [showEmoteList, setShowEmoteList] = useState<boolean>(false);
+
+  const [memberText, setMemberText] = useState<string | null>(null);
+  const [showMemberList, setShowMemberList] = useState<boolean>(false);
 
   const sendMessage = useCallback(() => {
     if (!text.trim()) return;
@@ -54,10 +58,11 @@ export function useMessageSenderFromForm() {
 
   function handleSelectListItemClick(strToInsert: string) {
     if (!textAreaRef || !strToInsert) return;
+    strToInsert += " ";
     const textarea = textAreaRef.current;
     if (!textarea) return;
     const startIndex = textarea.selectionStart;
-    const { newValue, newCursorStart } = insertOrReplaceEmoji(
+    const { newValue, newCursorStart } = insertOrReplaceEmojiAndMention(
       textarea.value,
       startIndex,
       strToInsert
@@ -69,8 +74,16 @@ export function useMessageSenderFromForm() {
       textarea.focus();
       textarea.setSelectionRange(cursorPos, cursorPos);
       setShowEmoteList(false);
+      setShowMemberList(false);
     });
   }
+
+  const resetItemListsVisibility = () => {
+    setShowMemberList(false);
+    setMemberText(null);
+    setShowEmoteList(false);
+    setEmoteText(null);
+  };
 
   return {
     handleSendMessage,
@@ -84,5 +97,10 @@ export function useMessageSenderFromForm() {
     setShowEmoteList,
     emoteText,
     setEmoteText,
+    showMemberList,
+    setShowMemberList,
+    memberText,
+    setMemberText,
+    resetItemListsVisibility,
   };
 }

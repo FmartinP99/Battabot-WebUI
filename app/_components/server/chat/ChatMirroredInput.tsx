@@ -37,6 +37,13 @@ const ChatMirroredInput = forwardRef<HTMLDivElement, ChatMirroredInputProps>(
       };
     }, [targetRef]);
 
+    useEffect(() => {
+      const textarea = targetRef.current;
+      if (!textarea) return;
+
+      setCaretPos(textarea.selectionStart);
+    }, [mirroredText, targetRef]);
+
     const handleFocus = () => {
       targetRef.current?.focus();
     };

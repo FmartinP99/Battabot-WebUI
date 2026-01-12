@@ -29,6 +29,7 @@ interface MemberProps {
   noMaxWidth?: boolean;
   memberSize?: MemberSize;
   showActivity?: boolean;
+  showImage?: boolean;
 }
 
 function Member({
@@ -36,6 +37,7 @@ function Member({
   noMaxWidth,
   memberSize = MemberSize.MEDIUM,
   showActivity,
+  showImage = true,
 }: MemberProps) {
   const pxHeight = pxHeightMap[memberSize];
   const circleSize = circleRemHeightMap[memberSize];
@@ -48,26 +50,28 @@ function Member({
         noMaxWidth ? "" : "w-[180px]"
       }`}
     >
-      <div className="relative flex-shrink-0 group">
-        <div className="absolute -inset-0.5 bg-gradient-to-br from-accent-x1 to-accent-x5 rounded-full opacity-0 group-hover:opacity-60 blur-sm transition-opacity duration-300"></div>
+      {showImage && (
+        <div className="relative flex-shrink-0 group">
+          <div className="absolute -inset-0.5 bg-gradient-to-br from-accent-x1 to-accent-x5 rounded-full opacity-0 group-hover:opacity-60 blur-sm transition-opacity duration-300"></div>
 
-        <Image
-          className={`relative rounded-full object-cover ring-2 ring-transparent group-hover:ring-accent-x1/30 transition-all duration-300 max-h-[${pxHeight}px]`}
-          src={member.avatarUrl || defaultBg}
-          alt="Not available"
-          width={pxHeight}
-          height={pxHeight}
-        />
+          <Image
+            className={`relative rounded-full object-cover ring-2 ring-transparent group-hover:ring-accent-x1/30 transition-all duration-300 max-h-[${pxHeight}px]`}
+            src={member.avatarUrl || defaultBg}
+            alt="Not available"
+            width={pxHeight}
+            height={pxHeight}
+          />
 
-        <div
-          className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-primary-x2"
-          style={{
-            backgroundColor: circleColor,
-            height: circleSize,
-            width: circleSize,
-          }}
-        ></div>
-      </div>
+          <div
+            className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-primary-x2"
+            style={{
+              backgroundColor: circleColor,
+              height: circleSize,
+              width: circleSize,
+            }}
+          />
+        </div>
+      )}
 
       <div className="flex min-h-0 flex-col truncate">
         <span
