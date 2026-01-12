@@ -133,3 +133,13 @@ html {
 .animate-blink {
   animation: blink 1s step-start infinite;
 }
+
+.mentioned-entity {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.mentioned-entity:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-hover);
+}

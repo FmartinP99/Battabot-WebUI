@@ -6,17 +6,15 @@ interface ChatChannelMentionProps {
   mention: string;
 }
 
-function ChatChannelMention({
-  mention,
-}: ChatChannelMentionProps) {
+function ChatChannelMention({ mention }: ChatChannelMentionProps) {
   const { channel, handleOnChannelClick } = useChatChannelMention(mention);
 
   if (!channel) return <span>Not available.</span>;
 
   return (
-    <span onClick={() => handleOnChannelClick(channel)}>
-      <ChatMentionedEntity>#{channel.name}</ChatMentionedEntity>
-    </span>
+    <ChatMentionedEntity onClick={() => handleOnChannelClick(channel)}>
+      #{channel.name}
+    </ChatMentionedEntity>
   );
 }
 
