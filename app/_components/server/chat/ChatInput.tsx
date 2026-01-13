@@ -12,7 +12,7 @@ import {
 } from "./helpers/chatInputHelpers";
 import ChatMemberSelectList from "./ChatMemberSelectList";
 import { ReactNode } from "react";
-import { ShowerHead } from "lucide-react";
+import ChatChannelSelectList from "./ChatChannelSelectList";
 
 const selectListClasses =
   "absolute bottom-full  left-1/2 w-[99%] -translate-x-1/2  shadow-lg mb-0.5 rounded-lg z-50 bg-primary-x3 py-1";
@@ -29,13 +29,15 @@ export default function ChatInput() {
     handleSelectListItemClick,
     showEmoteList,
     setShowEmoteList,
-    emoteText,
-    setEmoteText,
+    filterText,
+    setFiltexText,
     showMemberList,
     setShowMemberList,
-    memberText,
-    setMemberText,
+    showChannelsList,
+    setShowChannelsList,
     resetItemListsVisibility,
+    showMirroredCaret,
+    setShowMirroredCaret,
   } = useMessageSenderFromForm();
 
   if (!selectedChannelId || !selectedServerId) {
@@ -49,7 +51,7 @@ export default function ChatInput() {
       <ChatEmoteSelectList
         serverId={selectedServerId}
         handleSelectListItemClick={handleSelectListItemClick}
-        filter={emoteText}
+        filter={filterText}
         className={selectListItemClasses}
       />
     );
@@ -58,7 +60,16 @@ export default function ChatInput() {
       <ChatMemberSelectList
         serverId={selectedServerId}
         handleSelectListItemClick={handleSelectListItemClick}
-        filter={memberText}
+        filter={filterText}
+        className={selectListItemClasses}
+      />
+    );
+  } else if (showChannelsList) {
+    renderedSelectListComponent = (
+      <ChatChannelSelectList
+        serverId={selectedServerId}
+        handleSelectListItemClick={handleSelectListItemClick}
+        filter={filterText}
         className={selectListItemClasses}
       />
     );
@@ -78,6 +89,7 @@ export default function ChatInput() {
                 <ChatMirroredInput
                   mirroredText={text}
                   targetRef={textAreaRef}
+                  showMirroredCaret={showMirroredCaret}
                   className="text-left overflow-y-auto bg-transparent border-none focus:outline-none focus:ring-0 text-accent-x2 placeholder:text-accent-x4 min-h-[40px] max-h-[200px] py-1 px-2 text-sm"
                 />
 
@@ -85,16 +97,19 @@ export default function ChatInput() {
                   ref={textAreaRef}
                   name="message"
                   placeholder="Type your message..."
-                  className="  resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-accent-x2 placeholder:text-accent-x4 min-h-[40px] max-h-[200px] py-1 px-2 text-sm"
+                  className="pointer-events-none absolute inset-0 opacity-0  resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-accent-x2 placeholder:text-accent-x4 min-h-[40px] max-h-[200px] py-1 px-2 text-sm"
                   rows={1}
                   value={text}
+                  onBlur={() => setShowMirroredCaret(false)}
+                  onFocus={() => setShowMirroredCaret(true)}
                   onChange={(e) => setText(e.target.value)}
                   onKeyDown={(e) => {
                     if (
                       e.key === "Enter" &&
                       !e.shiftKey &&
                       !showEmoteList &&
-                      !showMemberList
+                      !showMemberList &&
+                      !showChannelsList
                     ) {
                       handleSendMessage(e);
                     }
@@ -149,13 +164,19 @@ export default function ChatInput() {
                     if (result) {
                       if (result.word[0] === ":") {
                         setShowEmoteList(true);
-                        setEmoteText(result.word.slice(1));
+                        setFiltexText(result.word.slice(1));
                         return;
                       }
 
                       if (result.word[0] === "@") {
                         setShowMemberList(true);
-                        setMemberText(result.word.slice(1));
+                        setFiltexText(result.word.slice(1));
+                        return;
+                      }
+
+                      if (result.word[0] === "#") {
+                        setShowChannelsList(true);
+                        setFiltexText(result.word.slice(1));
                         return;
                       }
                     }

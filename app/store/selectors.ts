@@ -1,7 +1,25 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { WebsocketMessageType } from "../_websocket/types/websocket_init.types";
+import {
+  ChannelType,
+  WebsocketMessageType,
+} from "../_websocket/types/websocket_init.types";
 import { RootState } from "../store/store";
 
+// FOR MEMOIZATION
+const selectServerId = (_: RootState, serverId: string) => serverId;
+
+const selectMemberId = (_: RootState, _serverId: string, memberId: string) =>
+  memberId;
+
+const selectPlaylistStates = (state: RootState) =>
+  state.websocket.playlistStates;
+const selectSelectedServerIdState = (state: RootState) =>
+  state.websocket.selectedServerId;
+
+const selectCurrentReminders = (state: RootState) =>
+  state.websocket.currentReminders;
+
+// FOR SELECTION
 export const selectWebSocketState = (state: RootState) => state.websocket;
 
 export const selectSocketReady = (state: RootState) =>
@@ -36,6 +54,17 @@ export const selectChannelByActiveServer = (
   );
 };
 
+export const selectChannelsByServerId = (state: RootState, serverId: string) =>
+  state.websocket.channels[serverId];
+
+export const selectMentionableChannelsByServerId = createSelector(
+  [selectChannels, selectServerId],
+  (channelsByServerId, serverId) =>
+    (channelsByServerId[serverId] ?? []).filter(
+      (ch) => ch.type === ChannelType.Text
+    )
+);
+
 export const selectMembers = (state: RootState) => state.websocket.members;
 
 export const selectMembersByServerId = (state: RootState, serverId: string) =>
@@ -63,11 +92,6 @@ export const selectMessages = (state: RootState) => state.websocket.messages;
 export const selectSelectedChannelId = (state: RootState, serverId: string) =>
   state.websocket.lastSelectedChannelIds[serverId];
 
-const selectPlaylistStates = (state: RootState) =>
-  state.websocket.playlistStates;
-const selectSelectedServerIdState = (state: RootState) =>
-  state.websocket.selectedServerId;
-
 export const selectSongsForSelectedServer = createSelector(
   [selectPlaylistStates, selectSelectedServerIdState],
   (playlistStates, serverId) => {
@@ -84,13 +108,6 @@ export const selectRolesByServerId = (state: RootState, serverId: string) =>
 
 export const selectLoader = (state: RootState, key: WebsocketMessageType) =>
   state.websocket.loaders[key];
-
-const selectCurrentReminders = (state: RootState) =>
-  state.websocket.currentReminders;
-
-const selectServerId = (_: RootState, serverId: string) => serverId;
-const selectMemberId = (_: RootState, _serverId: string, memberId: string) =>
-  memberId;
 
 export const selectRemindersByServerIdAndMemberId = createSelector(
   [selectCurrentReminders, selectServerId, selectMemberId],

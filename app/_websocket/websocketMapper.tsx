@@ -42,6 +42,7 @@ export function loadInitResponseToObject(
         name: ch.name ?? "Undefined",
         type: ch.type ?? ChannelType.Category,
         connectedMemberIds: ch.connectedMemberIds ?? [],
+        rawStr: ch.rawStr,
       })),
       members: guild.members?.map((m: WebsocketInitMembers) => ({
         memberId: m.memberId,

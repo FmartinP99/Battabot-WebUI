@@ -57,6 +57,7 @@ export interface WebsocketInitChannels {
     name: string;
     connectedMemberIds: Array<string>;
     type: ChannelType;
+    rawStr: string;
 }
 
 export interface WebsocketInitMembers {

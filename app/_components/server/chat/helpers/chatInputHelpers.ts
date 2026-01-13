@@ -5,13 +5,17 @@ import {
 import { HandleKeyDownContext } from "@/app/helpers/selectlistHelpers";
 import { getWordAtCursor } from "@/app/helpers/utils";
 
-export function insertOrReplaceEmojiAndMention(
+export function insertOrReplaceSelectlistTokens(
   value: string,
   cursor: number,
   strToInsert: string
 ): { newValue: string; newCursorStart: number } {
   const wordInfo = getWordAtCursor(value, cursor);
-  if (wordInfo?.word.startsWith(":") || wordInfo?.word.startsWith("@")) {
+  if (
+    wordInfo?.word.startsWith(":") ||
+    wordInfo?.word.startsWith("@") ||
+    wordInfo?.word.startsWith("#")
+  ) {
     return {
       newValue:
         value.slice(0, wordInfo.start) +

@@ -1,5 +1,7 @@
 import {
+  ChannelType,
   MemberStatus,
+  WebsocketInitChannels,
   WebsocketInitEmotes,
   WebsocketInitMembers,
 } from "@/app/_websocket/types/websocket_init.types";
@@ -23,4 +25,12 @@ export const DUMMY_MEMBER: WebsocketInitMembers = {
   activityName: "",
   status: MemberStatus.OFFLINE,
   rawStr: "",
+};
+
+export const DUMMY_CHANNEL: WebsocketInitChannels = {
+  channelId: "-1",
+    name: "No channel found.",
+    connectedMemberIds:[],
+    type: ChannelType.Text,
+    rawStr: "",
 };

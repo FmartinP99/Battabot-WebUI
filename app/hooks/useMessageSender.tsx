@@ -11,7 +11,7 @@ import {
   WebsocketMessageType,
   WebsocketSendMessageQuery,
 } from "../_websocket/types/websocket_init.types";
-import { insertOrReplaceEmojiAndMention } from "../_components/server/chat/helpers/chatInputHelpers";
+import { insertOrReplaceSelectlistTokens } from "../_components/server/chat/helpers/chatInputHelpers";
 
 export function useMessageSenderFromForm() {
   const selectedServerId = useAppSelector(selectSelectedServerId);
@@ -22,11 +22,13 @@ export function useMessageSenderFromForm() {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [text, setText] = useState("");
 
-  const [emoteText, setEmoteText] = useState<string | null>(null);
-  const [showEmoteList, setShowEmoteList] = useState<boolean>(false);
+  const [filterText, setFiltexText] = useState<string | null>(null);
 
-  const [memberText, setMemberText] = useState<string | null>(null);
+  const [showEmoteList, setShowEmoteList] = useState<boolean>(false);
   const [showMemberList, setShowMemberList] = useState<boolean>(false);
+  const [showChannelsList, setShowChannelsList] = useState<boolean>(false);
+
+  const [showMirroredCaret, setShowMirroredCaret] = useState<boolean>(false);
 
   const sendMessage = useCallback(() => {
     if (!text.trim()) return;
@@ -62,7 +64,7 @@ export function useMessageSenderFromForm() {
     const textarea = textAreaRef.current;
     if (!textarea) return;
     const startIndex = textarea.selectionStart;
-    const { newValue, newCursorStart } = insertOrReplaceEmojiAndMention(
+    const { newValue, newCursorStart } = insertOrReplaceSelectlistTokens(
       textarea.value,
       startIndex,
       strToInsert
@@ -75,14 +77,15 @@ export function useMessageSenderFromForm() {
       textarea.setSelectionRange(cursorPos, cursorPos);
       setShowEmoteList(false);
       setShowMemberList(false);
+      setShowChannelsList(false);
     });
   }
 
   const resetItemListsVisibility = () => {
     setShowMemberList(false);
-    setMemberText(null);
     setShowEmoteList(false);
-    setEmoteText(null);
+    setShowChannelsList(false);
+    setFiltexText(null);
   };
 
   return {
@@ -95,12 +98,14 @@ export function useMessageSenderFromForm() {
     handleSelectListItemClick,
     showEmoteList,
     setShowEmoteList,
-    emoteText,
-    setEmoteText,
+    filterText,
+    setFiltexText,
     showMemberList,
     setShowMemberList,
-    memberText,
-    setMemberText,
+    showChannelsList,
+    setShowChannelsList,
     resetItemListsVisibility,
+    showMirroredCaret,
+    setShowMirroredCaret,
   };
 }

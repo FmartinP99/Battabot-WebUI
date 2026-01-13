@@ -6,12 +6,18 @@ import { cn } from "@/lib/utils";
 interface ChatMirroredInputProps {
   targetRef: React.MutableRefObject<HTMLTextAreaElement | null>;
   mirroredText: string;
+  showMirroredCaret: boolean;
   className?: string | undefined;
 }
 
 const ChatMirroredInput = forwardRef<HTMLDivElement, ChatMirroredInputProps>(
-  ({ targetRef, mirroredText, className, ...props }, ref) => {
+  (
+    { targetRef, mirroredText, showMirroredCaret, className, ...props },
+    ref
+  ) => {
     const [caretPos, setCaretPos] = useState(0);
+    const [showPlaceHolderText, setShowPlaceHolderText] =
+      useState<boolean>(true);
 
     const beforeCaret = mirroredText.slice(0, caretPos);
     const afterCaret = mirroredText.slice(caretPos);
@@ -44,34 +50,52 @@ const ChatMirroredInput = forwardRef<HTMLDivElement, ChatMirroredInputProps>(
       setCaretPos(textarea.selectionStart);
     }, [mirroredText, targetRef]);
 
+    useEffect(() => {
+      setShowPlaceHolderText(!mirroredText?.length);
+    }, [mirroredText]);
+
     const handleFocus = () => {
       targetRef.current?.focus();
     };
+
+    const caretJSX = (
+      <span
+        className="inline-block w-[1px] bg-accent-x2 animate-blink align-text-bottom"
+        style={{
+          height: "1em",
+        }}
+      />
+    );
 
     return (
       <div
         tabIndex={0}
         className={cn(
-          "relative flex items-center cursor:text disabled:cursor-not-allowed disabled:opacity-50 md:text-sm break-all",
+          "relative block cursor:text disabled:cursor-not-allowed disabled:opacity-50 md:text-sm break-all whitespace-pre-wrap w-full text-center",
           className
         )}
         ref={ref}
         onFocus={handleFocus}
         {...props}
-        style={{ whiteSpace: "pre-wrap" }}
       >
-        <div className="flex items-center">
-          {formatMessageToRichText(beforeCaret, EmoteSize.SMALL)}
-        </div>
-        <span
-          className="w-[1px] bg-accent-x2 animate-blink align-bottom"
-          style={{
-            height: "1em",
-          }}
-        />
-        <div className="flex items-center">
-          {formatMessageToRichText(afterCaret, EmoteSize.SMALL)}
-        </div>
+        {showPlaceHolderText ? (
+          <>
+            {showMirroredCaret && caretJSX}
+            <span className="text-muted-foreground">
+              Type your message here...
+            </span>
+          </>
+        ) : (
+          <>
+            <div className="inline">
+              {formatMessageToRichText(beforeCaret, EmoteSize.SMALL)}
+            </div>
+            {showMirroredCaret && caretJSX}
+            <div className="inline ">
+              {formatMessageToRichText(afterCaret, EmoteSize.SMALL)}
+            </div>
+          </>
+        )}
       </div>
     );
   }
