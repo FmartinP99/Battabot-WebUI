@@ -2,6 +2,7 @@ import { WebsocketInitChannels } from "@/app/_websocket/types/websocket_init.typ
 import clsx from "clsx";
 import React from "react";
 import { getPrefix } from "../channel/helpers/channel_helpers";
+import { isValidWebsocketInitChannels } from "../../../_websocket/helpers/guards";
 
 interface ChatChannelSelectListItemProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,7 +15,7 @@ const ChatChannelSelectListItem = React.forwardRef<
   HTMLDivElement,
   ChatChannelSelectListItemProps
 >(({ channel, isActive, onItemClick, ...props }, ref) => {
-  // if (!isValidWebsocketInitEmote(emote)) return null;
+  if (!isValidWebsocketInitChannels(channel)) return null;
 
   const selectListItemClasses = clsx(
     "flex items-center gap-3 p-2 rounded cursor-pointer mx-1 bg-primary-x2",

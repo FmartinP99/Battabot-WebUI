@@ -3,8 +3,9 @@ import clsx from "clsx";
 import React from "react";
 import Member from "../member/Member";
 import { MemberSize } from "../member/enums/memberSize.enum";
+import { isValidWebsocketInitMembers } from "@/app/_websocket/helpers/guards";
 
-interface ChatEmoteSelectListItemProps
+interface ChatMemberSelectListItemProps
   extends React.HTMLAttributes<HTMLDivElement> {
   member: WebsocketInitMembers;
   isActive: boolean;
@@ -12,11 +13,11 @@ interface ChatEmoteSelectListItemProps
   onItemClick: (rawStr: string) => void;
 }
 
-const ChatEmoteSelectListItem = React.forwardRef<
+const ChatMemberSelectListItem = React.forwardRef<
   HTMLDivElement,
-  ChatEmoteSelectListItemProps
+  ChatMemberSelectListItemProps
 >(({ member, isActive, showImage = true, onItemClick, ...props }, ref) => {
-  // if (!isValidWebsocketInitEmote(emote)) return null;
+  if (!isValidWebsocketInitMembers(member)) return null;
 
   const selectListItemClasses = clsx(
     "flex items-center gap-3 p-2 rounded cursor-pointer mx-1 bg-primary-x2",
@@ -38,4 +39,4 @@ const ChatEmoteSelectListItem = React.forwardRef<
   );
 });
 
-export default React.memo(ChatEmoteSelectListItem);
+export default React.memo(ChatMemberSelectListItem);
