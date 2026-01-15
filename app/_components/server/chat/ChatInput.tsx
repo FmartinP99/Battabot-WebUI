@@ -27,14 +27,10 @@ export default function ChatInput() {
     selectedChannelId,
     textAreaRef,
     handleSelectListItemClick,
-    showEmoteList,
-    setShowEmoteList,
+    showSelectList,
+    setShowSelectList,
     filterText,
     setFiltexText,
-    showMemberList,
-    setShowMemberList,
-    showChannelsList,
-    setShowChannelsList,
     resetItemListsVisibility,
     showMirroredCaret,
     setShowMirroredCaret,
@@ -46,7 +42,7 @@ export default function ChatInput() {
 
   let renderedSelectListComponent: ReactNode = null;
 
-  if (showEmoteList) {
+  if (showSelectList === "emote") {
     renderedSelectListComponent = (
       <ChatEmoteSelectList
         serverId={selectedServerId}
@@ -55,7 +51,7 @@ export default function ChatInput() {
         className={selectListItemClasses}
       />
     );
-  } else if (showMemberList) {
+  } else if (showSelectList === "member") {
     renderedSelectListComponent = (
       <ChatMemberSelectList
         serverId={selectedServerId}
@@ -64,7 +60,7 @@ export default function ChatInput() {
         className={selectListItemClasses}
       />
     );
-  } else if (showChannelsList) {
+  } else if (showSelectList === "channel") {
     renderedSelectListComponent = (
       <ChatChannelSelectList
         serverId={selectedServerId}
@@ -107,9 +103,7 @@ export default function ChatInput() {
                     if (
                       e.key === "Enter" &&
                       !e.shiftKey &&
-                      !showEmoteList &&
-                      !showMemberList &&
-                      !showChannelsList
+                      showSelectList === null
                     ) {
                       handleSendMessage(e);
                     }
@@ -163,19 +157,19 @@ export default function ChatInput() {
 
                     if (result) {
                       if (result.word[0] === ":") {
-                        setShowEmoteList(true);
+                        setShowSelectList("emote");
                         setFiltexText(result.word.slice(1));
                         return;
                       }
 
                       if (result.word[0] === "@") {
-                        setShowMemberList(true);
+                        setShowSelectList("member");
                         setFiltexText(result.word.slice(1));
                         return;
                       }
 
                       if (result.word[0] === "#") {
-                        setShowChannelsList(true);
+                        setShowSelectList("channel");
                         setFiltexText(result.word.slice(1));
                         return;
                       }

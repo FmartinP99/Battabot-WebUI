@@ -24,9 +24,7 @@ export function useMessageSenderFromForm() {
 
   const [filterText, setFiltexText] = useState<string | null>(null);
 
-  const [showEmoteList, setShowEmoteList] = useState<boolean>(false);
-  const [showMemberList, setShowMemberList] = useState<boolean>(false);
-  const [showChannelsList, setShowChannelsList] = useState<boolean>(false);
+  const [showSelectList, setShowSelectList] = useState<"emote" | "member" | "channel" | null>(null);
 
   const [showMirroredCaret, setShowMirroredCaret] = useState<boolean>(false);
 
@@ -75,16 +73,12 @@ export function useMessageSenderFromForm() {
       const cursorPos = newCursorStart + strToInsert.length;
       textarea.focus();
       textarea.setSelectionRange(cursorPos, cursorPos);
-      setShowEmoteList(false);
-      setShowMemberList(false);
-      setShowChannelsList(false);
+      setShowSelectList(null);
     });
   }
 
   const resetItemListsVisibility = () => {
-    setShowMemberList(false);
-    setShowEmoteList(false);
-    setShowChannelsList(false);
+    setShowSelectList(null);
     setFiltexText(null);
   };
 
@@ -96,14 +90,10 @@ export function useMessageSenderFromForm() {
     selectedChannelId,
     textAreaRef,
     handleSelectListItemClick,
-    showEmoteList,
-    setShowEmoteList,
+    showSelectList,
+    setShowSelectList,
     filterText,
     setFiltexText,
-    showMemberList,
-    setShowMemberList,
-    showChannelsList,
-    setShowChannelsList,
     resetItemListsVisibility,
     showMirroredCaret,
     setShowMirroredCaret,
