@@ -4,7 +4,6 @@ import React from "react";
 import ChatEmoteSelectListItem from "./ChatEmoteSelectListItem";
 import { useSelectList } from "@/app/hooks/useSelectList";
 import { handleKeyDownForSelectListBasic } from "./helpers/chatInputHelpers";
-import { WebsocketInitEmotes } from "@/app/_websocket/types/websocket_init.types";
 import { DUMMY_EMOTE } from "../../../helpers/consts";
 
 interface ChatEmoteSelectListProps {
